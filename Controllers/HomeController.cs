@@ -24,19 +24,6 @@ namespace SGV_Booking.Controllers
             return View();
         }
 
-        public IActionResult Register()
-        {
-            return View();
-        }       
-
-        public IActionResult RegisterDetails(string passwordRegister, string emailRegister)
-        {
-            ViewBag.password = passwordRegister;
-            ViewBag.email = emailRegister;
-
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
