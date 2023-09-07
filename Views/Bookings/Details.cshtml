@@ -1,0 +1,71 @@
+﻿@model SGV_Booking.Models.Booking
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+
+<body>
+    <div style="background-color: #C3C3C3; padding: 20px; border-radius: 10px;">
+        <div class="container">
+            <div class="container" style="display: flex; align-items: center; background-color: white; padding: 15px; border-radius: 10px;">
+                <div class="container">
+                    <h1 class="title" style="color: darkgrey;">Booking Summary</h1>
+                </div>
+            </div>
+            <div class="container" style="background-color: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
+                <div class="row">
+                    <h3 style="color: darkgrey;">Restaurant:</h3>
+                    <p style="color: black;"> @Html.DisplayFor(model => model.Restaurant.RestaurantId) </p>
+                </div>
+                <div class="row">
+                    <h4 style="color: darkgrey;">Date/Time:</h4>
+                    <p style="color: black;"> @Html.DisplayFor(model => model.BookingTime) </p>
+                </div>
+                <div class="row">
+                    <h4 style="color: darkgrey;">People Amount:</h4>
+                    <p style="color: black;"> ... </p>
+                </div>
+                <div class="row">
+                    <h4 style="color: darkgrey;">Banquets Reserved:</h4>
+                    <p style="color: black;"> @Html.DisplayFor(model => model.BanquetOption) </p>
+                </div>
+                
+            </div>
+            <div class="container" style="background-color: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
+                <div class="row">
+                    <h4 style="color: darkgrey;">Booking Contact</h4>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <p style="color: darkgrey;">Name:</p>
+                    </div>
+                    <div class="col">
+                        <p> @Html.DisplayFor(model => model.Customer.FirstName) </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <p style="color: darkgrey;">Number:</p>
+                    </div>
+                    <div class="col">
+                        <p> @Html.DisplayFor(model => model.Customer.PhoneNumber) </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <p style="color: darkgrey;">Email:</p>
+                    </div>
+                    <div class="col">
+                        <p>Jason.le25@gmail.com</p>
+                    </div>
+                </div>
+                <div class="update-button-container" style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                    <button style="background-color: #AB0F43; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Change Contact</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
