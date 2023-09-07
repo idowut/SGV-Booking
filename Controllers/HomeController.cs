@@ -13,6 +13,7 @@ namespace SGV_Booking.Controllers
             _logger = logger;
         }
 
+     
         public IActionResult Index()
         {
             return View();
@@ -23,7 +24,7 @@ namespace SGV_Booking.Controllers
             return View();
         }
 
-        public IActionResult Users()
+        public IActionResult Restaurant1()
         {
             return View();
         }
