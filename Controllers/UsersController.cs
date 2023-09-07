@@ -20,5 +20,19 @@ namespace SGV_Booking.Controllers
 
             return View();
         }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult LoginDetails(string emailLogin, string passwordLogin)
+        {
+            ViewBag.emailLogin = emailLogin;
+
+            ViewBag.passwordLogin = passwordLogin;
+
+            return View();
+        }
     }
 }
