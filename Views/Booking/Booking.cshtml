@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "Booking Page";
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .display-header {
+        background-color: #333;
+        color: #fff;
+        padding: 15px;
+        text-align: center;
+        font-size: 24px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .elem-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    button[type="submit"] {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+</style>
+
+<div class="container">
+        <h1 class="display-header">Booking Details</h1>
+
+    <div class="row">
+        <div class="col-6">
+            <label for="firstName">First Name</label>
+            <input class="form-control" id="firstName" placeholder="First Name" type="text">
+        </div>
+
+        <div class="col-6">
+            <label for="lastName">Last Name</label>
+            <input class="form-control" id="lastName" placeholder="Last Name" type="text">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-6">
+            <label for="email">Email</label>
+            <input class="form-control" id="email" placeholder="Email" type="text">
+        </div>
+        <div class="col-6">
+            <label for="phoneNumber">Phone Number</label>
+            <input class="form-control" id="phoneNumber" placeholder="e.g 0000 000 0000" type="text">
+        </div>
+    </div>
+
+    <div class="col-12">
+        <label for="requirementNote">Dietary Requirements</label>
+        <textarea class="form-control" id="requirementNote" rows="2" placeholder="Dietary Requirements..."></textarea>
+    </div>
+
+    <form action="Booking" method="GET">
+        <button type="button" onclick="ToSummary()">Next</button>
+    </form>
+</div>
+
+<script>
+    function ToSummary() {
+        var firstName = document.getElementById("firstName").value;
+        var lastName = document.getElementById("lastName").value;
+        var email = document.getElementById("email").value;
+        var phoneNumber = document.getElementById("phoneNumber").value;
+        var dietaryRequirements = document.getElementById("requirementNote").value;
+
+        sessionStorage.setItem("firstName", firstName);
+        sessionStorage.setItem("lastName", lastName);
+        sessionStorage.setItem("email", email);
+        sessionStorage.setItem("phoneNumber", phoneNumber);
+        sessionStorage.setItem("dietaryRequirements", dietaryRequirements);
+
+        window.location.href = "BookingSummary";
+    }
+</script>
