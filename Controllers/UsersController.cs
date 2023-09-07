@@ -27,6 +27,17 @@ namespace SGV_Booking.Controllers
                           Problem("Entity set 'SGVDatabaseContext.Users'  is null.");
         }
 
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        public IActionResult RegisterDetails()
+        {
+            return View();
+        }
+
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
