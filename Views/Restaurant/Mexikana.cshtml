@@ -4,7 +4,11 @@
 }
 <head>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
+    <style>
+        body {
+            font-size: 18px; /* 文字を大きくする */
+        }
+    </style>
 </head>
 
 @{
@@ -13,36 +17,65 @@
 
 <div class="container">
     <h1 class="text-center">MEXIKANA</h1>
-    <h2 class="text-center"></h2>
     <hr />
 
-    <div class="text-center">
-        <div class="col-md-12">
-            <h5>Address:</h5>
-            <p><a href="https://www.google.com/maps/place/40+Fullarton+Rd,+Norwood+SA+5067/">40 Fullarton Road Norwood SA</a></p>
-
-            </p>
+    <div class="row">
+        
+         <div class="col-md-6">
+            <div class="text-center">
+                <h5>Address:</h5>
+                <p><a href="https://www.google.com/maps/place/40+Fullarton+Rd,+Norwood+SA+5067/">40 Fullarton Road Norwood SA</a></p>
+                <h5>Contact:</h5>
+                <p>Email: <a href="mailto:info@mexikana.com.au">Mexikana.com.au</a><br>Phone: 0466 88 0833</p>
+                <h5>Open Hours: </h5>
+                <p>Open Monday to Saturday</p>
+                <p>
+                    First dinner 5-7PM
+                </p>
+                <p>
+                    Second dinner 7-9PM
+                </p>
+                <p>
+                    Late night dinner 9-11PM
+                </p>
+            </div>
         </div>
-
-        <div class="col-md-12">
-            <h5>Contact:</h5>
-            <p>Email: <a href="mailto:info@mexikana.com.au">Mexikana.com.au</a><br>Phone: 0466 88 0833</p>
-        </div>
+        <div class="col-md-6 d-flex flex-column align-items-center">
+                <!-- センター配置のためのクラスを追加 -->
+                <h5 class="text-center">Mexikana Menu</h5>
+                <a href="/pdfs/mexikana-menu.pdf" target="_blank" id="previewPdf">See Menu</a>
+                <canvas id="pdf-canvas2" style="max-width: 80%; margin: auto;"></canvas> <!-- margin: autoを追加 -->
+         </div>
     </div>
 
-    <div class="text-center">
-        <div class="col-12">
-            <h5>Open Hours: </h5>
-            <p>Open Monday to Saturday</p>
-            <p>
-                First dinner 5-7PM
-            </p>
-            <p>
-                Second dinner 7-9PM
-            </p>
-            <p>
-                Late night dinner 9-11PM
-            </p>
-        </div>
-    </div>
+
 </div>
+
+
+<script src="/js/pdf.js"></script>
+<script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/pdf.worker.js';
+
+    function loadPdf(pdfPath, canvasId, maxCanvasWidth) {
+        pdfjsLib.getDocument(pdfPath).promise.then(function (pdf) {
+            return pdf.getPage(1);
+        }).then(function (page) {
+            var viewport = page.getViewport({ scale: 1 });
+            var scale = maxCanvasWidth / viewport.width;
+            var scaledViewport = page.getViewport({ scale: scale });
+
+            var canvas = document.getElementById(canvasId);
+            var context = canvas.getContext('2d');
+            canvas.height = scaledViewport.height;
+            canvas.width = scaledViewport.width;
+
+            var renderContext = {
+                canvasContext: context,
+                viewport: scaledViewport
+            };
+            page.render(renderContext);
+        });
+    }
+
+    loadPdf('/pdfs/mexikana-menu.pdf', 'pdf-canvas2', 300);
+</script>
