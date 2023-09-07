@@ -13,6 +13,7 @@ namespace SGV_Booking.Controllers
             _logger = logger;
         }
 
+     
         public IActionResult Index()
         {
             return View();
@@ -22,8 +23,6 @@ namespace SGV_Booking.Controllers
         {
             return View();
         }
-
-       
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
