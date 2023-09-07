@@ -9,13 +9,14 @@ namespace SGV_Booking.Controllers
             return View();
         }
 
-        public IActionResult RegisterDetails(string passwordRegister, string emailRegister, string firstName, string lastName, string addressRegister)
+        public IActionResult RegisterDetails(int phoneNumber, string passwordRegister, string emailRegister, string firstName, string lastName, string addressRegister)
         {
             ViewBag.password = passwordRegister;
             ViewBag.email = emailRegister;
             ViewBag.firstName = firstName;
             ViewBag.lastName = lastName;
             ViewBag.address = addressRegister;
+            ViewBag.phoneNumber = phoneNumber;
 
             return View();
         }
