@@ -8,6 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Booking\Booking Selection.cshtml.cs" />
+    <Compile Remove="Views\Booking\Index.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Booking\Booking Selection.cshtml" />
+    <Content Remove="Views\Booking\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Migrations\" />
     <Folder Include="Assets\" />

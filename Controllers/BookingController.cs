@@ -14,5 +14,9 @@ namespace SGV_Booking.Controllers
         {
             return View();
         }
+        public IActionResult BookingSelection()
+        {
+            return View();
+        }
     }
 }
