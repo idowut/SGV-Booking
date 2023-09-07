@@ -62,7 +62,7 @@
 </style>
 
 <div class="container">
-        <h1 class="display-header">Booking Selection</h1>
+        <h1 class="display-header">Booking Details</h1>
 
     <div class="row">
         <div class="col-6">
@@ -93,6 +93,24 @@
     </div>
 
     <form action="Booking" method="GET">
-        <button type="submit">Next</button>
+        <button type="button" onclick="ToSummary()">Next</button>
     </form>
 </div>
+
+<script>
+    function ToSummary() {
+        var firstName = document.getElementById("firstName").value;
+        var lastName = document.getElementById("lastName").value;
+        var email = document.getElementById("email").value;
+        var phoneNumber = document.getElementById("phoneNumber").value;
+        var dietaryRequirements = document.getElementById("requirementNote").value;
+
+        sessionStorage.setItem("firstName", firstName);
+        sessionStorage.setItem("lastName", lastName);
+        sessionStorage.setItem("email", email);
+        sessionStorage.setItem("phoneNumber", phoneNumber);
+        sessionStorage.setItem("dietaryRequirements", dietaryRequirements);
+
+        window.location.href = "BookingSummary";
+    }
+</script>
