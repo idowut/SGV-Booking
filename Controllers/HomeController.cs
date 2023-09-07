@@ -13,12 +13,18 @@ namespace SGV_Booking.Controllers
             _logger = logger;
         }
 
+     
         public IActionResult Index()
         {
             return View();
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Restaurant1()
         {
             return View();
         }
