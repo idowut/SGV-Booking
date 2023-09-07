@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "Booking Selection Page";
+}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 700px; 
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .display-header {
+        background-color: #333;
+        color: #fff;
+        padding: 15px; 
+        text-align: center;
+        font-size: 24px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .elem-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="number"],
+    input[type="date"],
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-position: right center;
+    }
+
+    button[type="submit"] {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+</style>
+
+
+<form>
+    <div class="container">
+        <h1 class="display-header">Booking Selection</h1>
+
+        <div class="elem-group">
+            <label for="guest">Guest</label>
+            <input type="number" id="guest" name="total_guest" placeholder="1..." min="1" required>
+        </div>
+
+        <div class="elem-group">
+            <label for="checkin-date">Select Date</label>
+            <input type="date" id="datetime" name="datetime" min="<?php echo date('Y-m-d'); ?>" required>
+        </div>
+
+        <div class="elem-group">
+            <label for="bookingTime">Select Time</label>
+            <select id="bookingTime" name="booking_time" required>
+                <option value="" disabled selected>Select Time</option>
+                <option value="12:00 PM">12:00 PM (Lunch)</option>
+                <option value="12:15 PM">12:15 PM (Lunch)</option>
+                <option value="12:30 PM">12:30 PM (Lunch)</option>
+                <option value="12:45 PM">12:45 PM (Lunch)</option>
+                <option value="1:00 PM">1:00 PM (Lunch)</option>
+                <option value="5:00 PM">5:00 PM (First Dinner)</option>
+                <option value="5:15 PM">5:15 PM (First Dinner)</option>
+                <option value="5:30 PM">5:30 PM (First Dinner)</option>
+                <option value="5:45 PM">5:45 PM (First Dinner)</option>
+                <option value="6:00 PM">6:00 PM (First Dinner)</option>
+                <option value="6:15 PM">6:15 PM (First Dinner)</option>
+                <option value="7:00 PM">7:00 PM (Second Dinner)</option>
+                <option value="7:15 PM">7:15 PM (Second Dinner)</option>
+                <option value="7:30 PM">7:30 PM (Second Dinner)</option>
+                <option value="7:45 PM">7:45 PM (Second Dinner)</option>
+                <option value="8:00 PM">8:00 PM (Second Dinner)</option>
+            </select>
+        </div>
+    </div>
+
+    <form action="Booking" method="GET">
+        <button type="submit">Next </button>
+    </form>
+</form>
