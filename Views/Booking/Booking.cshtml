@@ -9,29 +9,74 @@
     <div class="row">
         <div class="col-6">
             <label for="firstName">First Name</label>
-            <input class="form-control" id="firstName" type="text">
+            <input class="form-control" id="firstName" placeholder="First Name" type="text">
         </div>
 
         <div class="col-6">
             <label for="lastName">Last Name</label>
-            <input class="form-control" id="lastName" type="text">
+            <input class="form-control" id="lastName" placeholder="Last Name" type="text">
         </div>
     </div>
 
     <div class="row">
         <div class="col-6">
             <label for="email">Email</label>
-            <input class="form-control" id="email" type="text">
+            <input class="form-control" id="email" placeholder="Email" type="text">
         </div>
         <div class="col-6">
             <label for="phoneNumber">Phone Number</label>
-            <input class="form-control" id="phoneNumber" type="text">
+            <input class="form-control" id="phoneNumber" placeholder="e.g 0000 000 0000" type="text">
         </div>
     </div>
     
     <div class="col-12"> 
         <label for="requirementNote">Dietary Requirements</label>
-        <textarea class="form-control" id="requirementNote" rows="2"></textarea>
+        <textarea class="form-control" id="requirementNote" rows="2" placeholder="Dietary Requirements..."></textarea>
+    </div>
+    
+    <div class="col-12">
+        <label for="restaurantSelect">Select Restaurant</label>
+        <select class="form-select" id="restaurantSelect" aria-label="Default select example">
+            <option selected>Restaurant</option>
+            <option value="1">Bamboo Leaf</option>
+            <option value="2">La Oeste</option>
+            <option value="3">Mexikana</option>
+        </select>
     </div>
 
+    <div id="banquetOptions">
+        <label for="banquetOption">Banquet Option</label>
+        <div class="row">
+            <div class="col-4">
+                <div class="card" style="width: 22rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">À la carte</h5>
+                        <p class="card-text">Some information regarding the banquet.</p>
+                        <button type="submit" class="btn btn-primary">Select Banquet</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="card" style="width: 22rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Share Banquet</h5>
+                        <p class="card-text">Some information regarding the banquet.</p>
+                        <button type="submit" class="btn btn-primary">Select Banquet</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <div class="card" style="width: 22rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Feast Banquet</h5>
+                        <p class="card-text">Some information regarding the banquet.</p>
+                        <button type="submit" class="btn btn-primary">Select Banquet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
