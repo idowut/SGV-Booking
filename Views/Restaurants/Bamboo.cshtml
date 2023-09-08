@@ -1,7 +1,5 @@
-﻿@page
-@model SGV_Booking.Views.Home.restaurant1Model
-@{
-}
+﻿
+@model SGV_Booking.Models.Restaurant
 
 <head>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -17,7 +15,7 @@
 }
 
 <div class="container">
-    <h1 class="text-center">BAMBOO LEAF</h1>
+    <h1 class="text-center">@Model.RestaurantName</h1>
     <hr />
 
     <div class="row">
@@ -25,10 +23,10 @@
             <div class="text-center">
                 <h1>   </h1>
                 <h5>Address:</h5>
-                <p><a href="https://www.google.com/maps/place/25+Gouger+St,+Adelaide+SA/">25 Gouger Street, Adelaide SA</a></p>
+                <p><a href="https://www.google.com/maps/place/25+Gouger+St,+Adelaide+SA/">@Model.RestaurantAddress.AddressLine @Model.RestaurantAddress.Suburb</a></p>
 
                 <h5>Contact:</h5>
-                <p>Email: <a href="mailto:info@nijumaru.com.au">Bamboo.com.au</a><br>Phone: 0466 88 0833</p>
+                <p>Email: <a href="mailto:laoeste.com.au">Bamboo.com.au</a><br>Phone: @Model.RestaurantPhoneNumber</p>
                 <h5>Open Hours: </h5>
                 <p>Open Tuesdays to Sundays</p>
                 <p>Lunchtime 12-2PM</p>
@@ -39,7 +37,7 @@
 
         <div class="col-md-6 d-flex flex-column align-items-center">
             <!-- センター配置のためのクラスを追加 -->
-            <h5 class="text-center">Bamboo Menu</h5>
+            <h5 class="text-center">@Model.RestaurantName Menu</h5>
             <a href="/pdfs/bamboo-leaf-menu.pdf" target="_blank" id="previewPdf">See menu</a>
             <canvas id="pdf-canvas1" style="max-width: 80%; margin: auto;"></canvas> <!-- margin: autoを追加 -->
         </div>

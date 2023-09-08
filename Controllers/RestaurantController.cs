@@ -23,7 +23,6 @@ namespace SGV_Booking.Controllers
         {
             return View();
         }
-
         // GET: RestaurantController/Details/5
         public ActionResult Details(int id)
         {

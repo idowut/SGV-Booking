@@ -18,6 +18,21 @@ namespace SGV_Booking.Controllers
         {
             _context = context;
         }
+        private IActionResult GetRestaurantView(string restaurantName)
+        {
+            var restaurant = _context.Restaurants
+                                      .Include(r => r.RestaurantAddress)
+                                      .FirstOrDefault(r => r.RestaurantName == restaurantName);
+            if (restaurant == null)
+            {
+                return NotFound();
+            }
+            return View(restaurant);
+        }
+
+        public IActionResult Bamboo() => GetRestaurantView("Bamboo Leaf");
+        public IActionResult La_oeste() => GetRestaurantView("La Oeste De La Mar");
+        public IActionResult Mexikana() => GetRestaurantView("Mexikana");
 
         // GET: Restaurants
         public async Task<IActionResult> Index()

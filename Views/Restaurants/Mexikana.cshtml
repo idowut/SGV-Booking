@@ -1,7 +1,4 @@
-﻿@page
-@model SGV_Booking.Views.Home.restaurant1Model
-@{
-}
+﻿@model SGV_Booking.Models.Restaurant
 
 <head>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -13,36 +10,45 @@
 </head>
 
 @{
-    ViewBag.Title = "La Oeste De La Mar";
+    ViewBag.Title = "Mexikana";
 }
 
 <div class="container">
-    <h1 class="text-center">Le Oeste De La Mar</h1>
+    <h1 class="text-center">@Model.RestaurantName</h1>
     <hr />
 
     <div class="row">
-        <div class="col-md-6">
+        
+         <div class="col-md-6">
             <div class="text-center">
                 <h5>Address:</h5>
-                <p><a href="https://www.google.com/maps/place/40+120+North+Terrace,+Adelaide+SA/">40 120 North Terrace Adelaide SA</a></p>
+                <p><a href="https://www.google.com/maps/place/40+Fullarton+Rd,+Norwood+SA+5067/">@Model.RestaurantAddress.AddressLine @Model.RestaurantAddress.Suburb </a></p>
                 <h5>Contact:</h5>
-                <p>Email: <a href="mailto:laoeste.com.au">Lapeste.com.au</a><br>Phone: 0466 88 0833</p>
+                <p>Email: <a href="mailto:info@mexikana.com.au">Mexikana.com.au</a><br>Phone: @Model.RestaurantPhoneNumber</p>
                 <h5>Open Hours: </h5>
-                <p>Open Wednesday to Sunday</p>
-                <p>Brunch 10AM-12PM</p>
-                <p>Lunch 12-2PM</p>
-                <p>First dinner 5-7PM</p>
-                <p>Second dinner 7-9PM</p>
+                <p>Open Monday to Saturday</p>
+                <p>
+                    First dinner 5-7PM
+                </p>
+                <p>
+                    Second dinner 7-9PM
+                </p>
+                <p>
+                    Late night dinner 9-11PM
+                </p>
             </div>
         </div>
         <div class="col-md-6 d-flex flex-column align-items-center">
-            <!-- センター配置のためのクラスを追加 -->
-            <h5 class="text-center">Le Oeste De La Mar Menu</h5>
-            <a href="/pdfs/le-oeste-menu.pdf" target="_blank" id="previewPdf">See Menu</a>
-            <canvas id="pdf-canvas2" style="max-width: 80%; margin: auto;"></canvas> <!-- margin: autoを追加 -->
-        </div>
+                <!-- センター配置のためのクラスを追加 -->
+                <h5 class="text-center">@Model.RestaurantName Menu</h5>
+                <a href="/pdfs/mexikana-menu.pdf" target="_blank" id="previewPdf">See Menu</a>
+                <canvas id="pdf-canvas2" style="max-width: 80%; margin: auto;"></canvas> <!-- margin: autoを追加 -->
+         </div>
     </div>
+
+
 </div>
+
 
 <script src="/js/pdf.js"></script>
 <script>
@@ -69,5 +75,5 @@
         });
     }
 
-    loadPdf('/pdfs/le-oeste-menu.pdf', 'pdf-canvas2', 300);
+    loadPdf('/pdfs/mexikana-menu.pdf', 'pdf-canvas2', 300);
 </script>
