@@ -38,6 +38,16 @@ namespace SGV_Booking.Controllers
             return View();
         }
 
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        public IActionResult LoginDetails() 
+        { 
+            return View(); 
+        }
+
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
