@@ -32,7 +32,25 @@
                     <h4 style="color: darkgrey;">Banquets Reserved:</h4>
                     <p style="color: black;"> @Html.DisplayFor(model => model.BanquetOption) </p>
                 </div>
-                
+                <div class="row">
+                    <div class="col">
+                        <h4 style="color: darkgrey;">Notes:</h4>
+                        <div class="container" style="background-color:#E4E4E4; padding: 15px; border-radius: 10px;">
+                            <div class="col">
+                                <p style="color: black;"> @Html.DisplayFor(model => model.BookingNotes) </p>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="col">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="update-button-container" style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                            <button style="background-color: #AB0F43; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Update</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="container" style="background-color: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
                 <div class="row">
