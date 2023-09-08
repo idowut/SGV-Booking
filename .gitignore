@@ -374,3 +374,12 @@ FodyWeavers.xsd
 /Models/User.cs
 /appsettings.json
 /Program.cs
+/Data/SGVDatabaseContext.cs
+/Models/Address.cs
+/Models/Banquet.cs
+/Models/BanquetItem.cs
+/Models/Booking.cs
+/Models/ErrorViewModel.cs
+/Models/Restaurant.cs
+/Models/SGVContext.cs
+/Models/User.cs
