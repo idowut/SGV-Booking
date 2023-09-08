@@ -375,6 +375,8 @@ FodyWeavers.xsd
 /appsettings.json
 /Program.cs
 /appsettings.json
-/appsettings.json
 /Program.cs
+/appsettings.json
+/.gitignore
+/.gitignore
 /SGV-Booking.csproj
