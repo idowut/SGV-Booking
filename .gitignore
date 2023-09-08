@@ -361,6 +361,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/Program.cs
-/appsettings.json
-/SGV-Booking.csproj
