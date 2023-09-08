@@ -26,10 +26,28 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Booking" asp-action="Booking">Booking</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Booking" asp-action="Bookingselection">Make a booking</a>
                         </li>
                     </ul>
                 </div>
+                <nav class="navbar navbar-light bg-light">
+                    <div class="btn-group dropstart">
+                        <button type="button" class="btn btn-primary navbar-brand mx-auto" aria-expanded="false" data-bs-toggle="dropdown">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Hamburger_icon.svg" alt="">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Users">DEV: View unmapped pages</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
             </div>
         </nav>
     </header>
