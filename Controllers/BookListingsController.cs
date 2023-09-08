@@ -10,11 +10,11 @@ using SGV_Booking.Models;
 
 namespace SGV_Booking.Controllers
 {
-    public class BookingsController : Controller
+    public class BookListingsController : Controller
     {
         private readonly SGVDatabaseContext _context;
 
-        public BookingsController(SGVDatabaseContext context)
+        public BookListingsController(SGVDatabaseContext context)
         {
             _context = context;
         }
