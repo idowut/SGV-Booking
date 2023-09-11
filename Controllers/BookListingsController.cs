@@ -12,9 +12,9 @@ namespace SGV_Booking.Controllers
 {
     public class BookListingsController : Controller
     {
-        private readonly SGVDatabaseContext _context;
+        private readonly SGVContext _context;
 
-        public BookListingsController(SGVDatabaseContext context)
+        public BookListingsController(SGVContext context)
         {
             _context = context;
         }

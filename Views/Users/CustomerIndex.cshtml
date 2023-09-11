@@ -1,0 +1,118 @@
+﻿@model SGV_Booking.ViewModels.UsersAndBookings
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
+
+
+<div class="container-fluid">
+    <h2>
+        Welcome, @Html.DisplayFor(model => model.TheUser.FirstName)!
+    </h2>
+    <hr />
+    <div class="col">
+        <div class="d-flex align-items-start">
+            <div class="nav flex-column col-2 nav-pills me-5" id="v-pill-tabs" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="v-pills-bookings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-bookings" type="button" role="tab" aria-controls="v-pills-bookings" aria-selected="true"><img src="/images/booking-history.svg" height="24" />Bookings</button>
+                <button class="nav-link" id="v-pills-rewards-tab" data-bs-toggle="pill" data-bs-target="#v-pills-rewards" type="button" role="tab" aria-controls="v-pills-rewards" aria-selected="false"><img src="/images/star.svg" height="24" />Rewards</button>
+                <button class="nav-link" id="v-pills-userinfo-tab" data-bs-toggle="pill" data-bs-target="#v-pills-userinfo" type="button" role="tab" aria-controls="v-pills-userinfo" aria-selected="false"><img src="/images/user.svg" height="24" />User information</button>
+                <button class="nav-link" id="v-pills-settings-tab" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false"><img src="/images/setting.svg" height="24" />Settings</button>
+            </div>
+            <div class="tab-content col-10" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-bookings" role="tabpanel" aria-labelledby="v-pills-bookings-tab">
+                    <p>add later...</p>
+                    @Html.DisplayFor(model => model.UserBookings)
+                </div>
+                <div class="tab-pane fade" id="v-pills-rewards" role="tabpanel" aria-labelledby="v-pills-rewards-tab">
+                    <p>anthony's job not mine</p>
+                </div>
+                <div class="tab-pane fade" id="v-pills-userinfo" role="tabpanel" aria-labelledby="v-pills-userinfo-tab">
+                    <form asp-action="CustomerIndex" asp-route-id="@Model.TheUser.UserId">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="TheUser.UserId" />
+                        <div class="form-group row">
+                            <div class="col">
+                                <label asp-for="TheUser.FirstName" class="control-label col-form-label">First name</label>
+                            </div>
+                            <div class="col">
+                                <input asp-for="TheUser.FirstName" class="form-control" />
+                                <span asp-validation-for="TheUser.FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                            <div class="col">
+                                <label asp-for="TheUser.LastName" class="control-label"></label>
+                            </div>
+                            <div class="col">
+                                <input asp-for="TheUser.LastName" class="form-control" />
+                                <span asp-validation-for="TheUser.LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                            <div class="col">
+                                <label asp-for="TheUser.Email" class="control-label"></label>
+                            </div>
+                            <div class="col">
+                                <input asp-for="TheUser.Email" class="form-control" />
+                                <span asp-validation-for="TheUser.Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                            <div class="col">
+                                <label asp-for="TheUser.PhoneNumber" class="control-label"></label>
+                            </div>
+                            <div class="col">
+                                <input asp-for="TheUser.PhoneNumber" class="form-control" />
+                                <span asp-validation-for="TheUser.PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                            <div class="col-6">
+                                <label asp-for="TheUser.Password" class="control-label"></label>
+                            </div>
+                            <div class="col-5">
+                                <input asp-for="TheUser.Password" id="password" type="password" value="@Model.TheUser.Password" class="form-control" />
+                            </div>
+                            <div class="col-auto">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="password_show_hide();">
+                                        <div>
+                                            <i class="fas fa-eye" id="show_eye"></i>
+                                            <i class="fas fa-eye-slash d-none" id="hide_eye"></i>
+                                        </div>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="TheUser.Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                            <input type="submit" value="Save" class="btn btn-primary" />
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                    <p>tbd later</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function password_show_hide() {
+            var x = document.getElementById("password");
+            var show_eye = document.getElementById("show_eye");
+            var hide_eye = document.getElementById("hide_eye");
+            if (x.type === "password") {
+                x.type = "text";
+                hide_eye.classList.remove("d-none");
+                show_eye.classList.add("d-none");
+            } else {
+                x.type = "password";
+                hide_eye.classList.add("d-none");
+                show_eye.classList.remove("d-none");
+            }
+        }
+    </script>
+</div>

@@ -11,6 +11,7 @@ namespace SGV_Booking.Models
         public int CustomerId { get; set; }
         public string? BookingNotes { get; set; }
         public int? BanquetOption { get; set; }
+        public int NumGuest { get; set; }
 
         public virtual User Customer { get; set; } = null!;
         public virtual Restaurant Restaurant { get; set; } = null!;

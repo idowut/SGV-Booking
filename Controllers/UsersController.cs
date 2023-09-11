@@ -5,16 +5,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 using SGV_Booking.Data;
 using SGV_Booking.Models;
+using SGV_Booking.ViewModels;
 
 namespace SGV_Booking.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly SGVDatabaseContext _context;
+        private readonly SGVContext _context;
 
-        public UsersController(SGVDatabaseContext context)
+        public UsersController(SGVContext context)
         {
             _context = context;
         }
@@ -27,6 +29,65 @@ namespace SGV_Booking.Controllers
                           Problem("Entity set 'SGVDatabaseContext.Users'  is null.");
         }
 
+        public async Task<IActionResult> CustomerIndex(UsersAndBookings vm, int? id)
+        {
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var userBookings = await _context.Bookings.Where(i => i.CustomerId == id).ToListAsync();
+
+            var ViewModel = await _context.Users
+                .Select(i => new UsersAndBookings
+                {
+                    TheUser = user,
+                    UserBookings = userBookings
+                }).FirstAsync();
+            return View(ViewModel);
+        }
+
+        // POST: Users/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CustomerIndex(int id, [Bind("UserId,UserType,FirstName,LastName,Email,PhoneNumber,Password")] User user)
+        {
+            if (id != user.UserId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(user);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UserExists(user.UserId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(CustomerIndex));
+            }
+            return View(user);
+        }
 
         public IActionResult Register()
         {

@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using SGV_Booking.Models;
 
-namespace SGV_Booking.Models
+namespace SGV_Booking.Data
 {
     public partial class SGVContext : DbContext
     {
@@ -23,14 +24,14 @@ namespace SGV_Booking.Models
         public virtual DbSet<Restaurant> Restaurants { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=R90WBJA3\\SQLEXPRESS;Initial Catalog=SGV;Integrated Security=True;");
-            }
-        }
+//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//        {
+//            if (!optionsBuilder.IsConfigured)
+//            {
+//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+//                optionsBuilder.UseSqlServer("Data Source=DESKTOP-8PR6E5F\\SQLEXPRESS;Initial Catalog=SGV;Integrated Security=True;");
+//            }
+//        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -126,6 +127,8 @@ namespace SGV_Booking.Models
 
                 entity.Property(e => e.CustomerId).HasColumnName("customerID");
 
+                entity.Property(e => e.NumGuest).HasColumnName("numGuest");
+
                 entity.Property(e => e.RestaurantId).HasColumnName("restaurantID");
 
                 entity.HasOne(d => d.Customer)
@@ -167,6 +170,8 @@ namespace SGV_Booking.Models
             {
                 entity.Property(e => e.UserId).HasColumnName("userID");
 
+                entity.Property(e => e.BookingsCount).HasColumnName("bookingsCount");
+
                 entity.Property(e => e.Email)
                     .HasMaxLength(200)
                     .IsUnicode(false)
@@ -183,9 +188,8 @@ namespace SGV_Booking.Models
                     .HasColumnName("lastName");
 
                 entity.Property(e => e.Password)
-                    .HasMaxLength(64)
-                    .HasColumnName("password")
-                    .IsFixedLength();
+                    .IsUnicode(false)
+                    .HasColumnName("password");
 
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(15)
