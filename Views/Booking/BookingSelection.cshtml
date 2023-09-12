@@ -144,14 +144,14 @@
                 </select>
             </div>
 
-            <div id="banquetOptions">
+            <div id="banquetOptions" style="display: none;">
                 <label for="banquetOption">Banquet Option</label>
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-4" id="alaCarteOption">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">À la carte</h5>
-                                <p class="card-text">Some information regarding the banquet.</p>
+                                <p class="card-text">The À la carte option allows customers to order each distinctive food item at the restaurant.</p>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                     <label class="form-check-label" for="flexRadioDefault1"></label>
@@ -160,27 +160,27 @@
                         </div>
                     </div>
 
-                    <div class="col-4">
+                    <div class="col-4" id="shareBanquetOption">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Share Banquet</h5>
                                 <p class="card-text">Some information regarding the banquet.</p>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                    <label class="form-check-label" for="flexRadioDefault1"></label>
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                                    <label class="form-check-label" for="flexRadioDefault2"></label>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-4">
+                    <div class="col-4" id="feastBanquetOption">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Feast Banquet</h5>
-                                <p class="card-text">Some information regarding the banquet.</p>
+                                <p class="card-text">A large banquet big enough to feast with others including: Crispy beef, Satay chicken, S + P Eggplant, Crying Tiger Salad, Steam prawn dumplings, Ribs and Barramundi curry</p>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                    <label class="form-check-label" for="flexRadioDefault1"></label>
+                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
+                                    <label class="form-check-label" for="flexRadioDefault3"></label>
                                 </div>
                             </div>
                         </div>
@@ -192,6 +192,46 @@
         <form action="Booking" method="GET">
             <button type="submit">Next</button>
         </form>
+
+        <script>
+            document.getElementById("restaurantSelect").addEventListener("change", function () {
+                var alaCarteOption = document.getElementById("alaCarteOption");
+                var shareBanquetOption = document.getElementById("shareBanquetOption");
+                var feastBanquetOption = document.getElementById("feastBanquetOption");
+                var banquetOptions = document.getElementById("banquetOptions");
+
+                if (this.value === "1") {
+                    alaCarteOption.style.display = "block";
+                    shareBanquetOption.style.display = "block";
+                    feastBanquetOption.style.display = "block";
+                    banquetOptions.style.display = "block";
+
+                    var shareBanquetText = "A shared banquet that includes: Satay Chicken, Steam prawn dumplings,S + P Squid, Roast Pork, Sticky pork and Asian green";
+                    var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
+                    shareBanquetCardBody.innerText = shareBanquetText;
+
+                } else if (this.value === "2") {
+                    alaCarteOption.style.display = "block";
+                    shareBanquetOption.style.display = "none";
+                    feastBanquetOption.style.display = "none";
+                    banquetOptions.style.display = "block";
+                } else if (this.value === "3") {
+                    alaCarteOption.style.display = "block";
+                    shareBanquetOption.style.display = "block";
+                    feastBanquetOption.style.display = "none";
+                    banquetOptions.style.display = "block";
+
+                    var shareBanquetText = "A shared banquet that includes: Papas Fritas, Korean Fried Chicken, Tacos, Smokey chicken, Taquitos dorados and Nachos";
+                    var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
+                    shareBanquetCardBody.innerText = shareBanquetText;
+                } else {
+                    alaCarteOption.style.display = "none";
+                    shareBanquetOption.style.display = "none";
+                    feastBanquetOption.style.display = "none";
+                    banquetOptions.style.display = "none";
+                }
+            });
+        </script>
     </div>
 </body>
 </html>

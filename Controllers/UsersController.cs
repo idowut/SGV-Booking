@@ -107,14 +107,21 @@ namespace SGV_Booking.Controllers
                 Console.WriteLine("Im here 1");
                 return View(vm);
 
-            Console.WriteLine("Im here 2");
-            return RedirectToAction(nameof(Index));
+        }
 
-        }
-        public IActionResult Register()
-        {
-            return View();
-        }
+        //public IActionResult Register()
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        user.UserType = 2;
+        //        user.BookingsCount += 1;
+        //        _context.Add(user);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(RegisterDetails));
+        //    }
+
+        //    return View();
+        //}
 
         public IActionResult RegisterDetails()
         {
