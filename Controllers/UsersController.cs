@@ -28,8 +28,18 @@ namespace SGV_Booking.Controllers
         }
 
 
-        public IActionResult Register()
+        public async Task<IActionResult> Register([Bind("FirstName, LastName, Email, PhoneNumber, Password")] User user)
         {
+            int userIDMax = _context.Users.Max(user => user.UserId);
+
+            if (ModelState.IsValid)
+            {
+                user.UserType = 2;
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(RegisterDetails));
+            }
+
             return View();
         }
 

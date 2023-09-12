@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 /Program.cs
 /appsettings.json
+/11.09_SQL_DB_Query.sql
