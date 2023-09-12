@@ -89,8 +89,17 @@ namespace SGV_Booking.Controllers
             return View(user);
         }
 
-        public IActionResult Register()
+        public async Task<IActionResult> Register([Bind("FirstName, LastName, PhoneNumber, Email, Password")] User user)
         {
+            if (ModelState.IsValid)
+            {
+                user.UserType = 2;
+                user.BookingsCount += 1;
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(RegisterDetails));
+            }
+
             return View();
         }
 

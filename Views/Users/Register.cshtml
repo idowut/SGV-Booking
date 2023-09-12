@@ -1,8 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model SGV_Booking.Models.User
 
 <br />
 <br />
@@ -32,45 +28,38 @@
                     <br />
 
 
-                    <form method="post" action="/Users/RegisterDetails">
+                    <form method="post" action="/Users/Register">
                         <div class="row justify-content-center">
                             <div class="col-5">
-                                <input type="text" class="form-control" name="firstName" placeholder="Enter First Name" />
+                                <input type="text" class="form-control"  asp-for="FirstName" placeholder="Enter First Name" />
                             </div>
                         </div>
                         <br />
 
                         <div class="row justify-content-center">
                             <div class="col-5">
-                                <input type="text" class="form-control" name="lastName" placeholder="Enter Last Name" />
+                                <input type="text" class="form-control"  asp-for="LastName" placeholder="Enter Last Name" />
                             </div>
                         </div>
                         <br />
 
                         <div class="row justify-content-center">
                             <div class="col-5">
-                                <input type="text" class="form-control" name="phoneNumber" placeholder="Enter Phone No." />
+                                <input type="text" class="form-control" asp-for="PhoneNumber" placeholder="Enter Phone No." />
                             </div>
                         </div>
                         <br />
 
                         <div class="row justify-content-center">
                             <div class="col-5">
-                                <input type="text" class="form-control" name="addressRegister" placeholder="Enter Address" />
+                                <input type="text" class="form-control"  asp-for="Email" placeholder="Enter Email" />
                             </div>
                         </div>
                         <br />
 
                         <div class="row justify-content-center">
                             <div class="col-5">
-                                <input type="text" class="form-control" name="emailRegister" placeholder="Enter Email" />
-                            </div>
-                        </div>
-                        <br />
-
-                        <div class="row justify-content-center">
-                            <div class="col-5">
-                                <input type="password" class="form-control" name="passwordRegister" placeholder="Enter Password" />
+                                <input type="password" class="form-control"  asp-for="Password" placeholder="Enter Password" />
                             </div>
                         </div>
                         <br />
