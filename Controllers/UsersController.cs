@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol;
@@ -29,29 +30,30 @@ namespace SGV_Booking.Controllers
                           Problem("Entity set 'SGVDatabaseContext.Users'  is null.");
         }
 
-        public async Task<IActionResult> CustomerIndex(UsersAndBookings vm, int? id)
+        public async Task<IActionResult> CustomerIndex(UsersAndBookings vm,int? id)
         {
             if (id == null || _context.Users == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            var TheUser = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            var UserBookingsContext = _context.Bookings
+                .Where(i => i.CustomerId == id)
+                .AsQueryable();
 
-            if (user == null)
+            if (TheUser == null)
             {
                 return NotFound();
             }
-
-            var userBookings = await _context.Bookings.Where(i => i.CustomerId == id).ToListAsync();
-
-            var ViewModel = await _context.Users
+            vm =  await UserBookingsContext
                 .Select(i => new UsersAndBookings
                 {
-                    TheUser = user,
-                    UserBookings = userBookings
-                }).FirstAsync();
-            return View(ViewModel);
+                    TheUser = TheUser,
+                    UserBookings = i,
+                }).FirstOrDefaultAsync();
+
+            return View(vm);
         }
 
         // POST: Users/Edit/5
@@ -59,23 +61,29 @@ namespace SGV_Booking.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CustomerIndex(int id, [Bind("UserId,UserType,FirstName,LastName,Email,PhoneNumber,Password")] User user)
+        public async Task<IActionResult> CustomerIndex(int id, UsersAndBookings vm)
         {
-            if (id != user.UserId)
+            Console.WriteLine(id);
+            Console.WriteLine(vm.TheUser.UserId);
+
+            Console.WriteLine(vm.TheUser.FirstName);
+
+            if (id != vm.TheUser.UserId)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
+
+                Console.WriteLine("Im here 0");
                 try
                 {
-                    _context.Update(user);
+                    _context.Update(vm.TheUser);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.UserId))
+                    Console.WriteLine("It caught an error");
+                    if (!UserExists(vm.TheUser.UserId))
                     {
                         return NotFound();
                     }
@@ -84,11 +92,25 @@ namespace SGV_Booking.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(CustomerIndex));
-            }
-            return View(user);
-        }
+                var TheUser = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+                var UserBookingsContext = _context.Bookings
+                    .Where(i => i.CustomerId == id)
+                    .AsQueryable();
 
+                vm =  await UserBookingsContext
+                .Select(i => new UsersAndBookings
+                {
+                    TheUser = TheUser,
+                    UserBookings = i,
+                }).FirstOrDefaultAsync();
+
+                Console.WriteLine("Im here 1");
+                return View(vm);
+
+            Console.WriteLine("Im here 2");
+            return RedirectToAction(nameof(Index));
+
+        }
         public IActionResult Register()
         {
             return View();
@@ -195,8 +217,10 @@ namespace SGV_Booking.Controllers
                         throw;
                     }
                 }
+                Console.WriteLine("Im here 1");
                 return RedirectToAction(nameof(Index));
             }
+            Console.WriteLine("Im here 2");
             return View(user);
         }
 

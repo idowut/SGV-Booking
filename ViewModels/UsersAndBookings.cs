@@ -9,6 +9,6 @@ namespace SGV_Booking.ViewModels
     public class UsersAndBookings
     {
         public User TheUser { get; set; }
-        public List<Booking> UserBookings { get; set; }
+        public Booking UserBookings { get; set; }
     }
 }
