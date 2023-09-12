@@ -91,7 +91,17 @@ namespace SGV_Booking.Controllers
 
         public async Task<IActionResult> Register([Bind("FirstName, LastName, PhoneNumber, Email, Password")] User user)
         {
-            if (ModelState.IsValid)
+            var hasEmail = false;
+            var registerValidation = _context.Users
+                .Where(userindata => userindata.Email.Equals(user.Password))
+                .ToList();
+
+            if (registerValidation.Count > 0)
+            {
+                hasEmail = true;
+            }
+
+            if (ModelState.IsValid && hasEmail == false)
             {
                 user.UserType = 2;
                 user.BookingsCount += 1;
@@ -108,8 +118,22 @@ namespace SGV_Booking.Controllers
             return View();
         }
 
-        public IActionResult Login()
+        public IActionResult Login(string emailLogin, string passwordLogin)
         {
+            ViewBag.num = null;
+            if (!string.IsNullOrWhiteSpace(emailLogin))
+            {
+                var loginQuery = _context.Users
+                    .Where(user => user.Email.Equals(emailLogin) && user.Password.Equals(passwordLogin))
+                    .Select(user => user)
+                    .ToList();
+
+                ViewBag.email = loginQuery.Count;
+                if (loginQuery.Count == 1)
+                {
+                    return RedirectToAction(nameof(LoginDetails));
+                }
+            }
             return View();
         }
 
