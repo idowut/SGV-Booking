@@ -125,7 +125,9 @@ namespace SGV_Booking.Controllers
                 ViewBag.email = loginQuery.Count;
                 if (loginQuery.Count > 0)
                 {
-                    return RedirectToAction(nameof(LoginDetails));
+                    var user = _context.Users.FirstOrDefault(user => user.Email.Equals(emailLogin));
+
+                    return RedirectToAction("CustomerIndex", new {id = user.UserId});
                 }
             }
             return View();
