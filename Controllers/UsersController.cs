@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
 using SGV_Booking.Data;
 using SGV_Booking.Models;
 using SGV_Booking.ViewModels;
@@ -25,12 +24,12 @@ namespace SGV_Booking.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-              return _context.Users != null ? 
-                          View(await _context.Users.ToListAsync()) :
-                          Problem("Entity set 'SGVDatabaseContext.Users'  is null.");
+            return _context.Users != null ?
+                        View(await _context.Users.ToListAsync()) :
+                        Problem("Entity set 'SGVDatabaseContext.Users'  is null.");
         }
 
-        public async Task<IActionResult> CustomerIndex(UsersAndBookings vm,int? id)
+        public async Task<IActionResult> CustomerIndex(UsersAndBookings vm, int? id)
         {
             if (id == null || _context.Users == null)
             {
@@ -46,7 +45,7 @@ namespace SGV_Booking.Controllers
             {
                 return NotFound();
             }
-            vm =  await UserBookingsContext
+            vm = await UserBookingsContext
                 .Select(i => new UsersAndBookings
                 {
                     TheUser = TheUser,
@@ -74,62 +73,77 @@ namespace SGV_Booking.Controllers
             }
 
 
-                Console.WriteLine("Im here 0");
-                try
+            Console.WriteLine("Im here 0");
+            try
+            {
+                _context.Update(vm.TheUser);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                Console.WriteLine("It caught an error");
+                if (!UserExists(vm.TheUser.UserId))
                 {
-                    _context.Update(vm.TheUser);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    Console.WriteLine("It caught an error");
-                    if (!UserExists(vm.TheUser.UserId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                var TheUser = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
-                var UserBookingsContext = _context.Bookings
-                    .Where(i => i.CustomerId == id)
-                    .AsQueryable();
+            }
+            var TheUser = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            var UserBookingsContext = _context.Bookings
+                .Where(i => i.CustomerId == id)
+                .AsQueryable();
 
-                vm =  await UserBookingsContext
-                .Select(i => new UsersAndBookings
-                {
-                    TheUser = TheUser,
-                    UserBookings = i,
-                }).FirstOrDefaultAsync();
+            vm = await UserBookingsContext
+            .Select(i => new UsersAndBookings
+            {
+                TheUser = TheUser,
+                UserBookings = i,
+            }).FirstOrDefaultAsync();
 
-                Console.WriteLine("Im here 1");
-                return View(vm);
+            Console.WriteLine("Im here 1");
+            return View(vm);
 
+            Console.WriteLine("Im here 2");
+            return RedirectToAction(nameof(Index));
         }
 
-        //public IActionResult Register()
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        user.UserType = 2;
-        //        user.BookingsCount += 1;
-        //        _context.Add(user);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(RegisterDetails));
-        //    }
+        public async Task<IActionResult> Register([Bind("FirstName, LastName, PhoneNumber, Email, Password")] User user)
+        {
+            if (ModelState.IsValid)
+            {
+                user.UserType = 2;
+                user.BookingsCount += 1;
+                _context.Add(user);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(RegisterDetails));
+            }
 
-        //    return View();
-        //}
-
+            return View();
+        }
         public IActionResult RegisterDetails()
         {
             return View();
         }
 
-        public IActionResult Login()
+        public IActionResult Login(string emailLogin, string passwordLogin)
         {
+            ViewBag.num = null;
+            if (!string.IsNullOrWhiteSpace(emailLogin))
+            {
+                var loginQuery = _context.Users
+                    .Where(user => user.Email.Equals(emailLogin) && user.Password.Equals(passwordLogin))
+                    .Select(user => user)
+                    .ToList();
+
+                ViewBag.email = loginQuery.Count;
+                if (loginQuery.Count > 0)
+                {
+                    return RedirectToAction(nameof(LoginDetails));
+                }
+            }
             return View();
         }
 
@@ -140,29 +154,33 @@ namespace SGV_Booking.Controllers
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Users == null)
+    {
+            if (id == null || _context.Bookings == null)
             {
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserId == id);
-            if (user == null)
+            var booking = await _context.Bookings
+                .Include(b => b.Customer)
+                .Include(b => b.Restaurant)
+                .FirstOrDefaultAsync(m => m.BookingId == id);
+            if (booking == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(booking);
         }
 
-        // GET: Users/Create
+        // GET: Bookings/Create
         public IActionResult Create()
         {
+            ViewData["CustomerId"] = new SelectList(_context.Users, "UserId", "UserId");
+            ViewData["RestaurantId"] = new SelectList(_context.Restaurants, "RestaurantId", "RestaurantId");
             return View();
         }
 
-        // POST: Users/Create
+        // POST: Bookings/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -263,14 +281,14 @@ namespace SGV_Booking.Controllers
             {
                 _context.Users.Remove(user);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(int id)
         {
-          return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
+            return (_context.Users?.Any(e => e.UserId == id)).GetValueOrDefault();
         }
     }
 }
