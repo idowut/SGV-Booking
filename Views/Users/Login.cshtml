@@ -4,29 +4,55 @@
 @{
 }
 
+<style>
+    body {
+        background-color: #c6e5f3;
+        margin: 0px;
+        padding: 0px;
+    }
+</style>
 
 
 
 
-
-<h2 style="text-align: center">Login</h2>
-
-
-<form method="post" action="/Users/LoginDetails">
+<body>
     <div class="row justify-content-center">
-        <div class="col-3">
-            <input type="text" name="emailLogin" class="form-control" placeholder="Enter Email" />
-        </div>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-3">
-            <input type="text" name="passwordLogin" class="form-control" placeholder ="Enter Password" />
-        </div>
-    </div>
+        <div class="container" style="width: 500px; margin-top: 10%; background-color:white">
+            @for (var i = 0; i < 2; i++)
+            {
+                <br />
+            }
+            <h2 style="text-align: center">Login</h2>
+            <br />
+            <br />
+            <form method="post" action="/Users/Login">
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                        <input type="text" name="emailLogin" class="form-control" placeholder="Enter Email" />
+                    </div>
+                </div>
+                <br />
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                        <input type="password" name="passwordLogin" class="form-control" placeholder="Enter Password" />
+                    </div>
+                </div>
+                <br />
 
-    <div class="row justify-content-center">
-        <div class="col-auto">
-            <button type="submit" class="form-control btn-primary">Login</button>
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <button type="submit" class="form-control btn-primary">Login</button>
+                    </div>
+                </div>
+            </form>
+            @for (var i = 0; i < 2; i++)
+            {
+                <br />
+            }
+            <p>@ViewBag.email</p>
         </div>
+
     </div>
-</form>
+    "
+
+</body>
