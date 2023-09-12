@@ -19,7 +19,11 @@
             <div class="tab-content col-10" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-bookings" role="tabpanel" aria-labelledby="v-pills-bookings-tab">
                     <p>add later...</p>
-                    @Model.UserBookings.BookingNotes
+                    @foreach (var item in Model.UserBookings)
+                    {
+                        <p>@item.BookingNotes</p>
+                        
+                    }
 
                 </div>
                 <div class="tab-pane fade" id="v-pills-rewards" role="tabpanel" aria-labelledby="v-pills-rewards-tab">

@@ -36,21 +36,15 @@ namespace SGV_Booking.Controllers
                 return NotFound();
             }
 
-            var TheUser = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
-            var UserBookingsContext = _context.Bookings
+            vm.TheUser = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            vm.UserBookings = await _context.Bookings
                 .Where(i => i.CustomerId == id)
-                .AsQueryable();
+                .ToListAsync();
 
-            if (TheUser == null)
+            if (vm.TheUser == null)
             {
                 return NotFound();
             }
-            vm = await UserBookingsContext
-                .Select(i => new UsersAndBookings
-                {
-                    TheUser = TheUser,
-                    UserBookings = i,
-                }).FirstOrDefaultAsync();
 
             return View(vm);
         }
@@ -91,17 +85,6 @@ namespace SGV_Booking.Controllers
                     throw;
                 }
             }
-            var TheUser = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
-            var UserBookingsContext = _context.Bookings
-                .Where(i => i.CustomerId == id)
-                .AsQueryable();
-
-            vm = await UserBookingsContext
-            .Select(i => new UsersAndBookings
-            {
-                TheUser = TheUser,
-                UserBookings = i,
-            }).FirstOrDefaultAsync();
 
             Console.WriteLine("Im here 1");
             return View(vm);
@@ -110,14 +93,15 @@ namespace SGV_Booking.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Register([Bind("FirstName, LastName, PhoneNumber, Email, Password")] User user)
+        public async Task<IActionResult> Register([Bind("UserID, FirstName, LastName, PhoneNumber, Email, Password")] User user)
         {
             if (ModelState.IsValid)
             {
                 user.UserType = 2;
-                user.BookingsCount += 1;
+                user.BookingsCount = 0;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+                Console.WriteLine(user);
                 return RedirectToAction(nameof(RegisterDetails));
             }
 
