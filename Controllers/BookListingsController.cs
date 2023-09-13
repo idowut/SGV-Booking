@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SGV_Booking.Data;
@@ -111,7 +107,7 @@ namespace SGV_Booking.Controllers
 
         //ViewData["CustomerId"] = new SelectList(_context.Users, "UserId", "UserId", booking.CustomerId);
         //ViewData["RestaurantId"] = new SelectList(_context.Restaurants, "RestaurantId", "RestaurantId", booking.RestaurantId);
-   
+
 
         //return View(booking);
         //}
@@ -162,43 +158,52 @@ namespace SGV_Booking.Controllers
 
         // GET: Bookings/Delete/5
 
-         public async Task<IActionResult> EditCustomer(int? id)
+        public async Task<IActionResult> CustomerEdit(int id)
+        {
+            Console.WriteLine(id);
+            if (id == null || _context.Bookings == null)
             {
-                if (id == null || _context.Bookings == null)
-                {
-                    return NotFound();
-                }
-
-                var booking = await _context.Bookings
-                    .Include(b => b.Customer)
-                    .Include(b => b.Restaurant)
-                    .FirstOrDefaultAsync(m => m.BookingId == id);
-            if (booking == null)
-                {
-                    return NotFound();
-                }
-                return View(booking);
+                Console.WriteLine("im in here");
+                return NotFound();
             }
+
+            var booking = await _context.Bookings
+                .Include(b => b.Customer)
+                .Include(b => b.Restaurant)
+                .FirstOrDefaultAsync(m => m.BookingId == id);
+            if (booking == null)
+            {
+                Console.WriteLine("Im in here now");
+                return NotFound();
+            }
+
+            Console.WriteLine(booking.BookingId);
+            Console.WriteLine(booking.BookingNotes);
+
+            Console.WriteLine("test");
+            return View(booking);
+        }
 
         // POST: Users/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditCustomer(int id, [Bind("BookingId,RestaurantId,BookingTime,CustomerId,BookingNotes,BanquetOption")] Booking booking)
+        public async Task<IActionResult> CustomerEdit(int id, Booking booking)
         {
             Console.WriteLine(booking.CustomerId);
             Console.WriteLine(booking.RestaurantId);
             Console.WriteLine(booking.BookingId);
             Console.WriteLine(booking.BookingNotes);
             Console.WriteLine(booking.BanquetOption);
-  
+
             //type what you wanna say
             //now I can see customerID, restrantId on terminal but ModelState is still not valid.
 
-
+            Console.WriteLine(id);
             if (id != booking.BookingId)
             {
+                Console.WriteLine("Test0");
                 return NotFound();
             }
 
@@ -211,24 +216,25 @@ namespace SGV_Booking.Controllers
             //    }
             //}
 
-                try
+            try
+            {
+                _context.Update(booking);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!BookingExists(booking.BookingId))
                 {
-                    _context.Update(booking);
-                    await _context.SaveChangesAsync();
+                    Console.WriteLine("Test");
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!BookingExists(booking.BookingId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                Console.WriteLine("Im here 1");
-                return RedirectToAction("CustomerDetails", "BookListings", new { id = booking.BookingId });
+            }
+            Console.WriteLine("Im here 1");
+            return RedirectToAction("CustomerDetails", "BookListings", new { id = booking.BookingId });
 
         }
         public async Task<IActionResult> Delete(int? id)
@@ -237,7 +243,7 @@ namespace SGV_Booking.Controllers
             {
                 return NotFound();
             }
-            
+
 
             var booking = await _context.Bookings
                 .Include(b => b.Customer)
@@ -266,14 +272,14 @@ namespace SGV_Booking.Controllers
             {
                 _context.Bookings.Remove(booking);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BookingExists(int id)
         {
-          return (_context.Bookings?.Any(e => e.BookingId == id)).GetValueOrDefault();
+            return (_context.Bookings?.Any(e => e.BookingId == id)).GetValueOrDefault();
         }
     }
 }
