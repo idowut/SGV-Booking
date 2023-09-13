@@ -107,7 +107,7 @@
         <form>
             <div class="elem-group">
                 <label for="guest">Guest</label>
-                <input type="number" id="guest" name="total_guest" placeholder="1..." min="1" required>
+                <input type="number" id="guest" name="total_guest" placeholder="1..." min="1" max="10" required>
             </div>
 
             <div class="elem-group">
@@ -132,13 +132,17 @@
             </div>
 
             <div id="banquetOptions" style="display: none;">
+                
                 <label for="banquetOption">Banquet Option</label>
+                <div class="alert alert-info">
+                    <strong>Info:</strong> Some banquet selection are only available if booking is made with 4 or more guests.
+                </div>
                 <div class="row">
                     <div class="col-4" id="alaCarteOption">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">À la carte</h5>
-                                <p class="card-text">The À la carte option allows customers to order each distinctive food item at the restaurant.<p/>
+                                <p class="card-text">The À la carte option allows customers to order each distinctive food item at the restaurant.<p />
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                     <label class="form-check-label" for="flexRadioDefault1"></label>
@@ -164,7 +168,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Feast Banquet</h5>
-                                <p class="card-text">A large banquet big enough to feast with others including: Crispy beef, Satay chicken, S + P Eggplant, Crying Tiger Salad, Steam prawn dumplings, Ribs and Barramundi curry
+                                <p class="card-text">
+                                    A large banquet big enough to feast with others including: Crispy beef, Satay chicken, S + P Eggplant, Crying Tiger Salad, Steam prawn dumplings, Ribs and Barramundi curry
                                     <br>
                                     (min 4 people)
                                     <br>
@@ -184,10 +189,10 @@
         <form action="Booking" method="GET">
             <button type="submit">Next</button>
         </form>
-
         <script>
             document.getElementById("restaurantSelect").addEventListener("change", function () {
                 var selectedRestaurant = this.value;
+                var guestCount = document.getElementById("guest").value;
                 var alaCarteOption = document.getElementById("alaCarteOption");
                 var shareBanquetOption = document.getElementById("shareBanquetOption");
                 var feastBanquetOption = document.getElementById("feastBanquetOption");
@@ -195,16 +200,19 @@
                 var bookingTimeSelect = document.getElementById("bookingTimeSelect");
                 var bookingTime = document.getElementById("bookingTime");
 
-
                 // Clear existing options
                 bookingTime.innerHTML = '';
 
                 if (selectedRestaurant !== "Restaurant") {
-                    // Show the booking time select and banquet options
+                    // Show the booking time select and banquet options based on guest count
                     bookingTimeSelect.style.display = "block";
-                    banquetOptions.style.display = "block";
 
-
+                    if (guestCount >= 4) {
+                        banquetOptions.style.display = "block";
+                    } else {
+                        banquetOptions.style.display = "none";
+                    }
+                                     
                     // Add booking time options based on the selected restaurant
                     if (selectedRestaurant === "1") { // Bamboo Leaf
                         addOption(bookingTime, "12:00 PM", "12:00 PM (Lunch)");
@@ -261,30 +269,34 @@
                         addOption(bookingTime, "9:30 PM", "9:30 PM (Night Dinner)");
                         addOption(bookingTime, "9:45 PM", "9:45 PM (Night Dinner)");
                     }
-                    // Display the appropriate banquet option text
-                    if (selectedRestaurant === "1") {
-                        alaCarteOption.style.display = "block";
-                        shareBanquetOption.style.display = "block";
-                        feastBanquetOption.style.display = "block";
-                        banquetOptions.style.display = "block";
 
-                        var shareBanquetText = "A shared banquet that includes: Satay Chicken, Steam prawn dumplings, S + P Squid, Roast Pork, Sticky pork and Asian green \n(min 4 People) \n$55 per person";
-                        var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
-                        shareBanquetCardBody.innerText = shareBanquetText;
-                    } else if (selectedRestaurant === "2") {
+                    // Display the appropriate banquet option text
+                    if (guestCount >= 4) {
+                        if (selectedRestaurant === "1") {
+                            alaCarteOption.style.display = "block";
+                            shareBanquetOption.style.display = "block";
+                            feastBanquetOption.style.display = "block";
+
+                            var shareBanquetText = "A shared banquet that includes: Satay Chicken, Steam prawn dumplings, S + P Squid, Roast Pork, Sticky pork and Asian green \n(min 4 People) \n$55 per person";
+                            var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
+                            shareBanquetCardBody.innerText = shareBanquetText;
+                        } else if (selectedRestaurant === "2") {
+                            alaCarteOption.style.display = "block";
+                            shareBanquetOption.style.display = "none";
+                            feastBanquetOption.style.display = "none";
+                        } else if (selectedRestaurant === "3") {
+                            alaCarteOption.style.display = "block";
+                            shareBanquetOption.style.display = "block";
+                            feastBanquetOption.style.display = "block";
+
+                            var shareBanquetText = "A shared banquet that includes: Papas Fritas, Korean Fried Chicken, Tacos, Smokey chicken, Taquitos dorados and Nachos \n(min 4 people) \n$35 per person";
+                            var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
+                            shareBanquetCardBody.innerText = shareBanquetText;
+                        }
+                    } else {
                         alaCarteOption.style.display = "block";
                         shareBanquetOption.style.display = "none";
                         feastBanquetOption.style.display = "none";
-                        banquetOptions.style.display = "block";
-                    } else if (selectedRestaurant === "3") {
-                        alaCarteOption.style.display = "block";
-                        shareBanquetOption.style.display = "block";
-                        feastBanquetOption.style.display = "none";
-                        banquetOptions.style.display = "block";
-
-                        var shareBanquetText = "A shared banquet that includes: Papas Fritas, Korean Fried Chicken, Tacos, Smokey chicken, Taquitos dorados and Nachos \n(min 4 people) \n$35 per person";
-                        var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
-                        shareBanquetCardBody.innerText = shareBanquetText;
                     }
                 } else {
                     // Hide the booking time select and banquet options
