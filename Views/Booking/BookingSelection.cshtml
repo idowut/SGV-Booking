@@ -105,10 +105,22 @@
         <h1 class="display-header">Booking Selection</h1>
 
         <form>
-            <div class="elem-group">
-                <label for="guest">Guest</label>
-                <input type="number" id="guest" name="total_guest" placeholder="1..." min="1" max="10" required>
-            </div>
+        <div class="elem-group">
+            <label for="guest">Guest</label>
+            <select class="form-select" id="guest" name="total_guest" aria-label="Default select example" required>
+                <option selected disabled>Select the number of guests</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+            </select>
+        </div>
 
             <div class="elem-group">
                 <label for="checkin-date">Select Date</label>
@@ -117,8 +129,8 @@
 
             <div class="elem-group">
                 <label for="restaurantSelect">Select Restaurant</label>
-                <select class="form-select" id="restaurantSelect" aria-label="Default select example">
-                    <option selected>Restaurant</option>
+                <select class="form-select" id="restaurantSelect" aria-label="Default select example" >
+                    <option selected disabled>Restaurant</option>
                     <option value="1">Bamboo Leaf</option>
                     <option value="2">La Oeste</option>
                     <option value="3">Mexikana</option>
@@ -135,7 +147,7 @@
 
                 <label for="banquetOption">Banquet Option</label>
                 <div class="alert alert-info">
-                    <strong>Info:</strong> Some banquet selections are available for all guest counts.
+                    <strong>Info:</strong> Some banquet selections are only available for bookings consisting of 4 of more guests.
                 </div>
                 <div class="row">
                     <div class="col-4" id="alaCarteOption">
@@ -171,8 +183,6 @@
                                 <p class="card-text">
                                     A large banquet big enough to feast with others including: Crispy beef, Satay chicken, S + P Eggplant, Crying Tiger Salad, Steam prawn dumplings, Ribs, and Barramundi curry
                                     <br>
-                                    (Available for all group sizes)
-                                    <br>
                                     $70 per person
                                 </p>
                                 <div class="form-check">
@@ -189,7 +199,7 @@
         <form action="Booking" method="GET">
             <button type="submit">Next</button>
         </form>
-        <script>
+        <script>       
             document.getElementById("restaurantSelect").addEventListener("change", function () {
                 var selectedRestaurant = this.value;
                 var guestCount = document.getElementById("guest").value;
@@ -208,7 +218,7 @@
                     bookingTimeSelect.style.display = "block";
                     banquetOptions.style.display = "block";
 
-                    // Add booking time options based on the selected restaurant
+                    // Adds booking time options based on the selected restaurant
                     if (selectedRestaurant === "1") { // Bamboo Leaf
                         addOption(bookingTime, "12:00 PM", "12:00 PM (Lunch)");
                         addOption(bookingTime, "12:15 PM", "12:15 PM (Lunch)");
@@ -273,38 +283,36 @@
                         shareBanquetOption.style.display = "block";
                         feastBanquetOption.style.display = "block";
                         if (guestCount <= 3) {
-                            // Disable Share Banquet and Feast Banquet options
-                            shareBanquetOption.querySelector(".form-check-input").disabled = true;
-                            feastBanquetOption.querySelector(".form-check-input").disabled = true;
+                            // Hide Share Banquet and Feast Banquet options
+                            shareBanquetOption.style.display = "none";
+                            feastBanquetOption.style.display = "none";
                         } else {
-                            // Enable Share Banquet and Feast Banquet options
-                            shareBanquetOption.querySelector(".form-check-input").disabled = false;
-                            feastBanquetOption.querySelector(".form-check-input").disabled = false;
+                            // Show Share Banquet and Feast Banquet options
+                            shareBanquetOption.style.display = "block";
+                            feastBanquetOption.style.display = "block";
                         }
                         // Update card text for share banquet
-                        var shareBanquetText = "A shared banquet that includes: Satay Chicken, Steam prawn dumplings, S + P Squid, Roast Pork, Sticky pork and Asian green $55 per person";
+                        var shareBanquetText = "A shared banquet that includes: Satay Chicken, Steam prawn dumplings, S + P Squid, Roast Pork, Sticky pork and Asian green \n$55 per person";
                         var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
                         shareBanquetCardBody.innerText = shareBanquetText;
                     } else if (selectedRestaurant === "2") { // La Oeste
                         alaCarteOption.style.display = "block";
                         shareBanquetOption.style.display = "none";
                         feastBanquetOption.style.display = "none";
-                    } if (selectedRestaurant === "3") { // Mexikana
-                            alaCarteOption.style.display = "block";
-                            shareBanquetOption.style.display = "block";
-                            feastBanquetOption.style.display = "none";
+                    } else if (selectedRestaurant === "3") { // Mexikana
+                        alaCarteOption.style.display = "block";
+                        shareBanquetOption.style.display = "block";
+                        feastBanquetOption.style.display = "none";
 
-                            if (guestCount <= 3) {
-                                // Disable Share Banquet and Feast Banquet options for Mexikana
-                                shareBanquetOption.querySelector(".form-check-input").disabled = true;
-                                feastBanquetOption.querySelector(".form-check-input").disabled = true;
-                            } else {
-                                // Enable Share Banquet option for Mexikana
-                                shareBanquetOption.querySelector(".form-check-input").disabled = false;
-                                // Feast Banquet is still disabled for Mexikana
-                            }
+                        if (guestCount <= 3) {
+                            // Hide Share Banquet and Feast Banquet options for Mexikana
+                            shareBanquetOption.style.display = "none";
+                        } else {
+                            // Show Share Banquet option for Mexikana
+                            shareBanquetOption.style.display = "block";
+                        }
                         // Update card text for share banquet
-                        var shareBanquetText = "A shared banquet that includes: Papas Fritas, Korean Fried Chicken, Tacos, Smokey chicken, Taquitos dorados and Nachos $35 per person";
+                        var shareBanquetText = "A shared banquet that includes: Papas Fritas, Korean Fried Chicken, Tacos, Smokey chicken, Taquitos dorados and Nachos \n$35 per person";
                         var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
                         shareBanquetCardBody.innerText = shareBanquetText;
                     }
@@ -328,9 +336,8 @@
 
             // Initial state on page load
             document.getElementById("restaurantSelect").selectedIndex = 0;
-            document.getElementById("restaurantSelect").dispatchEvent(new Event("change"));
+            document.getElementById("restaurantSelect").dispatchEvent(new Event("change"));           
         </script>
-
     </div>
 </body>
 </html>
