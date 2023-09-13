@@ -1,5 +1,6 @@
 ﻿@model SGV_Booking.ViewModels.UsersAndBookings
 
+
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
 
 
@@ -17,16 +18,80 @@
             </div>
             <div class="tab-content col-10" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-bookings" role="tabpanel" aria-labelledby="v-pills-bookings-tab">
-                    <p>add later...</p>
                     @foreach (var item in Model.UserBookings)
                     {
-                        <p>@item.BookingNotes</p>
-                        
+                        <div class="card">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <div class="container" style="flex:auto;background-color:lightgray">
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <h5 class="text-center" fill="#dee2e6">@item.BookingTime</h5>
+                                        <br>
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@item.Restaurant.RestaurantName</h5>
+                                        <p class="card-text">@item.BookingNotes</p>
+                                        <form asp-action="CustomerEdit" asp-controller="BookListings" asp-route-id="@item.BookingId">
+                                            <input type="submit" class="btn btn-secondary" value="Edit booking">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
 
                 </div>
                 <div class="tab-pane fade" id="v-pills-rewards" role="tabpanel" aria-labelledby="v-pills-rewards-tab">
-                    <p>anthony's job not mine</p>
+                    @*ANTHONY CODE HERE*@
+
+                    @{
+                        IDictionary<String , int> bookingsRestaurants = new Dictionary<string, int>();
+
+                        foreach (var item in Model.UserBookings)
+                        {
+                            if (bookingsRestaurants.ContainsKey(item.Restaurant.RestaurantName))
+                            {
+                                bookingsRestaurants[item.Restaurant.RestaurantName] = (bookingsRestaurants[item.Restaurant.RestaurantName] + 1);
+                            }
+                            else
+                            {
+                                bookingsRestaurants[item.Restaurant.RestaurantName] = 1;
+                            }
+                        } 
+                    }
+
+                    <div class="container">
+                        <h4 class="title" style="color: black;">Your Rewards</h4>
+                        <br />
+                        <p>When you vist one of our 3 resturants 5 times!, you get 20% of your next meal!</p>
+                        <br />
+                        <div class="container" style="background-color: #F3F3F3; padding: 15px; border-radius: 10px;">
+                            @foreach (KeyValuePair<string, int> item in bookingsRestaurants)
+                            {
+
+                                var number = @item.Value;
+                                var percentage = (number * 20);
+                                
+                               
+
+                                <div class="contianer">
+                                    <h3>@item.Key</h3> 
+                                    <br />
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: @percentage% " aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <br />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    @*ANTHONY CODE HERE*@
                 </div>
                 <div class="tab-pane fade" id="v-pills-userinfo" role="tabpanel" aria-labelledby="v-pills-userinfo-tab">
                     <form asp-action="CustomerIndex" asp-route-id="@Model.TheUser.UserId">
@@ -73,7 +138,7 @@
                             </div>
                         </div>
                         <br />
-                        <div class="form-group row">
+                        <div class="form-group row d-flex">
                             <div class="col-6">
                                 <label asp-for="TheUser.Password" class="control-label"></label>
                             </div>
