@@ -143,26 +143,37 @@ namespace SGV_Booking.Controllers
         {
             return View();
         }
+        
 
-        public IActionResult Login(string emailLogin, string passwordLogin)
+        public IActionResult Login()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login([Bind("Email, Password")] User user)
+        {
+            ViewBag.noLogin = null;
 
             //If the enters their login, then they are sent to the index page.
             ViewBag.num = null;
-            if (!string.IsNullOrWhiteSpace(emailLogin))
+            if (!string.IsNullOrWhiteSpace(user.Email))
             {
                 //If user input is in the database.
-                var loginQuery = _context.Users
-                    .Where(user => user.Email.Equals(emailLogin) && user.Password.Equals(passwordLogin))
-                    .Select(user => user)
-                    .ToList();
-
-                ViewBag.email = loginQuery.Count;
-                if (loginQuery.Count > 0)
+                var login = _context.Users
+                    .FirstOrDefault(userindata => userindata.Email.Equals(user.Email) && userindata.Password.Equals(user.Password));
+                
+                if (login == null)
                 {
-                    var user = _context.Users.FirstOrDefault(user => user.Email.Equals(emailLogin));
+                    ViewBag.noLogin = "Incorrect Login. Try checking your email or password.";
+                }
 
-                    return RedirectToAction("CustomerIndex", new {id = user.UserId});
+                if (login != null)
+                {
+                    var loggedUser = _context.Users.FirstOrDefault(userindata => userindata.Email.Equals(user.Email));
+                    Console.WriteLine("error is here");
+
+                    return RedirectToAction("CustomerIndex", new {id = loggedUser.UserId});
                 }
             }
             return View();
