@@ -129,17 +129,20 @@
 
             <div class="elem-group">
                 <label for="restaurantSelect">Select Restaurant</label>
-                <select class="form-select" id="restaurantSelect" aria-label="Default select example" >
+                <select class="form-select" id="restaurantSelect" aria-label="Default select example">
                     <option selected disabled>Restaurant</option>
-                    <option value="1">Bamboo Leaf</option>
-                    <option value="2">La Oeste</option>
-                    <option value="3">Mexikana</option>
+                    <option value="Bamboo Leaf">Bamboo Leaf</option>
+                    <option value="La Oeste">La Oeste</option>
+                    <option value="Mexikana">Mexikana</option>
                 </select>
             </div>
+
 
             <div class="elem-group" id="bookingTimeSelect">
                 <label for="bookingTime">Select Time</label>
                 <select id="bookingTime" name="booking_time" required>
+                    <option value="" disabled selected>Select a Time</option>
+
                 </select>
             </div>
 
@@ -199,16 +202,41 @@
         <form action="Booking" method="GET">
             <button type="submit">Next</button>
         </form>
-        <script>       
+        <script>
+            function updateSessionStorage() {
+                var selectedGuests = document.getElementById("guest").value;
+                var selectedDate = document.getElementById("datetime").value;
+                var selectedRestaurant = document.getElementById("restaurantSelect").value;
+                var selectedTime = document.getElementById("bookingTime").value;
+
+                var nextButton = document.querySelector('button[type="submit"]');
+
+                if (selectedGuests !== "" && selectedDate !== "" && selectedRestaurant !== "Restaurant" && selectedTime !== "") {
+                    // All required fields are selected, enable the "Next" button
+                    nextButton.disabled = false;
+                } else {
+                    // At least one required field is missing, disable the "Next" button
+                    nextButton.disabled = true;
+                }
+
+                sessionStorage.setItem("selectedGuests", selectedGuests);
+                sessionStorage.setItem("selectedDate", selectedDate);
+                sessionStorage.setItem("selectedRestaurant", selectedRestaurant);
+                sessionStorage.setItem("selectedTime", selectedTime);
+            }
+
+            document.getElementById("guest").addEventListener("change", updateSessionStorage);
+            document.getElementById("datetime").addEventListener("change", updateSessionStorage);
+            document.getElementById("restaurantSelect").addEventListener("change", updateSessionStorage);
+            document.getElementById("bookingTime").addEventListener("change", updateSessionStorage);
+
             document.getElementById("restaurantSelect").addEventListener("change", function () {
                 var selectedRestaurant = this.value;
-                var guestCount = document.getElementById("guest").value;
                 var alaCarteOption = document.getElementById("alaCarteOption");
                 var shareBanquetOption = document.getElementById("shareBanquetOption");
                 var feastBanquetOption = document.getElementById("feastBanquetOption");
                 var banquetOptions = document.getElementById("banquetOptions");
-                var bookingTimeSelect = document.getElementById("bookingTimeSelect");
-                var bookingTime = document.getElementById("bookingTime");
+                
 
                 // Clear existing options
                 bookingTime.innerHTML = '';
@@ -219,7 +247,7 @@
                     banquetOptions.style.display = "block";
 
                     // Adds booking time options based on the selected restaurant
-                    if (selectedRestaurant === "1") { // Bamboo Leaf
+                    if (selectedRestaurant === "Bamboo Leaf") { // Bamboo Leaf
                         addOption(bookingTime, "12:00 PM", "12:00 PM (Lunch)");
                         addOption(bookingTime, "12:15 PM", "12:15 PM (Lunch)");
                         addOption(bookingTime, "12:30 PM", "12:30 PM (Lunch)");
@@ -235,7 +263,7 @@
                         addOption(bookingTime, "7:15 PM", "7:15 PM (Second Dinner)");
                         addOption(bookingTime, "7:30 PM", "7:30 PM (Second Dinner)");
                         addOption(bookingTime, "7:45 PM", "7:45 PM (Second Dinner)");                       
-                    } else if (selectedRestaurant === "2") { // La Oeste
+                    } else if (selectedRestaurant === "La Oeste") { // La Oeste
                         addOption(bookingTime, "10:00 AM", "10:00 AM (Brunch)");
                         addOption(bookingTime, "10:00 AM", "10:00 AM (Brunch)");
                         addOption(bookingTime, "10:15 AM", "10:15 AM (Brunch)");
@@ -257,7 +285,7 @@
                         addOption(bookingTime, "7:15 PM", "7:15 PM (Second Dinner)");
                         addOption(bookingTime, "7:30 PM", "7:30 PM (Second Dinner)");
                         addOption(bookingTime, "7:45 PM", "7:45 PM (Second Dinner)");
-                    } else if (selectedRestaurant === "3") { // Mexikana
+                    } else if (selectedRestaurant === "Mexikana") { // Mexikana
                         addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
                         addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
                         addOption(bookingTime, "5:15 PM", "5:15 PM (First Dinner)");
@@ -278,7 +306,7 @@
                     }
 
                     // Display the appropriate banquet option text and enable/disable radio buttons
-                    if (selectedRestaurant === "1") { // Bamboo Leaf
+                    if (selectedRestaurant === "Bamboo Leaf") { // Bamboo Leaf
                         alaCarteOption.style.display = "block";
                         shareBanquetOption.style.display = "block";
                         feastBanquetOption.style.display = "block";
@@ -295,11 +323,11 @@
                         var shareBanquetText = "A shared banquet that includes: Satay Chicken, Steam prawn dumplings, S + P Squid, Roast Pork, Sticky pork and Asian green \n$55 per person";
                         var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
                         shareBanquetCardBody.innerText = shareBanquetText;
-                    } else if (selectedRestaurant === "2") { // La Oeste
+                    } else if (selectedRestaurant === "La Oeste") { // La Oeste
                         alaCarteOption.style.display = "block";
                         shareBanquetOption.style.display = "none";
                         feastBanquetOption.style.display = "none";
-                    } else if (selectedRestaurant === "3") { // Mexikana
+                    } else if (selectedRestaurant === "Mexikana") { // Mexikana
                         alaCarteOption.style.display = "block";
                         shareBanquetOption.style.display = "block";
                         feastBanquetOption.style.display = "none";
@@ -332,6 +360,7 @@
                     option.text = text;
                     select.appendChild(option);
                 }
+
             });
 
             // Initial state on page load

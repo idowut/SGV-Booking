@@ -22,5 +22,9 @@ namespace SGV_Booking.Controllers
         {
             return View();
         }
+        public IActionResult BookingConfirmation()
+        {
+            return View();
+        }
     }
 }
