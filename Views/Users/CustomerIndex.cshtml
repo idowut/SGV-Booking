@@ -81,10 +81,19 @@
                                
 
                                 <div class="contianer">
-                                    <h3>@item.Key</h3> 
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3>@item.Key</h3>
+                                        </div>
+                                        <div class="col" style="text-align: right;">
+                                            <h5>@item.Value/5</h5>
+                                        </div>
+                                    </div>
                                     <br />
-                                    <div class="progress">
-                                        <div class="progress-bar progress-bar-striped" role="progressbar" style="width: @percentage% " aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="row">
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: @percentage%; border-radius: 10px;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                                        </div>
                                     </div>
                                     <br />
                                 </div>
