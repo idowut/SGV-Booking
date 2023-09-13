@@ -93,6 +93,12 @@ namespace SGV_Booking.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Register([Bind("UserID, FirstName, LastName, PhoneNumber, Email, Password")] User user)
         {
             ViewBag.phoneError = null;
@@ -165,7 +171,10 @@ namespace SGV_Booking.Controllers
                 
                 if (login == null)
                 {
-                    ViewBag.noLogin = "Incorrect Login. Try checking your email or password.";
+                    if (!string.IsNullOrWhiteSpace(user.Password))
+                    {
+                        ViewBag.noLogin = "Incorrect Login. Try checking your email or password.";
+                    }
                 }
 
                 if (login != null)
