@@ -5,7 +5,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: lightblue;
             margin: 0;
             padding: 0;
         }
@@ -138,7 +138,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">À la carte</h5>
-                                <p class="card-text">The À la carte option allows customers to order each distinctive food item at the restaurant.</p>
+                                <p class="card-text">The À la carte option allows customers to order each distinctive food item at the restaurant.<p/>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                     <label class="form-check-label" for="flexRadioDefault1"></label>
@@ -164,7 +164,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Feast Banquet</h5>
-                                <p class="card-text">A large banquet big enough to feast with others including: Crispy beef, Satay chicken, S + P Eggplant, Crying Tiger Salad, Steam prawn dumplings, Ribs and Barramundi curry</p>
+                                <p class="card-text">A large banquet big enough to feast with others including: Crispy beef, Satay chicken, S + P Eggplant, Crying Tiger Salad, Steam prawn dumplings, Ribs and Barramundi curry
+                                    <br>
+                                    (min 4 people)
+                                    <br>
+                                    $70 per person
+                                </p>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
                                     <label class="form-check-label" for="flexRadioDefault3"></label>
@@ -263,7 +268,7 @@
                         feastBanquetOption.style.display = "block";
                         banquetOptions.style.display = "block";
 
-                        var shareBanquetText = "A shared banquet that includes: Satay Chicken, Steam prawn dumplings, S + P Squid, Roast Pork, Sticky pork and Asian green";
+                        var shareBanquetText = "A shared banquet that includes: Satay Chicken, Steam prawn dumplings, S + P Squid, Roast Pork, Sticky pork and Asian green \n(min 4 People) \n$55 per person";
                         var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
                         shareBanquetCardBody.innerText = shareBanquetText;
                     } else if (selectedRestaurant === "2") {
@@ -277,7 +282,7 @@
                         feastBanquetOption.style.display = "none";
                         banquetOptions.style.display = "block";
 
-                        var shareBanquetText = "A shared banquet that includes: Papas Fritas, Korean Fried Chicken, Tacos, Smokey chicken, Taquitos dorados and Nachos";
+                        var shareBanquetText = "A shared banquet that includes: Papas Fritas, Korean Fried Chicken, Tacos, Smokey chicken, Taquitos dorados and Nachos \n(min 4 people) \n$35 per person";
                         var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
                         shareBanquetCardBody.innerText = shareBanquetText;
                     }
