@@ -1,4 +1,11 @@
-﻿namespace SGV_Booking.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using SGV_Booking.Data;
+using SGV_Booking.Models;
+using SGV_Booking.ViewModels;
+
+namespace SGV_Booking.Controllers
 {
     public class UsersController : Controller
     {
@@ -137,6 +144,10 @@
             return RedirectToAction(nameof(Index));
         }
 
+        public IActionResult Register()
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> Register([Bind("UserID, FirstName, LastName, PhoneNumber, Email, Password")] User user)
         {
@@ -221,7 +232,23 @@
                     var loggedUser = _context.Users.FirstOrDefault(userindata => userindata.Email.Equals(user.Email));
                     Console.WriteLine("error is here");
 
-                    return RedirectToAction("CustomerIndex", new { id = loggedUser.UserId });
+                    if (loggedUser.UserType == 0)
+                    {
+                        return RedirectToAction("AdminIndex", new { id = loggedUser.UserId });
+                    }
+
+                    else if (loggedUser.UserType == 1)
+                    {
+
+                        var restaurant = await _context.Restaurants
+                            .FirstOrDefaultAsync(i => i.RestaurantName == loggedUser.FirstName);
+                        return RedirectToAction("RestaurantIndex", new { id = restaurant.RestaurantId });
+                    }
+
+                    else if (loggedUser.UserType == 2)
+                    {
+                        return RedirectToAction("CustomerIndex", new { id = loggedUser.UserId });
+                    }
                 }
             }
             return View();
