@@ -210,7 +210,7 @@
 
                     // Add booking time options based on the selected restaurant
                     if (selectedRestaurant === "1") { // Bamboo Leaf
-                        aaddOption(bookingTime, "12:00 PM", "12:00 PM (Lunch)");
+                        addOption(bookingTime, "12:00 PM", "12:00 PM (Lunch)");
                         addOption(bookingTime, "12:15 PM", "12:15 PM (Lunch)");
                         addOption(bookingTime, "12:30 PM", "12:30 PM (Lunch)");
                         addOption(bookingTime, "12:45 PM", "12:45 PM (Lunch)");
@@ -224,8 +224,7 @@
                         addOption(bookingTime, "7:00 PM", "7:00 PM (Second Dinner)");
                         addOption(bookingTime, "7:15 PM", "7:15 PM (Second Dinner)");
                         addOption(bookingTime, "7:30 PM", "7:30 PM (Second Dinner)");
-                        addOption(bookingTime, "7:45 PM", "7:45 PM (Second Dinner)");
-
+                        addOption(bookingTime, "7:45 PM", "7:45 PM (Second Dinner)");                       
                     } else if (selectedRestaurant === "2") { // La Oeste
                         addOption(bookingTime, "10:00 AM", "10:00 AM (Brunch)");
                         addOption(bookingTime, "10:00 AM", "10:00 AM (Brunch)");
@@ -248,8 +247,8 @@
                         addOption(bookingTime, "7:15 PM", "7:15 PM (Second Dinner)");
                         addOption(bookingTime, "7:30 PM", "7:30 PM (Second Dinner)");
                         addOption(bookingTime, "7:45 PM", "7:45 PM (Second Dinner)");
-
                     } else if (selectedRestaurant === "3") { // Mexikana
+                        addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
                         addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
                         addOption(bookingTime, "5:15 PM", "5:15 PM (First Dinner)");
                         addOption(bookingTime, "5:30 PM", "5:30 PM (First Dinner)");
@@ -290,17 +289,20 @@
                         alaCarteOption.style.display = "block";
                         shareBanquetOption.style.display = "none";
                         feastBanquetOption.style.display = "none";
-                    } else if (selectedRestaurant === "3") { // Mexikana
-                        alaCarteOption.style.display = "block";
-                        shareBanquetOption.style.display = "block";
-                        if (guestCount <= 3) {
-                            // Disable Share Banquet and Feast Banquet options
-                            shareBanquetOption.querySelector(".form-check-input").disabled = true;
-                            // Feast Banquet is already disabled for Mexikana
-                        } else {
-                            // Enable Share Banquet option
-                            shareBanquetOption.querySelector(".form-check-input").disabled = false;
-                        }
+                    } if (selectedRestaurant === "3") { // Mexikana
+                            alaCarteOption.style.display = "block";
+                            shareBanquetOption.style.display = "block";
+                            feastBanquetOption.style.display = "none";
+
+                            if (guestCount <= 3) {
+                                // Disable Share Banquet and Feast Banquet options for Mexikana
+                                shareBanquetOption.querySelector(".form-check-input").disabled = true;
+                                feastBanquetOption.querySelector(".form-check-input").disabled = true;
+                            } else {
+                                // Enable Share Banquet option for Mexikana
+                                shareBanquetOption.querySelector(".form-check-input").disabled = false;
+                                // Feast Banquet is still disabled for Mexikana
+                            }
                         // Update card text for share banquet
                         var shareBanquetText = "A shared banquet that includes: Papas Fritas, Korean Fried Chicken, Tacos, Smokey chicken, Taquitos dorados and Nachos $35 per person";
                         var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
