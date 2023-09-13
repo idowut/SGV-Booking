@@ -19,7 +19,7 @@ namespace SGV_Booking.Models
         public string PhoneNumber { get; set; } = null!;
         public string Password { get; set; } = null!;
 
-        public string? priorityStatus { get; set; } 
+        public Boolean? priorityStatus { get; set; } 
 
         public virtual ICollection<Booking> Bookings { get; set; }
     }
