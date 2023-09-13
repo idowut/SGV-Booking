@@ -25,11 +25,32 @@
             </div>
             <div class="tab-content col-10" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-bookings" role="tabpanel" aria-labelledby="v-pills-bookings-tab">
-                    <p>add later...</p>
                     @foreach (var item in Model.UserBookings)
                     {
-                        <p>@item.BookingNotes</p>
-                        
+                        <div class="card">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <div class="container" style="flex:auto;background-color:lightgray">
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <h5 class="text-center" fill="#dee2e6">@item.BookingTime</h5>
+                                        <br>
+                                        <br>
+                                        <br>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@item.Restaurant.RestaurantName</h5>
+                                        <p class="card-text">@item.BookingNotes</p>
+                                        <form asp-action="CustomerEdit" asp-controller="BookListings" asp-route-id="@item.BookingId">
+                                            <input type="submit" class="btn btn-secondary" value="Edit booking">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     }
 
                 </div>
@@ -96,7 +117,7 @@
                             </div>
                         </div>
                         <br />
-                        <div class="form-group row">
+                        <div class="form-group row d-flex">
                             <div class="col-6">
                                 <label asp-for="TheUser.Password" class="control-label"></label>
                             </div>

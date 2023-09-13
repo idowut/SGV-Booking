@@ -39,6 +39,8 @@ namespace SGV_Booking.Controllers
             vm.TheUser = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
             vm.UserBookings = await _context.Bookings
                 .Where(i => i.CustomerId == id)
+                .Include(i => i.Restaurant)
+                .OrderByDescending(i => i.BookingTime)
                 .ToListAsync();
 
             if (vm.TheUser == null)
@@ -85,6 +87,11 @@ namespace SGV_Booking.Controllers
                     throw;
                 }
             }
+            vm.TheUser = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            vm.UserBookings = await _context.Bookings
+                .Where(i => i.CustomerId == id)
+                .Include(i => i.Restaurant)
+                .ToListAsync();
 
             Console.WriteLine("Im here 1");
             return View(vm);
