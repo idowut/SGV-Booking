@@ -5,7 +5,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: lightblue;
             margin: 0;
             padding: 0;
         }
@@ -66,8 +66,12 @@
             border-radius: 5px;
         }
 
+        #bookingTimeSelect {
+            display: none;
+        }
+
         #banquetOptions {
-            margin-top: 20px;
+            display: none;
         }
 
             #banquetOptions .card {
@@ -103,35 +107,12 @@
         <form>
             <div class="elem-group">
                 <label for="guest">Guest</label>
-                <input type="number" id="guest" name="total_guest" placeholder="1..." min="1" required>
+                <input type="number" id="guest" name="total_guest" placeholder="1..." min="1" max="10" required>
             </div>
 
             <div class="elem-group">
                 <label for="checkin-date">Select Date</label>
                 <input type="date" id="datetime" name="datetime" min="<?php echo date('Y-m-d'); ?>" required>
-            </div>
-
-            <div class="elem-group">
-                <label for="bookingTime">Select Time</label>
-                <select id="bookingTime" name="booking_time" required>
-                    <option value="" disabled selected>Select Time</option>
-                    <option value="12:00 PM">12:00 PM (Lunch)</option>
-                    <option value="12:15 PM">12:15 PM (Lunch)</option>
-                    <option value="12:30 PM">12:30 PM (Lunch)</option>
-                    <option value="12:45 PM">12:45 PM (Lunch)</option>
-                    <option value="1:00 PM">1:00 PM (Lunch)</option>
-                    <option value="5:00 PM">5:00 PM (First Dinner)</option>
-                    <option value="5:15 PM">5:15 PM (First Dinner)</option>
-                    <option value="5:30 PM">5:30 PM (First Dinner)</option>
-                    <option value="5:45 PM">5:45 PM (First Dinner)</option>
-                    <option value="6:00 PM">6:00 PM (First Dinner)</option>
-                    <option value="6:15 PM">6:15 PM (First Dinner)</option>
-                    <option value="7:00 PM">7:00 PM (Second Dinner)</option>
-                    <option value="7:15 PM">7:15 PM (Second Dinner)</option>
-                    <option value="7:30 PM">7:30 PM (Second Dinner)</option>
-                    <option value="7:45 PM">7:45 PM (Second Dinner)</option>
-                    <option value="8:00 PM">8:00 PM (Second Dinner)</option>
-                </select>
             </div>
 
             <div class="elem-group">
@@ -144,8 +125,18 @@
                 </select>
             </div>
 
+            <div class="elem-group" id="bookingTimeSelect">
+                <label for="bookingTime">Select Time</label>
+                <select id="bookingTime" name="booking_time" required>
+                </select>
+            </div>
+
             <div id="banquetOptions" style="display: none;">
+
                 <label for="banquetOption">Banquet Option</label>
+                <div class="alert alert-info">
+                    <strong>Info:</strong> Some banquet selections are available for all guest counts.
+                </div>
                 <div class="row">
                     <div class="col-4" id="alaCarteOption">
                         <div class="card">
@@ -177,7 +168,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title">Feast Banquet</h5>
-                                <p class="card-text">A large banquet big enough to feast with others including: Crispy beef, Satay chicken, S + P Eggplant, Crying Tiger Salad, Steam prawn dumplings, Ribs and Barramundi curry</p>
+                                <p class="card-text">
+                                    A large banquet big enough to feast with others including: Crispy beef, Satay chicken, S + P Eggplant, Crying Tiger Salad, Steam prawn dumplings, Ribs, and Barramundi curry
+                                    <br>
+                                    (Available for all group sizes)
+                                    <br>
+                                    $70 per person
+                                </p>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
                                     <label class="form-check-label" for="flexRadioDefault3"></label>
@@ -192,46 +189,148 @@
         <form action="Booking" method="GET">
             <button type="submit">Next</button>
         </form>
-
         <script>
             document.getElementById("restaurantSelect").addEventListener("change", function () {
+                var selectedRestaurant = this.value;
+                var guestCount = document.getElementById("guest").value;
                 var alaCarteOption = document.getElementById("alaCarteOption");
                 var shareBanquetOption = document.getElementById("shareBanquetOption");
                 var feastBanquetOption = document.getElementById("feastBanquetOption");
                 var banquetOptions = document.getElementById("banquetOptions");
+                var bookingTimeSelect = document.getElementById("bookingTimeSelect");
+                var bookingTime = document.getElementById("bookingTime");
 
-                if (this.value === "1") {
-                    alaCarteOption.style.display = "block";
-                    shareBanquetOption.style.display = "block";
-                    feastBanquetOption.style.display = "block";
+                // Clear existing options
+                bookingTime.innerHTML = '';
+
+                if (selectedRestaurant !== "Restaurant") {
+                    // Show the booking time select and banquet options based on guest count
+                    bookingTimeSelect.style.display = "block";
                     banquetOptions.style.display = "block";
 
-                    var shareBanquetText = "A shared banquet that includes: Satay Chicken, Steam prawn dumplings,S + P Squid, Roast Pork, Sticky pork and Asian green";
-                    var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
-                    shareBanquetCardBody.innerText = shareBanquetText;
+                    // Add booking time options based on the selected restaurant
+                    if (selectedRestaurant === "1") { // Bamboo Leaf
+                        addOption(bookingTime, "12:00 PM", "12:00 PM (Lunch)");
+                        addOption(bookingTime, "12:15 PM", "12:15 PM (Lunch)");
+                        addOption(bookingTime, "12:30 PM", "12:30 PM (Lunch)");
+                        addOption(bookingTime, "12:45 PM", "12:45 PM (Lunch)");
+                        addOption(bookingTime, "1:00 PM", "1:00 PM (Lunch)");
+                        addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
+                        addOption(bookingTime, "5:15 PM", "5:15 PM (First Dinner)");
+                        addOption(bookingTime, "5:30 PM", "5:30 PM (First Dinner)");
+                        addOption(bookingTime, "5:45 PM", "5:45 PM (First Dinner)");
+                        addOption(bookingTime, "6:00 PM", "6:00 PM (First Dinner)");
+                        addOption(bookingTime, "6:15 PM", "6:15 PM (First Dinner)");
+                        addOption(bookingTime, "7:00 PM", "7:00 PM (Second Dinner)");
+                        addOption(bookingTime, "7:15 PM", "7:15 PM (Second Dinner)");
+                        addOption(bookingTime, "7:30 PM", "7:30 PM (Second Dinner)");
+                        addOption(bookingTime, "7:45 PM", "7:45 PM (Second Dinner)");                       
+                    } else if (selectedRestaurant === "2") { // La Oeste
+                        addOption(bookingTime, "10:00 AM", "10:00 AM (Brunch)");
+                        addOption(bookingTime, "10:00 AM", "10:00 AM (Brunch)");
+                        addOption(bookingTime, "10:15 AM", "10:15 AM (Brunch)");
+                        addOption(bookingTime, "10:30 AM", "10:30 AM (Brunch)");
+                        addOption(bookingTime, "10:45 AM", "10:45 AM (Brunch)");
+                        addOption(bookingTime, "11:00 AM", "11:00 AM (Brunch)");
+                        addOption(bookingTime, "12:00 PM", "12:00 PM (Lunch)");
+                        addOption(bookingTime, "12:15 PM", "12:15 PM (Lunch)");
+                        addOption(bookingTime, "12:30 PM", "12:30 PM (Lunch)");
+                        addOption(bookingTime, "12:45 PM", "12:45 PM (Lunch)");
+                        addOption(bookingTime, "1:00 PM", "1:00 PM (Lunch)");
+                        addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
+                        addOption(bookingTime, "5:15 PM", "5:15 PM (First Dinner)");
+                        addOption(bookingTime, "5:30 PM", "5:30 PM (First Dinner)");
+                        addOption(bookingTime, "5:45 PM", "5:45 PM (First Dinner)");
+                        addOption(bookingTime, "6:00 PM", "6:00 PM (First Dinner)");
+                        addOption(bookingTime, "6:15 PM", "6:15 PM (First Dinner)");
+                        addOption(bookingTime, "7:00 PM", "7:00 PM (Second Dinner)");
+                        addOption(bookingTime, "7:15 PM", "7:15 PM (Second Dinner)");
+                        addOption(bookingTime, "7:30 PM", "7:30 PM (Second Dinner)");
+                        addOption(bookingTime, "7:45 PM", "7:45 PM (Second Dinner)");
+                    } else if (selectedRestaurant === "3") { // Mexikana
+                        addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
+                        addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
+                        addOption(bookingTime, "5:15 PM", "5:15 PM (First Dinner)");
+                        addOption(bookingTime, "5:30 PM", "5:30 PM (First Dinner)");
+                        addOption(bookingTime, "5:45 PM", "5:45 PM (First Dinner)");
+                        addOption(bookingTime, "6:00 PM", "6:00 PM (First Dinner)");
+                        addOption(bookingTime, "6:15 PM", "6:15 PM (First Dinner)");
+                        addOption(bookingTime, "7:00 PM", "7:00 PM (Second Dinner)");
+                        addOption(bookingTime, "7:15 PM", "7:15 PM (Second Dinner)");
+                        addOption(bookingTime, "7:30 PM", "7:30 PM (Second Dinner)");
+                        addOption(bookingTime, "7:45 PM", "7:45 PM (Second Dinner)");
+                        addOption(bookingTime, "8:00 PM", "8:00 PM (Second Dinner)");
+                        addOption(bookingTime, "8:15 PM", "8:15 PM (Second Dinner)");
+                        addOption(bookingTime, "9:00 PM", "9:00 PM (Night Dinner)");
+                        addOption(bookingTime, "9:15 PM", "9:15 PM (Night Dinner)");
+                        addOption(bookingTime, "9:30 PM", "9:30 PM (Night Dinner)");
+                        addOption(bookingTime, "9:45 PM", "9:45 PM (Night Dinner)");
+                    }
 
-                } else if (this.value === "2") {
-                    alaCarteOption.style.display = "block";
-                    shareBanquetOption.style.display = "none";
-                    feastBanquetOption.style.display = "none";
-                    banquetOptions.style.display = "block";
-                } else if (this.value === "3") {
-                    alaCarteOption.style.display = "block";
-                    shareBanquetOption.style.display = "block";
-                    feastBanquetOption.style.display = "none";
-                    banquetOptions.style.display = "block";
+                    // Display the appropriate banquet option text and enable/disable radio buttons
+                    if (selectedRestaurant === "1") { // Bamboo Leaf
+                        alaCarteOption.style.display = "block";
+                        shareBanquetOption.style.display = "block";
+                        feastBanquetOption.style.display = "block";
+                        if (guestCount <= 3) {
+                            // Disable Share Banquet and Feast Banquet options
+                            shareBanquetOption.querySelector(".form-check-input").disabled = true;
+                            feastBanquetOption.querySelector(".form-check-input").disabled = true;
+                        } else {
+                            // Enable Share Banquet and Feast Banquet options
+                            shareBanquetOption.querySelector(".form-check-input").disabled = false;
+                            feastBanquetOption.querySelector(".form-check-input").disabled = false;
+                        }
+                        // Update card text for share banquet
+                        var shareBanquetText = "A shared banquet that includes: Satay Chicken, Steam prawn dumplings, S + P Squid, Roast Pork, Sticky pork and Asian green $55 per person";
+                        var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
+                        shareBanquetCardBody.innerText = shareBanquetText;
+                    } else if (selectedRestaurant === "2") { // La Oeste
+                        alaCarteOption.style.display = "block";
+                        shareBanquetOption.style.display = "none";
+                        feastBanquetOption.style.display = "none";
+                    } if (selectedRestaurant === "3") { // Mexikana
+                            alaCarteOption.style.display = "block";
+                            shareBanquetOption.style.display = "block";
+                            feastBanquetOption.style.display = "none";
 
-                    var shareBanquetText = "A shared banquet that includes: Papas Fritas, Korean Fried Chicken, Tacos, Smokey chicken, Taquitos dorados and Nachos";
-                    var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
-                    shareBanquetCardBody.innerText = shareBanquetText;
+                            if (guestCount <= 3) {
+                                // Disable Share Banquet and Feast Banquet options for Mexikana
+                                shareBanquetOption.querySelector(".form-check-input").disabled = true;
+                                feastBanquetOption.querySelector(".form-check-input").disabled = true;
+                            } else {
+                                // Enable Share Banquet option for Mexikana
+                                shareBanquetOption.querySelector(".form-check-input").disabled = false;
+                                // Feast Banquet is still disabled for Mexikana
+                            }
+                        // Update card text for share banquet
+                        var shareBanquetText = "A shared banquet that includes: Papas Fritas, Korean Fried Chicken, Tacos, Smokey chicken, Taquitos dorados and Nachos $35 per person";
+                        var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
+                        shareBanquetCardBody.innerText = shareBanquetText;
+                    }
                 } else {
+                    // Hide the booking time select and banquet options
+                    bookingTimeSelect.style.display = "none";
+                    banquetOptions.style.display = "none";
                     alaCarteOption.style.display = "none";
                     shareBanquetOption.style.display = "none";
                     feastBanquetOption.style.display = "none";
-                    banquetOptions.style.display = "none";
+                }
+
+                // Function to add options to a dropdown
+                function addOption(select, value, text) {
+                    var option = document.createElement("option");
+                    option.value = value;
+                    option.text = text;
+                    select.appendChild(option);
                 }
             });
+
+            // Initial state on page load
+            document.getElementById("restaurantSelect").selectedIndex = 0;
+            document.getElementById("restaurantSelect").dispatchEvent(new Event("change"));
         </script>
+
     </div>
 </body>
 </html>

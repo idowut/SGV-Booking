@@ -30,6 +30,8 @@ namespace SGV_Booking.Models
         [Required(ErrorMessage = "Please Enter a Password.")]
         public string Password { get; set; } = null!;
 
+        public Boolean? priorityStatus { get; set; } 
+
         public virtual ICollection<Booking> Bookings { get; set; }
     }
 }

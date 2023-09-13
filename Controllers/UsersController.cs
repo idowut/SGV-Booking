@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using SGV_Booking.Data;
-using SGV_Booking.Models;
-using SGV_Booking.ViewModels;
-
-namespace SGV_Booking.Controllers
+﻿namespace SGV_Booking.Controllers
 {
     public class UsersController : Controller
     {
@@ -29,6 +17,55 @@ namespace SGV_Booking.Controllers
                         Problem("Entity set 'SGVDatabaseContext.Users'  is null.");
         }
 
+        public async Task<IActionResult> RestaurantIndex(int id)
+        {
+            var vm = new RestaurantAndBookings();
+            if (id == null || _context.Users == null)
+            {
+                Console.WriteLine("test");
+                return NotFound();
+            }
+            vm.TheUsers = await _context.Users.ToListAsync();
+            vm.TheRestaurant = await _context.Restaurants.FirstOrDefaultAsync(m => m.RestaurantId == id);
+            vm.TheBanquets = await _context.Banquets.ToListAsync();
+            vm.RestaurantBookings = await _context.Bookings
+                .Where(i => i.RestaurantId == id)
+                .OrderBy(i => i.BookingTime)
+                .ToListAsync();
+
+            if (vm.TheRestaurant == null)
+            {
+                return NotFound();
+            }
+
+            return View(vm);
+
+        }
+
+
+        // GET: Users/Details/5
+        public async Task<IActionResult> RestaurantBookingDetails(int id)
+        {
+            var vm = new BookingBanquetUser();
+
+            if (id == null || _context.Bookings == null)
+            {
+                return NotFound();
+            }
+
+            vm.TheBooking = await _context.Bookings.FirstOrDefaultAsync(i => i.BookingId == id);
+            vm.TheBanquet = await _context.Banquets.FirstOrDefaultAsync(i => i.BanquetId == vm.TheBooking.BanquetOption);
+            vm.TheUser = await _context.Users.FirstOrDefaultAsync(i => i.UserId == vm.TheBooking.CustomerId);
+            vm.TheRestaurant = await _context.Restaurants.FirstOrDefaultAsync(i => i.RestaurantId == vm.TheBooking.RestaurantId);
+            if (vm.TheBooking == null)
+            {
+                return NotFound();
+            }
+
+            return View(vm);
+        }
+
+
         public async Task<IActionResult> CustomerIndex(UsersAndBookings vm, int? id)
         {
             if (id == null || _context.Users == null)
@@ -39,6 +76,8 @@ namespace SGV_Booking.Controllers
             vm.TheUser = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
             vm.UserBookings = await _context.Bookings
                 .Where(i => i.CustomerId == id)
+                .Include(i => i.Restaurant)
+                .OrderBy(i => i.BookingTime)
                 .ToListAsync();
 
             if (vm.TheUser == null)
@@ -85,17 +124,17 @@ namespace SGV_Booking.Controllers
                     throw;
                 }
             }
+            vm.TheUser = await _context.Users.FirstOrDefaultAsync(m => m.UserId == id);
+            vm.UserBookings = await _context.Bookings
+                .Where(i => i.CustomerId == id)
+                .Include(i => i.Restaurant)
+                .ToListAsync();
 
             Console.WriteLine("Im here 1");
             return View(vm);
 
             Console.WriteLine("Im here 2");
             return RedirectToAction(nameof(Index));
-        }
-
-        public IActionResult Register()
-        {
-            return View();
         }
 
         [HttpPost]
@@ -123,7 +162,7 @@ namespace SGV_Booking.Controllers
                     return RedirectToAction(nameof(RegisterDetails));
                 }
 
-                if(registerQuery.Count > 0)
+                if (registerQuery.Count > 0)
                 {
                     var userEmailAndPassword = await _context.Users
                         .FirstOrDefaultAsync(userindata => userindata.PhoneNumber.Equals(user.PhoneNumber) || userindata.Email.Equals(user.Email));
@@ -149,7 +188,7 @@ namespace SGV_Booking.Controllers
         {
             return View();
         }
-        
+
 
         public IActionResult Login()
         {
@@ -168,7 +207,7 @@ namespace SGV_Booking.Controllers
                 //If user input is in the database.
                 var login = _context.Users
                     .FirstOrDefault(userindata => userindata.Email.Equals(user.Email) && userindata.Password.Equals(user.Password));
-                
+
                 if (login == null)
                 {
                     if (!string.IsNullOrWhiteSpace(user.Password))
@@ -182,7 +221,7 @@ namespace SGV_Booking.Controllers
                     var loggedUser = _context.Users.FirstOrDefault(userindata => userindata.Email.Equals(user.Email));
                     Console.WriteLine("error is here");
 
-                    return RedirectToAction("CustomerIndex", new {id = loggedUser.UserId});
+                    return RedirectToAction("CustomerIndex", new { id = loggedUser.UserId });
                 }
             }
             return View();
@@ -195,7 +234,7 @@ namespace SGV_Booking.Controllers
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
-    {
+        {
             if (id == null || _context.Bookings == null)
             {
                 return NotFound();
