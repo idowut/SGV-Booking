@@ -31,9 +31,27 @@
                 <h4 style="color: darkgrey;">People Amount:</h4>
                 <input class="form-control" /> <!-- 仮定：PeopleAmount プロパティが存在する -->
             </div>*@
+
+            <div class="" style="background-color: white; padding: 10px; border-radius: 10px;">
+                <div class="col-6">
+                    <div class="d-flex align-items-start justify-content-start">
+                        <h4 style="color: dimgrey; margin-right: 10px;">Restaurant:</h4>
+                        <h4 style="color: dimgray; margin-right: 10px;">@Model.Restaurant.RestaurantName</h4>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex align-items-start justify-content-start">
+                        <h4 style="color: dimgray; margin-right: 10px;">Date/Time:</h4>
+                        <h4 style="color: dimgray; margin-right: 10px;">@Html.DisplayFor(model => model.BookingTime)</h4>
+                    </div>
+                </div>
+            </div>
+                
+            
+            <div style="height: 10px;"></div>
             <div class="col-md-12">
-                        <div class="form-group" style="background-color: white; padding: 2px; border-radius: 2px;">
-                    <h4 class="text-center" style="color: darkgrey;">Booking Notes:</h4>
+                        <div class="form-group" style="background-color: white; padding: 10px; border-radius: 10px;">
+                    <h4 style="color: gray;">Booking Notes:</h4>
                     <div style="display: flex; flex-direction: column; align-items: center;">
                         <!-- テキストエリアを下に配置 -->
                         <textarea asp-for="BookingNotes" class="form-control" rows="5" cols="20"></textarea>
@@ -42,16 +60,15 @@
             </div>
                 <div style="height: 20px;"></div>
             <div class="col-md-12">
-                        
-
                 <div class="form-group" style="background-color: white; padding: 10px; border-radius: 10px;">
-                    <h4 class="text-center" style="color: darkgrey;">People Amounts:</h4>
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <!-- テキストエリアを下に配置 -->
-                        <textarea class="form-control" rows="1" cols="2"></textarea>
+                    <h4  style="color: darkgrey;">People Amounts:</h4>
+                    <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                        <!-- Number input field to specify the number of people -->
+                        <input type="number" class="form-control" style="width: 50%;" min="1" step="1" placeholder="Amount Of People" />
                     </div>
                 </div>
             </div>
+
 
 
 
@@ -61,14 +78,19 @@
                 <span asp-validation-for="BanquetOption" class="text-danger"></span>
             </div>
    *@
-            
-            <div class="row">
-                <div class="col">
-                    <div class="update-button-container" style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                        <button type="submit" style="background-color: #AB0F43; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Update</button>
+
+
+                <div class="row">
+                    <div class="col">
+                        <div style="height: 20px;"></div>
+                        <div class="button-container" style="display: flex; justify-content: space-between; align-items: center;">
+                            <!-- Delete Button -->
+                            <a asp-action="Delete" asp-route-id="@Model.BookingId" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; text-decoration: none;">Cancel Booking</a>
+                            <!-- Update Button -->
+                            <button type="submit" style="background-color: #007BFF; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Update</button>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </div>      
         </form>
         </div>
     </div>

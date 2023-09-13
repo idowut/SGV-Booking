@@ -237,17 +237,19 @@ namespace SGV_Booking.Controllers
             {
                 return NotFound();
             }
+            
 
             var booking = await _context.Bookings
                 .Include(b => b.Customer)
                 .Include(b => b.Restaurant)
                 .FirstOrDefaultAsync(m => m.BookingId == id);
+
             if (booking == null)
             {
                 return NotFound();
             }
 
-            return View(booking);
+            return View("Delete", booking);
         }
 
         // POST: Bookings/Delete/5

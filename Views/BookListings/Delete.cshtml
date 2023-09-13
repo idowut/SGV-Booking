@@ -4,48 +4,51 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<body>
+    <div style="background-color: #C3C3C3; padding: 20px; border-radius: 10px;">
+        <div class="container text-start"  >
+            <div class="container" style="display: flex; align-items: center; background-color: white; padding: 15px; border-radius: 10px;">
+                <div class="container">
+                    <h1 class="title" style="color: red;">Are you sure to cancel this booking?</h1>
+                </div>
+            </div>
+            <div class="container" style="background-color: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
+                <div class="row">
+                    <h3 style="color: darkgrey;">Restaurant:</h3>
+                    <p style="color: black;"> @Html.DisplayFor(model => model.Restaurant.RestaurantName) </p>
+                </div>
+                <div class="row">
+                    <h4 style="color: darkgrey;">Date/Time:</h4>
+                    <p style="color: black;"> @Html.DisplayFor(model => model.BookingTime) </p>
+                </div>
+                <div class="row">
+                    <h4 style="color: darkgrey;">People Amount:</h4>
+                    <p style="color: black;"> ... </p>
+                </div>
+                <div class="row">
+                    <h4 style="color: darkgrey;">Banquets Reserved:</h4>
+                    <p style="color: black;"> @Html.DisplayFor(model => model.BanquetOption) </p>
+                </div>
+                <div style="width: 100%;">
+                       <h4 style="color: darkgrey;">Notes:</h4>
+                        <div style="background-color: #E4E4E4; padding: 15px; border-radius: 10px;">
+                            <p style="color: black;">@Html.DisplayFor(model => model.BookingNotes)</p>
+                        </div>
+                    </div>
+                <div style="height: 20px"></div>
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="BookingId" />
+                    <input type="submit" value="Cancel Booking" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; text-decoration: none" />
+                </form>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Booking</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BookingTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BookingTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BookingNotes)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BookingNotes)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BanquetOption)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BanquetOption)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Customer)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Customer.UserId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Restaurant)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Restaurant.RestaurantId)
-        </dd>
-    </dl>
+            </div>
+        </div>
+    </div>
+</body>
+
     
-    <form asp-action="Delete">
+@*    <form asp-action="Delete">
         <input type="hidden" asp-for="BookingId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
+        <input type="submit" value="Cancel" class="btn btn-danger" /> 
+    </form>*@
+
