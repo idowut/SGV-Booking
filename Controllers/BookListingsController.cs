@@ -22,8 +22,8 @@ namespace SGV_Booking.Controllers
         // GET: Bookings
         public async Task<IActionResult> Index()
         {
-            var sGVDatabaseContext = _context.Bookings.Include(b => b.Customer).Include(b => b.Restaurant);
-            return View(await sGVDatabaseContext.ToListAsync());
+            var SGVDatabaseContext = _context.Bookings.Include(b => b.Customer).Include(b => b.Restaurant);
+            return View(await SGVDatabaseContext.ToListAsync());
         }
 
         // GET: Bookings/Details/5

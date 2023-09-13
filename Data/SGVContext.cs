@@ -160,6 +160,8 @@ namespace SGV_Booking.Data
                     .IsUnicode(false)
                     .HasColumnName("restaurantPhoneNumber");
 
+                entity.Property(e => e.RestaurantRewardValue).HasColumnName("restaurantRewardValue");
+
                 entity.HasOne(d => d.RestaurantAddress)
                     .WithMany(p => p.Restaurants)
                     .HasForeignKey(d => d.RestaurantAddressId)
@@ -171,6 +173,8 @@ namespace SGV_Booking.Data
                 entity.Property(e => e.UserId).HasColumnName("userID");
 
                 entity.Property(e => e.BookingsCount).HasColumnName("bookingsCount");
+
+                entity.Property(e => e.priorityStatus).HasColumnName("priorityStatus");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(200)
