@@ -3,15 +3,24 @@
 *@
 @{
 }
-<h2 style="text-align: center">Register Details</h2>
+
+@for (var i = 0; i < 2; i++)
+{
+    <br />
+}
+
+<h2 style="text-align: center">Login Successful</h2>
 <br />
 
-<p style="text-align: center">Login was Successful! Welcome!</p>
+<p style="text-align: center">You are now Signed Up! Welcome!</p>
 
 
 <br />
 <div class="row justify-content-center">
     <div class="col-auto">
         <a href="/Home/Index" class="btn btn-outline-primary">Return Home</a>
+    </div>
+    <div class="col-auto">
+        <a href="/Users/Login" class="btn btn-outline-primary">Login</a>
     </div>
 </div>
