@@ -14,7 +14,7 @@
     </style>
 </head>
 
-<body>
+<body style="background-repeat: no-repeat; background-attachment: fixed; background-size: cover; background-image: url(https://res.cloudinary.com/tf-lab/image/upload/restaurant/cb6cef6d-5ad2-4f9a-a5d2-bfa4d58b036a/3efc8b8e-6365-490b-a830-3700e89ab51e.jpg)">
     <div class="row">
         <div class="col-md-6">
             <img style="width:90%; margin-left: 50px; margin-top: 70px" src="~/images/SGVlogo.png" />
@@ -26,40 +26,70 @@
 
                     <br />
                     <br />
-
-
                     <form method="post" action="/Users/Register">
                         <div class="row justify-content-center">
+                                <div class="col-4">
+                                    <label asp-for="FirstName">Enter First Name</label>
+                                </div>
+                                <div class="col-5">
+                                    <input type="text" class="form-control" asp-for="FirstName" />
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                                
+                            </div>
+                            <br />
+
+
+                        <div class="row justify-content-center">
+                                <div class="col-4">
+                                      <label asp-for="LastName">Enter Last Name</label>
+                                </div>
+                                <div class="col-5">
+                                     <input type="text" class="form-control" asp-for="LastName"/>
+                                     <span asp-validation-for="LastName" class="text-danger"></span>
+
+                                </div>
+                            </div>
+                            <br />
+
+                        <div class="row justify-content-center">
+                                <div class="col-4">
+                                    <label asp-for="PhoneNumber">Enter Phone Number</label>
+                                </div>
+                                <div class="col-5">
+                                     <input type="text" class="form-control" asp-for="PhoneNumber"/>
+                                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
+                                    <div class="col">
+                                        <p style="color: red">@ViewBag.phoneError</p>
+                                    </div>
+                                </div>
+                            </div>
+                        <br />
+
+                        <div class="row justify-content-center">
+                            <div class="col-4">
+                                <label asp-for="Email">Enter Email</label>
+                            </div>
                             <div class="col-5">
-                                <input type="text" class="form-control" asp-for="FirstName" placeholder="Enter First Name" />
+                                <input type="text" class="form-control" asp-for="Email"/>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+
+                                <div class="col">
+                                <p style="color: red; text-align: center; right: 0">@ViewBag.emailError</p>
+                                </div>
                             </div>
                         </div>
                         <br />
 
                         <div class="row justify-content-center">
-                            <div class="col-5">
-                                <input type="text" class="form-control" asp-for="LastName" placeholder="Enter Last Name" />
+                            <div class="col-4">
+                                <label asp-for="Password">Enter Password</label>
                             </div>
-                        </div>
-                        <br />
-
-                        <div class="row justify-content-center">
                             <div class="col-5">
-                                <input type="text" class="form-control" asp-for="PhoneNumber" placeholder="Enter Phone No." />
-                            </div>
-                        </div>
-                        <br />
+                                <input type="password" class="form-control" asp-for="Password"/>
+                                <span asp-validation-for="Password" class="text-danger"></span>
 
-                        <div class="row justify-content-center">
-                            <div class="col-5">
-                                <input type="text" class="form-control" asp-for="Email" placeholder="Enter Email" />
-                            </div>
-                        </div>
-                        <br />
-
-                        <div class="row justify-content-center">
-                            <div class="col-5">
-                                <input type="password" class="form-control" asp-for="Password" placeholder="Enter Password" />
                             </div>
                         </div>
                         <br />

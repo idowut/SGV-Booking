@@ -1,11 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using SGV_Booking.Data;
-using SGV_Booking.Models;
-using SGV_Booking.ViewModels;
-
-namespace SGV_Booking.Controllers
+﻿namespace SGV_Booking.Controllers
 {
     public class UsersController : Controller
     {
@@ -144,16 +137,49 @@ namespace SGV_Booking.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
         public async Task<IActionResult> Register([Bind("UserID, FirstName, LastName, PhoneNumber, Email, Password")] User user)
         {
+            ViewBag.phoneError = null;
+            ViewBag.emailError = null;
+            ViewBag.firstName = user.FirstName;
+
+
             if (ModelState.IsValid)
             {
-                user.UserType = 2;
-                user.BookingsCount = 0;
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                Console.WriteLine(user);
-                return RedirectToAction(nameof(RegisterDetails));
+                var registerQuery = _context.Users
+                    .Where(userindata => userindata.PhoneNumber.Equals(user.PhoneNumber) || userindata.Email.Equals(user.Email))
+                    .Select(userindata => userindata)
+                    .ToList();
+
+                if (registerQuery.Count == 0)
+                {
+                    user.UserType = 2;
+                    user.BookingsCount = 0;
+                    _context.Add(user);
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine(user);
+                    return RedirectToAction(nameof(RegisterDetails));
+                }
+
+                if (registerQuery.Count > 0)
+                {
+                    var userEmailAndPassword = await _context.Users
+                        .FirstOrDefaultAsync(userindata => userindata.PhoneNumber.Equals(user.PhoneNumber) || userindata.Email.Equals(user.Email));
+
+                    if (userEmailAndPassword.PhoneNumber == user.PhoneNumber)
+                    {
+                        ViewBag.phoneError = "Phone number is already in use.";
+                    }
+                    if (userEmailAndPassword.Email == user.Email)
+                    {
+                        ViewBag.emailError = "Email is already in use.";
+                    }
+
+                }
+
+
+                return View();
             }
 
             return View();
@@ -163,38 +189,39 @@ namespace SGV_Booking.Controllers
             return View();
         }
 
-        public async Task<IActionResult> LoginAsync(string emailLogin, string passwordLogin)
+
+        public IActionResult Login()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login([Bind("Email, Password")] User user)
+        {
+            ViewBag.noLogin = null;
+
+            //If the enters their login, then they are sent to the index page.
             ViewBag.num = null;
-            if (!string.IsNullOrWhiteSpace(emailLogin))
+            if (!string.IsNullOrWhiteSpace(user.Email))
             {
-                var loginQuery = _context.Users
-                    .Where(user => user.Email.Equals(emailLogin) && user.Password.Equals(passwordLogin))
-                    .Select(user => user)
-                    .ToList();
+                //If user input is in the database.
+                var login = _context.Users
+                    .FirstOrDefault(userindata => userindata.Email.Equals(user.Email) && userindata.Password.Equals(user.Password));
 
-                ViewBag.email = loginQuery.Count;
-                if (loginQuery.Count > 0)
+                if (login == null)
                 {
-                    var user = _context.Users.FirstOrDefault(user => user.Email.Equals(emailLogin));
-
-                    if (user.UserType == 0)
+                    if (!string.IsNullOrWhiteSpace(user.Password))
                     {
-                        return RedirectToAction("AdminIndex", new { id = user.UserId });
+                        ViewBag.noLogin = "Incorrect Login. Try checking your email or password.";
                     }
+                }
 
-                    else if (user.UserType == 1)
-                    {
+                if (login != null)
+                {
+                    var loggedUser = _context.Users.FirstOrDefault(userindata => userindata.Email.Equals(user.Email));
+                    Console.WriteLine("error is here");
 
-                        var restaurant = await _context.Restaurants
-                            .FirstOrDefaultAsync(i => i.RestaurantName == user.FirstName);
-                        return RedirectToAction("RestaurantIndex", new { id = restaurant.RestaurantId });
-                    }
-
-                    else if (user.UserType == 2)
-                    {
-                        return RedirectToAction("CustomerIndex", new { id = user.UserId });
-                    }
+                    return RedirectToAction("CustomerIndex", new { id = loggedUser.UserId });
                 }
             }
             return View();
@@ -204,6 +231,27 @@ namespace SGV_Booking.Controllers
         {
             return View();
         }
+
+        // GET: Users/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null || _context.Bookings == null)
+            {
+                return NotFound();
+            }
+
+            var booking = await _context.Bookings
+                .Include(b => b.Customer)
+                .Include(b => b.Restaurant)
+                .FirstOrDefaultAsync(m => m.BookingId == id);
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            return View(booking);
+        }
+
         // GET: Bookings/Create
         public IActionResult Create()
         {
