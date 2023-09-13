@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SGV_Booking.Data;
@@ -12,6 +8,9 @@ namespace SGV_Booking.Controllers
 {
     public class RestaurantsController : Controller
     {
+        const string SessionUserId = "_UserID";
+        const string SessionUserName = "_UserName";
+
         private readonly SGVContext _context;
 
         public RestaurantsController(SGVContext context)
@@ -170,14 +169,14 @@ namespace SGV_Booking.Controllers
             {
                 _context.Restaurants.Remove(restaurant);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool RestaurantExists(int id)
         {
-          return (_context.Restaurants?.Any(e => e.RestaurantId == id)).GetValueOrDefault();
+            return (_context.Restaurants?.Any(e => e.RestaurantId == id)).GetValueOrDefault();
         }
     }
 }

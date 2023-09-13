@@ -8,6 +8,9 @@ namespace SGV_Booking.Controllers
 {
     public class BookListingsController : Controller
     {
+        const string SessionUserId = "_UserID";
+        const string SessionUserName = "_UserName";
+
         private readonly SGVContext _context;
 
         public BookListingsController(SGVContext context)

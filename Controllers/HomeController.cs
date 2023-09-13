@@ -6,6 +6,10 @@ namespace SGV_Booking.Controllers
 {
     public class HomeController : Controller
     {
+        const string SessionUserId = "_UserID";
+        const string SessionUserName = "_UserName";
+
+
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -13,7 +17,7 @@ namespace SGV_Booking.Controllers
             _logger = logger;
         }
 
-     
+
         public IActionResult Index()
         {
             return View();
@@ -26,7 +30,7 @@ namespace SGV_Booking.Controllers
 
         public IActionResult Users()
         {
-            return View(); 
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -36,8 +40,8 @@ namespace SGV_Booking.Controllers
         }
 
         public IActionResult Temp()
-        { 
-            return View(); 
+        {
+            return View();
         }
     }
 }
