@@ -1,65 +1,95 @@
-﻿@model SGV_Booking.ViewModels.RestaurantAndBookings
+﻿@model SGV_Booking.ViewModels.BookingBanquetUser
 
 @{
     ViewData["Title"] = "Details";
 }
 
 
-
 <body>
+    <a class="btn btn-primary" asp-action="RestaurantIndex" asp-route-id="@Model.TheRestaurant.RestaurantId"> < Back to Restaurant Dashboard</a>
+    <br />
+    <br />
     <div style="background-color: #C3C3C3; padding: 20px; border-radius: 10px;">
         <div class="container">
             <div class="container" style="display: flex; align-items: center; background-color: white; padding: 15px; border-radius: 10px;">
                 <div class="container">
-                    <h1 class="title" style="color: darkgrey;">Bookings</h1>
+                    <h1 class="title" style="color: black;">@Model.TheRestaurant.RestaurantName Booking Summary</h1>
                 </div>
             </div>
             <div class="container" style="background-color: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
-                <div class="container">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    <p>Booking time</p>
-                                </th>
-                                <th>
-                                    <p>Booking ideas</p>
-                                </th>
-                                <th>
-                                    <p>Customer</p>
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.RestaurantBookings)
-                            {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.BookingTime)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.BookingNotes)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Customer.FirstName)
-                                    </td>
-
-
-                                    <td>
-                                        <a asp-action="Details" asp-route-id="@item.BookingId">Details</a>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+                <div class="row">
+                    <h4 style="color: darkgrey;">Date/Time:</h4>
+                    <p style="color: black;"> @Html.DisplayFor(model => model.TheBooking.BookingTime) </p>
+                </div>
+                <div class="row">
+                    <h4 style="color: darkgrey;">People Amount:</h4>
+                    <p style="color: black;"> @Html.DisplayFor(model => model.TheBooking.NumGuest) </p>
+                </div>
+                <div class="row">
+                    <h4 style="color: darkgrey;">Banquets Reserved:</h4>
+                    <p style="color: black;"> 
+                        @if (Model.TheBanquet == null)
+                        {
+                            <p>No banquet selected.</p>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(model => model.TheBanquet.BanquetName)
+                        }
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <h4 style="color: darkgrey;">Notes:</h4>
+                        <div class="container" style="background-color:#E4E4E4; padding: 15px; border-radius: 10px;">
+                            <div class="col">
+                                <p style="color: black;"> @Html.DisplayFor(model => model.TheBooking.BookingNotes) </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="update-button-container" style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                            <button style="background-color: #AB0F43; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Update</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
+            <div class="container" style="background-color: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
+                <div class="row">
+                    <h4 style="color: darkgrey;">Booking Contact</h4>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <p style="color: darkgrey;">Name:</p>
+                    </div>
+                    <div class="col">
+                        <p> @Html.DisplayFor(model => model.TheUser.FirstName) </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <p style="color: darkgrey;">Number:</p>
+                    </div>
+                    <div class="col">
+                        <p> @Html.DisplayFor(model => model.TheUser.PhoneNumber) </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <p style="color: darkgrey;">Email:</p>
+                    </div>
+                    <div class="col">
+                        <p>Jason.le25@gmail.com</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
-
 
 
 

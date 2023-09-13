@@ -7,8 +7,14 @@
 
 
 <body>
+    <a class="btn btn-primary" asp-action="CustomerIndex" asp-controller="Users" asp-route-id="@Model.CustomerId"> < Back to User Dashboard</a>
+    <br />
+    <br />
     <div style="background-color: #C3C3C3; padding: 20px; border-radius: 10px;">
         <div class="container"  >
+            <div class="alert alert-info">
+                <strong>Info:</strong> Changes can only be made to People amount and Booking notes. Please cancel and remake booking to modify other information.
+            </div>
             <div class="container" style="display: flex; align-items: center; background-color: white; padding: 15px; border-radius: 10px;">
                 <div class="container">
                     <h1 class="title" style="color: darkgrey;">Booking Summary</h1>
@@ -25,7 +31,7 @@
                 </div>
                 <div class="row">
                     <h4 style="color: darkgrey;">People Amount:</h4>
-                    <p style="color: black;"> ... </p>
+                    <p style="color: black;"> @Html.DisplayFor(Model => Model.NumGuest)</p>
                 </div>
                 <div class="row">
                     <h4 style="color: darkgrey;">Banquets Reserved:</h4>
@@ -41,8 +47,9 @@
                 <form>
                     <div class="row">
                         <div class="col">
-                            <div class="update-button-container" style="display: flex; justify-content: flex-end; margin-top: 10px;">
-                                <button style="background-color: red; color: white; border: none; padding: 5px 20px; border-radius: 5px;" asp-action="EditCustomer" asp-route-id="@Model.BookingId">Edit</button>
+                            <div class="update-button-container" style="display: flex; justify-content:space-between; margin-top: 10px;">
+                                <a asp-action="Delete" asp-route-id="@Model.BookingId" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; text-decoration: none;">Cancel Booking</a>
+                                <button style="background-color: #007bff; color: white; border: none; padding: 5px 20px; border-radius: 5px;" asp-action="CustomerEdit" asp-route-id="@Model.BookingId">Edit</button>
                             </div>
                         </div>
                     </div>

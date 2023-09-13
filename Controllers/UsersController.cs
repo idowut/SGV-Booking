@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SGV_Booking.Data;
@@ -29,15 +24,17 @@ namespace SGV_Booking.Controllers
                         Problem("Entity set 'SGVDatabaseContext.Users'  is null.");
         }
 
-        public async Task<IActionResult> RestaurantIndex(RestaurantAndBookings vm,int id)
+        public async Task<IActionResult> RestaurantIndex(int id)
         {
+            var vm = new RestaurantAndBookings();
             if (id == null || _context.Users == null)
             {
+                Console.WriteLine("test");
                 return NotFound();
             }
             vm.TheUsers = await _context.Users.ToListAsync();
             vm.TheRestaurant = await _context.Restaurants.FirstOrDefaultAsync(m => m.RestaurantId == id);
-            vm.TheBanquets = await _context.Banquets.ToListAsync(); 
+            vm.TheBanquets = await _context.Banquets.ToListAsync();
             vm.RestaurantBookings = await _context.Bookings
                 .Where(i => i.RestaurantId == id)
                 .OrderBy(i => i.BookingTime)
@@ -51,6 +48,30 @@ namespace SGV_Booking.Controllers
             return View(vm);
 
         }
+
+
+        // GET: Users/Details/5
+        public async Task<IActionResult> RestaurantBookingDetails(int id)
+        {
+            var vm = new BookingBanquetUser();
+
+            if (id == null || _context.Bookings == null)
+            {
+                return NotFound();
+            }
+
+            vm.TheBooking = await _context.Bookings.FirstOrDefaultAsync(i => i.BookingId == id);
+            vm.TheBanquet = await _context.Banquets.FirstOrDefaultAsync(i => i.BanquetId == vm.TheBooking.BanquetOption);
+            vm.TheUser = await _context.Users.FirstOrDefaultAsync(i => i.UserId == vm.TheBooking.CustomerId);
+            vm.TheRestaurant = await _context.Restaurants.FirstOrDefaultAsync(i => i.RestaurantId == vm.TheBooking.RestaurantId);
+            if (vm.TheBooking == null)
+            {
+                return NotFound();
+            }
+
+            return View(vm);
+        }
+
 
         public async Task<IActionResult> CustomerIndex(UsersAndBookings vm, int? id)
         {
@@ -142,7 +163,7 @@ namespace SGV_Booking.Controllers
             return View();
         }
 
-        public IActionResult Login(string emailLogin, string passwordLogin)
+        public async Task<IActionResult> LoginAsync(string emailLogin, string passwordLogin)
         {
             ViewBag.num = null;
             if (!string.IsNullOrWhiteSpace(emailLogin))
@@ -157,7 +178,23 @@ namespace SGV_Booking.Controllers
                 {
                     var user = _context.Users.FirstOrDefault(user => user.Email.Equals(emailLogin));
 
-                    return RedirectToAction("CustomerIndex", new {id = user.UserId});
+                    if (user.UserType == 0)
+                    {
+                        return RedirectToAction("AdminIndex", new { id = user.UserId });
+                    }
+
+                    else if (user.UserType == 1)
+                    {
+
+                        var restaurant = await _context.Restaurants
+                            .FirstOrDefaultAsync(i => i.RestaurantName == user.FirstName);
+                        return RedirectToAction("RestaurantIndex", new { id = restaurant.RestaurantId });
+                    }
+
+                    else if (user.UserType == 2)
+                    {
+                        return RedirectToAction("CustomerIndex", new { id = user.UserId });
+                    }
                 }
             }
             return View();
@@ -167,27 +204,6 @@ namespace SGV_Booking.Controllers
         {
             return View();
         }
-
-        // GET: Users/Details/5
-        public async Task<IActionResult> RestaurantBookingDetails(int? id)
-        {
-            if (id == null || _context.Bookings == null)
-            {
-                return NotFound();
-            }
-
-            var booking = await _context.Bookings
-                .Include(b => b.Customer)
-                .Include(b => b.Restaurant)
-                .FirstOrDefaultAsync(m => m.BookingId == id);
-            if (booking == null)
-            {
-                return NotFound();
-            }
-
-            return View(booking);
-        }
-
         // GET: Bookings/Create
         public IActionResult Create()
         {

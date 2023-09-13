@@ -1,0 +1,57 @@
+﻿@model SGV_Booking.ViewModels.RestaurantAndBookings
+
+@{
+    ViewData["Title"] = "RestaurantIndex";
+}
+
+<body>
+    <div style="background-color: #C3C3C3; padding: 20px; border-radius: 10px;">
+        <div class="container">
+            <div class="container" style="display: flex; align-items: center; background-color: white; padding: 15px; border-radius: 10px;">
+                <div class="container">
+                    <h1 class="title" style="color: black;">@Model.TheRestaurant.RestaurantName Bookings</h1>
+                </div>
+            </div>
+            <div class="container" style="background-color: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
+                <div class="container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Date and Time
+                                </th>
+                                <th>
+                                    Booking Notes
+                                </th>
+                                <th>
+                                    Customer
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.RestaurantBookings)
+                            {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BookingTime)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BookingNotes)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Customer.FirstName)
+                                    </td>
+                                    <td>
+                                        <a asp-action="RestaurantBookingDetails" asp-route-id="@item.BookingId">Details</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>

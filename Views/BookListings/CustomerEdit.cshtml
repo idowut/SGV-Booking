@@ -2,12 +2,14 @@
 @{
     ViewData["Title"] = "Edit Booking";
 }
+<a class="btn btn-primary" asp-action="CustomerDetails" asp-route-id="@Model.BookingId"> < Back to Booking Summary</a>
+<br />
+<br />
 
 <div class="row">
     <div style="background-color: #C3C3C3; padding: 20px; border-radius: 10px;">
     <div class="col-md-12">
-        <form asp-action="EditCustomer">
-
+        <form asp-action="CustomerEdit">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="BookingId" />
@@ -64,7 +66,7 @@
                     <h4  style="color: darkgrey;">People Amounts:</h4>
                     <div style="display: flex; flex-direction: column; align-items: flex-start;">
                         <!-- Number input field to specify the number of people -->
-                        <input type="number" class="form-control" style="width: 50%;" min="1" step="1" placeholder="Amount Of People" />
+                        <input asp-for="NumGuest" type="number" class="form-control" min="1" step="1" placeholder="Amount Of People" value="@Model.NumGuest"/>
                     </div>
                 </div>
             </div>
@@ -83,9 +85,7 @@
                 <div class="row">
                     <div class="col">
                         <div style="height: 20px;"></div>
-                        <div class="button-container" style="display: flex; justify-content: space-between; align-items: center;">
-                            <!-- Delete Button -->
-                            <a asp-action="Delete" asp-route-id="@Model.BookingId" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; text-decoration: none;">Cancel Booking</a>
+                        <div class="button-container" style="display: flex; justify-content: flex-end; align-items: center;">
                             <!-- Update Button -->
                             <button type="submit" style="background-color: #007BFF; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Update</button>
                         </div>
