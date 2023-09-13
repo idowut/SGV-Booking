@@ -16,6 +16,8 @@ namespace SGV_Booking.Models
         public int? RestaurantAddressId { get; set; }
         public string? RestaurantPhoneNumber { get; set; }
 
+        public int RestaurantRewardValue { get; set; } = null!;
+
         public virtual Address? RestaurantAddress { get; set; }
         public virtual ICollection<Banquet> Banquets { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
