@@ -1,0 +1,122 @@
+﻿@model SGV_Booking.Models.Booking
+@{
+    ViewData["Title"] = "Edit Booking";
+}
+
+<div class="row">
+    <div style="background-color: #C3C3C3; padding: 20px; border-radius: 10px;">
+    <div class="col-md-12">
+        <form asp-action="EditCustomer">
+
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="BookingId" />
+            <input type="hidden" asp-for="CustomerId" />
+            <input type="hidden" asp-for="RestaurantId" />
+            <input type="hidden" asp-for="BookingTime" />
+
+           @*<div class="form-group" style="display: flex; align-items: center; background-color: white; padding: 15px; border-radius: 10px;>
+
+                <label asp-for="Restaurant.RestaurantName" class="control-label"></label>
+                <input asp-for="Restaurant.RestaurantName" class="form-control" />
+                <span asp-validation-for="Restaurant.RestaurantName" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="display: flex; align-items: center; background-color: white; padding: 15px; border-radius: 10px;>
+                <label asp-for="BookingTime" class="control-label"></label>
+                <input asp-for="BookingTime" class="form-control" />
+                <span asp-validation-for="BookingTime" class="text-danger"></span>
+               @* </div>*@
+
+           @*    <div class="row">
+                <h4 style="color: darkgrey;">People Amount:</h4>
+                <input class="form-control" /> <!-- 仮定：PeopleAmount プロパティが存在する -->
+            </div>*@
+            <div class="col-md-12">
+                        <div class="form-group" style="background-color: white; padding: 2px; border-radius: 2px;">
+                    <h4 class="text-center" style="color: darkgrey;">Booking Notes:</h4>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <!-- テキストエリアを下に配置 -->
+                        <textarea asp-for="BookingNotes" class="form-control" rows="5" cols="20"></textarea>
+                    </div>
+                </div>
+            </div>
+                <div style="height: 20px;"></div>
+            <div class="col-md-12">
+                        
+
+                <div class="form-group" style="background-color: white; padding: 10px; border-radius: 10px;">
+                    <h4 class="text-center" style="color: darkgrey;">People Amounts:</h4>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <!-- テキストエリアを下に配置 -->
+                        <textarea class="form-control" rows="1" cols="2"></textarea>
+                    </div>
+                </div>
+            </div>
+
+
+
+            @*<div class="form-group">
+                <label asp-for="BanquetOption" class="control-label"></label>
+                <input asp-for="BanquetOption" class="form-control" />
+                <span asp-validation-for="BanquetOption" class="text-danger"></span>
+            </div>
+   *@
+            
+            <div class="row">
+                <div class="col">
+                    <div class="update-button-container" style="display: flex; justify-content: flex-end; margin-top: 10px;">
+                        <button type="submit" style="background-color: #AB0F43; color: white; border: none; padding: 5px 10px; border-radius: 5px;">Update</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+
+
+
+@*
+<form asp-action="EditForCustomer" asp-route-id="@Model.BookingId">
+    <body>   
+        <div style="background-color: #C3C3C3; padding: 20px; border-radius: 10px;">
+            <div class="container">
+              
+                    <div class="container" style="display: flex; align-items: center; background-color: white; padding: 15px; border-radius: 10px;">
+                        <div class="container">
+                            <h1 class="title" style="color: darkgrey;">Edit Booking</h1>
+                        </div>
+                    </div>
+                    <div class="container" style="background-color: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
+                        <div class="row">
+                            <h3 style="color: darkgrey;">Restaurant:</h3>
+                            <input asp-for="Restaurant.RestaurantName"  class="form-control" />
+                        </div>
+                        <div class="row">
+                            <h4 style="color: darkgrey;">Date/Time:</h4>
+                            <input type="datetime-local" asp-for="BookingTime" class="form-control" />
+                        </div>
+                @*        <div class="row">
+                            <h4 style="color: darkgrey;">People Amount:</h4>
+                            <input asp-for="" class="form-control" /> <!-- 仮定：PeopleAmount プロパティが存在する -->
+                        </div>*@
+                 @*       <div class="row">
+                            <h4 style="color: darkgrey;">Banquets Reserved:</h4>
+                            <input asp-for="BanquetOption" class="form-control" />
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <h4 style="color: darkgrey;">Notes:</h4>
+                                <textarea asp-for="BookingNotes" class="form-control"></textarea>
+                            </div>
+                            <div class="col">
+                            </div>
+                        </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                    </div>
+            </div>
+        </div>
+    </body>
+</form>*@
