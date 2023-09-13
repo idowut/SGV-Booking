@@ -29,6 +29,29 @@ namespace SGV_Booking.Controllers
                         Problem("Entity set 'SGVDatabaseContext.Users'  is null.");
         }
 
+        public async Task<IActionResult> RestaurantIndex(RestaurantAndBookings vm,int id)
+        {
+            if (id == null || _context.Users == null)
+            {
+                return NotFound();
+            }
+            vm.TheUsers = await _context.Users.ToListAsync();
+            vm.TheRestaurant = await _context.Restaurants.FirstOrDefaultAsync(m => m.RestaurantId == id);
+            vm.TheBanquets = await _context.Banquets.ToListAsync(); 
+            vm.RestaurantBookings = await _context.Bookings
+                .Where(i => i.RestaurantId == id)
+                .OrderBy(i => i.BookingTime)
+                .ToListAsync();
+
+            if (vm.TheRestaurant == null)
+            {
+                return NotFound();
+            }
+
+            return View(vm);
+
+        }
+
         public async Task<IActionResult> CustomerIndex(UsersAndBookings vm, int? id)
         {
             if (id == null || _context.Users == null)
@@ -40,7 +63,7 @@ namespace SGV_Booking.Controllers
             vm.UserBookings = await _context.Bookings
                 .Where(i => i.CustomerId == id)
                 .Include(i => i.Restaurant)
-                .OrderByDescending(i => i.BookingTime)
+                .OrderBy(i => i.BookingTime)
                 .ToListAsync();
 
             if (vm.TheUser == null)
@@ -146,8 +169,8 @@ namespace SGV_Booking.Controllers
         }
 
         // GET: Users/Details/5
-        public async Task<IActionResult> Details(int? id)
-    {
+        public async Task<IActionResult> RestaurantBookingDetails(int? id)
+        {
             if (id == null || _context.Bookings == null)
             {
                 return NotFound();
