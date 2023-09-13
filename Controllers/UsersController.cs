@@ -9,6 +9,8 @@ namespace SGV_Booking.Controllers
 {
     public class UsersController : Controller
     {
+        const string SessionUserId = "_UserID";
+        const string SessionUserName = "_UserName";
         private readonly SGVContext _context;
 
         public UsersController(SGVContext context)
@@ -242,11 +244,17 @@ namespace SGV_Booking.Controllers
 
                         var restaurant = await _context.Restaurants
                             .FirstOrDefaultAsync(i => i.RestaurantName == loggedUser.FirstName);
+                        HttpContext.Session.SetInt32(SessionUserId, restaurant.RestaurantId);
+                        HttpContext.Session.SetString(SessionUserName, loggedUser.FirstName);
+
                         return RedirectToAction("RestaurantIndex", new { id = restaurant.RestaurantId });
                     }
 
                     else if (loggedUser.UserType == 2)
                     {
+                        HttpContext.Session.SetInt32(SessionUserId, loggedUser.UserId);
+                        HttpContext.Session.SetString(SessionUserName, loggedUser.FirstName);
+
                         return RedirectToAction("CustomerIndex", new { id = loggedUser.UserId });
                     }
                 }
@@ -254,6 +262,13 @@ namespace SGV_Booking.Controllers
             return View();
         }
 
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.SetInt32(SessionUserId, -1);
+            HttpContext.Session.SetString(SessionUserName, "");
+            return View();
+        }
         public IActionResult LoginDetails()
         {
             return View();

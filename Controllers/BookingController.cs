@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SGV_Booking.Models;
 
 namespace SGV_Booking.Controllers
 {
     public class BookingController : Controller
     {
+        const string SessionUserId = "_UserID";
+        const string SessionUserName = "_UserName";
+
         public IActionResult Index()
         {
             return View();

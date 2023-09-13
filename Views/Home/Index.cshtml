@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html>
 <head>
     <title>@ViewData["Title"]</title>
@@ -18,7 +21,6 @@
     <div class="container text-center">
         <h1> </h1>
         <p class="lead"></p>
-
         <div class="row">
             <div class="col-md-4 button-container" id="bamboo">
                 <form asp-area="" asp-controller="Restaurants" asp-action="Bamboo" method="post">
