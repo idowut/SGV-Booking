@@ -5,6 +5,9 @@
 }
 
 <body>
+    <a class="btn btn-primary" asp-action="CustomerIndex" asp-controller="Users" asp-route-id="@Model.CustomerId"> < Back to User Dashboard</a>
+    <br />
+    <br />
     <div style="background-color: #C3C3C3; padding: 20px; border-radius: 10px;">
         <div class="container text-start"  >
             <div class="container" style="display: flex; align-items: center; background-color: white; padding: 15px; border-radius: 10px;">
@@ -23,7 +26,7 @@
                 </div>
                 <div class="row">
                     <h4 style="color: darkgrey;">People Amount:</h4>
-                    <p style="color: black;"> ... </p>
+                    <p style="color: black;"> @Html.DisplayFor(model => model.NumGuest) </p>
                 </div>
                 <div class="row">
                     <h4 style="color: darkgrey;">Banquets Reserved:</h4>
