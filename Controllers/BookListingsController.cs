@@ -271,13 +271,14 @@ namespace SGV_Booking.Controllers
                 return Problem("Entity set 'SGVDatabaseContext.Bookings'  is null.");
             }
             var booking = await _context.Bookings.FindAsync(id);
+            var userId = booking.CustomerId;
             if (booking != null)
             {
                 _context.Bookings.Remove(booking);
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("CustomerIndex", "Users", new { id = userId });
         }
 
         private bool BookingExists(int id)

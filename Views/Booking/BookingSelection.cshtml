@@ -209,15 +209,6 @@
                 var selectedRestaurant = document.getElementById("restaurantSelect").value;
                 var selectedTime = document.getElementById("bookingTime").value;
 
-                var nextButton = document.querySelector('button[type="submit"]');
-
-                if (selectedGuests !== "" && selectedDate !== "" && selectedRestaurant !== "Restaurant" && selectedTime !== "") {
-                    // All required fields are selected, enable the "Next" button
-                    nextButton.disabled = false;
-                } else {
-                    // At least one required field is missing, disable the "Next" button
-                    nextButton.disabled = true;
-                }
 
                 sessionStorage.setItem("selectedGuests", selectedGuests);
                 sessionStorage.setItem("selectedDate", selectedDate);
