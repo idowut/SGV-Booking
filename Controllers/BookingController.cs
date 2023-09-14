@@ -1,5 +1,6 @@
 ﻿using Humanizer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SGV_Booking.Data;
 
@@ -32,32 +33,54 @@ namespace SGV_Booking.Controllers
         {
             return View();
         }
-        public IActionResult BookingConfirmation(int guestCount, DateTime dateTime, string bookingTime, string selectedRestaurant, string selectedBanquet, string firstName, string lastName, string email, string phoneNumber, string dietaryRequirements)
+        public async Task<IActionResult> BookingConfirmation(int guestCount, string date, string bookingTime, string selectedRestaurant, string selectedBanquet, string firstName, string lastName, string email, string phoneNumber, string dietaryRequirements)
         {
-            int booking_guestCount = guestCount;
-            DateTime booking_dateTime = dateTime;
-            string booking_bookingTime = bookingTime;
-            string booking_selectedRestaurant = selectedRestaurant;
-            string booking_selectedBanquet = selectedBanquet;
-            string booking_firstName = firstName;
-            string bookingLastName = lastName;
-            string bookingEmail = email;
-            string bookingPhoneNumber = phoneNumber; 
-            string bookingDietaryRequirements = dietaryRequirements;
+            DateTime dt = Convert.ToDateTime(date + " " + bookingTime);
 
-            Console.WriteLine(booking_firstName);
-            
-            Booking
+            Console.WriteLine(selectedRestaurant);
+            var Restaurant = await _context.Restaurants.FirstOrDefaultAsync(i => i.RestaurantName == selectedRestaurant);
+            var RestaurantId = Restaurant.RestaurantId;
 
+            var Customer = await _context.Users.FirstOrDefaultAsync(i => i.FirstName == firstName && i.LastName == lastName && i.Email == email); ;
 
+            var CustomerId = -1;
+            if (Customer != null)
+            {
+                CustomerId = Customer.UserId;
+            }
 
+            var BookingNotes = dietaryRequirements;
 
+            var BanquetOption = selectedBanquet;
 
+            var NumGuest = guestCount;
 
+            string query = "INSERT INTO Bookings (restaurantID, bookingTime, customerID, bookingNotes, numGuest)";
+            query += "VALUES(@RestaurantID, @dateTime, @CustomerID, @BookingNotes, @NumGuest)";
 
+            SqlConnection connectionString = new SqlConnection("Data Source=TIN\\SQLEXPRESS;Initial Catalog=SGV;Integrated Security=True");
 
+            SqlCommand addCommand = new SqlCommand(query, connectionString);
+            addCommand.Parameters.AddWithValue("@RestaurantID", RestaurantId);
+            addCommand.Parameters.AddWithValue("@dateTime", dt);
+            addCommand.Parameters.AddWithValue("@CustomerID", CustomerId);
+            addCommand.Parameters.AddWithValue("@BookingNotes", BookingNotes);
+            addCommand.Parameters.AddWithValue("@NumGuest", NumGuest);
 
-            return View();
+            connectionString.Open();
+            int i = addCommand.ExecuteNonQuery();
+
+            connectionString.Close();
+
+            if (i != 0)
+            {
+                return View();
+            }
+            else
+            {
+                Console.WriteLine("not successful");
+                return View();
+            }
         }
     }
 }
