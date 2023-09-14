@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model SGV_Booking.Models.Booking
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -105,29 +107,29 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="display-header">Booking Summary</h1>
+        <h1 class="display-header">Booking Summary</h1>     
+        <form id="bookingInfo" action="BookingConfirmation" method="POST">
 
-        <div class="booking-info">
-            <h2>Booking Details</h2>
-            <p><strong>Number of Guests:</strong> <span id="guestCount"></span></p>
-            <p><strong>Date:</strong> <span id="dateTime"></span></p>
-            <p><strong>Time:</strong> <span id="bookingTime"></span></p>
-            <p><strong>Selected Restaurant:</strong> <span id="selectedRestaurant"></span></p>
-            <p><strong>Selected Banquet Option:</strong> <span id="selectedBanquet"></span></p>
-        </div>
+            <div class="booking-info">
+                <h2>Booking Details</h2>
+                <p><strong>Number of Guests:</strong> <input type="number" name="guestCount" id="guestCount" value="" READONLY/></p>
+                <p><strong>Date:</strong> <input type="dateTime" name="dateTime" id="dateTime" value="" READONLY ></p>
+                <p><strong>Time:</strong> <input type="text" name="bookingTime" id="bookingTime" value="" READONLY></p>
+                <p><strong>Selected Restaurant:</strong> <input type="text" name="selectedRestaurant"id="selectedRestaurant" value="" READONLY></p>
+                <p><strong>Selected Banquet Option:</strong> <input type="text" name="selectedBanquet" id="selectedBanquet" value="" READONLY></p>
+            </div>
 
-        <div class="summary-info">
-            <h2>Guest Information</h2>
-            <p><strong>First Name:</strong> <span id="firstName"></span></p>
-            <p><strong>Last Name:</strong> <span id="lastName"></span></p>
-            <p><strong>Email:</strong> <span id="email"></span></p>
-            <p><strong>Phone Number:</strong> <span id="phoneNumber"></span></p>
-            <p><strong>Dietary Requirements:</strong> <span id="dietaryRequirements"></span></p>
-        </div>
+            <div class="summary-info">
+                <h2>Guest Information</h2>
+                <p><strong>First Name:</strong> <input type="text" name="firstName" id="firstName" value="" READONLY /></p>
+                <p><strong>Last Name:</strong> <input type="text" name="lastName" id="lastName" value="" READONLY /></p>
+                <p><strong>Email:</strong> <input type="email" name="email" id="email" value="" READONLY /> </p>
+                <p><strong>Phone Number:</strong> <input type="text" name="phoneNumber" id="phoneNumber" value="" READONLY /></p>
+                <p><strong>Dietary Requirements:</strong> <input type="text" name="dietaryRequirements" id="dietaryRequirements" value="" READONLY /></p>
+            </div>
 
 
-        <form action="BookingConfirmation" method="GET">
-            <button type="submit">Confirm Booking</button>
+            <input type="submit" id="submitButton" value="Confirm Booking"/>
         </form>
     </div>
 
@@ -143,16 +145,17 @@
         var selectedRestaurant = sessionStorage.getItem("selectedRestaurant");
         var selectedBanquet = sessionStorage.getItem("selectedBanquet");
 
-        document.getElementById("firstName").textContent = firstName;
-        document.getElementById("lastName").textContent = lastName;
-        document.getElementById("email").textContent = email;
-        document.getElementById("phoneNumber").textContent = phoneNumber;
-        document.getElementById("dietaryRequirements").textContent = dietaryRequirements;
-        document.getElementById("guestCount").textContent = selectedGuests;
-        document.getElementById("dateTime").textContent = selectedDate;
-        document.getElementById("bookingTime").textContent = selectedTime;
-        document.getElementById("selectedRestaurant").textContent = selectedRestaurant;
-        document.getElementById("selectedBanquet").textContent = selectedBanquet;
+        document.getElementById("firstName").value = firstName;
+        document.getElementById("lastName").value = lastName;
+        document.getElementById("email").value = email;
+        document.getElementById("phoneNumber").value = phoneNumber;
+        document.getElementById("dietaryRequirements").value = dietaryRequirements;
+        document.getElementById("guestCount").value = selectedGuests;
+        document.getElementById("dateTime").value = selectedDate;
+        document.getElementById("bookingTime").value = selectedTime;
+        document.getElementById("selectedRestaurant").value = selectedRestaurant;
+        document.getElementById("selectedBanquet").value = selectedBanquet;
+
     </script>
 </body>
 </html>
