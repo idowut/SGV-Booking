@@ -9,7 +9,6 @@ namespace SGV_Booking.Controllers
         const string SessionUserId = "_UserID";
         const string SessionUserName = "_UserName";
 
-
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -17,18 +16,7 @@ namespace SGV_Booking.Controllers
             _logger = logger;
         }
 
-
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        public IActionResult Users()
         {
             return View();
         }
@@ -37,11 +25,6 @@ namespace SGV_Booking.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        public IActionResult Temp()
-        {
-            return View();
         }
     }
 }

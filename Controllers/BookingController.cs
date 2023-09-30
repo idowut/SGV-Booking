@@ -1,5 +1,4 @@
-﻿using Humanizer;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SGV_Booking.Data;
@@ -16,11 +15,6 @@ namespace SGV_Booking.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public IActionResult Booking()
         {
             return View();
@@ -58,7 +52,7 @@ namespace SGV_Booking.Controllers
             string query = "INSERT INTO Bookings (restaurantID, bookingTime, customerID, bookingNotes, numGuest)";
             query += "VALUES(@RestaurantID, @dateTime, @CustomerID, @BookingNotes, @NumGuest)";
 
-            SqlConnection connectionString = new SqlConnection("Data Source=TIN\\SQLEXPRESS;Initial Catalog=SGV;Integrated Security=True");
+            SqlConnection connectionString = new SqlConnection("Data Source=DESKTOP-8PR6E5F\\SQLEXPRESS;Initial Catalog=SGV;Integrated Security=True");
 
             SqlCommand addCommand = new SqlCommand(query, connectionString);
             addCommand.Parameters.AddWithValue("@RestaurantID", RestaurantId);
