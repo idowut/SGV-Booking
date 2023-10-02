@@ -1,132 +1,26 @@
-﻿@model SGV_Booking.Models.Booking
+﻿@model SGV_Booking.ViewModels.BookingInfoProcess;
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Summary</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: lightblue;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .display-header {
-            background-color: #333;
-            color: #fff;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .elem-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        input[type="number"],
-        input[type="date"],
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-position: right center;
-        }
-
-        button[type="submit"] {
-            background-color: #333;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        #bookingTimeSelect {
-            display: none;
-        }
-
-        #banquetOptions {
-            display: none;
-        }
-
-            #banquetOptions .card {
-                width: 100%;
-                max-width: 300px;
-                margin: 0 auto;
-                margin-bottom: 20px;
-            }
-
-            #banquetOptions .card-title {
-                font-size: 18px;
-                font-weight: bold;
-            }
-
-            #banquetOptions .card-text {
-                font-size: 14px;
-            }
-
-            #banquetOptions .btn {
-                width: 100%;
-                background-color: #333;
-                color: #fff;
-                border: none;
-                font-size: 16px;
-                border-radius: 5px;
-            }
-    </style>
-</head>
 <body>
+    <p>tsting: @Model.customerFirstName</p>
     <div class="container">
         <h1 class="display-header">Booking Summary</h1>     
-        <form id="bookingInfo" action="BookingConfirmation" method="POST">
+        <form action="@Url.Action("BookingSummary", "Booking")" method="POST">
 
-            <div class="booking-info">
-                <h2>Booking Details</h2>
-                <p><strong>Number of Guests:</strong> <input type="number" name="guestCount" id="guestCount" value="" READONLY/></p>
-                <p><strong>Date:</strong> <input type="dateTime" name="dateTime" id="dateTime" value="" READONLY ></p>
-                <p><strong>Time:</strong> <input type="text" name="bookingTime" id="bookingTime" value="" READONLY></p>
-                <p><strong>Selected Restaurant:</strong> <input type="text" name="selectedRestaurant"id="selectedRestaurant" value="" READONLY></p>
-                <p><strong>Selected Banquet Option:</strong> <input type="text" name="selectedBanquet" id="selectedBanquet" value="" READONLY></p>
-            </div>
+            <input name="guestNumber" value="@Model.guestNumber">
+            <input name="banquetOption" value="@Model.banquetOption">
+            <input name="datePicker" value="@Model.datePicker">
+            <input name="timePicker" value="@Model.timePicker">
+            <input name="restaurantSelect" value="@Model.restaurantSelect">
+            <input name="bookingNotes" value="@Model.bookingNotes">
 
-            <div class="summary-info">
-                <h2>Guest Information</h2>
-                <p><strong>First Name:</strong> <input type="text" name="firstName" id="firstName" value="" READONLY /></p>
-                <p><strong>Last Name:</strong> <input type="text" name="lastName" id="lastName" value="" READONLY /></p>
-                <p><strong>Email:</strong> <input type="email" name="email" id="email" value="" READONLY /> </p>
-                <p><strong>Phone Number:</strong> <input type="text" name="phoneNumber" id="phoneNumber" value="" READONLY /></p>
-                <p><strong>Dietary Requirements:</strong> <input type="text" name="dietaryRequirements" id="dietaryRequirements" value="" READONLY /></p>
-            </div>
+            <input name="customerFirstName" value="@Model.customerFirstName">
+            <input name="customerLastName" value="@Model.customerLastName">
+            <input name="customerPhone" value="@Model.customerPhone">
+            <input name="customerEmail" value="@Model.customerEmail">
+
+
+
+
 
 
             <input type="submit" id="submitButton" value="Confirm Booking"/>

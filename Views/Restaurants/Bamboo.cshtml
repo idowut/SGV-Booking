@@ -1,4 +1,5 @@
-﻿@model SGV_Booking.Models.Restaurant
+﻿
+@model SGV_Booking.Models.Restaurant
 
 <head>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -10,7 +11,7 @@
 </head>
 
 @{
-    ViewBag.Title = "Mexikana";
+    ViewBag.Title = "BAMBOO LEAF";
 }
 
 <div class="container">
@@ -18,37 +19,30 @@
     <hr />
 
     <div class="row">
-        
-         <div class="col-md-6">
+        <div class="col-md-6">
             <div class="text-center">
+                <h1>   </h1>
                 <h5>Address:</h5>
-                <p><a href="https://www.google.com/maps/place/40+Fullarton+Rd,+Norwood+SA+5067/">@Model.RestaurantAddress.AddressLine @Model.RestaurantAddress.Suburb </a></p>
+                <p><a href="https://www.google.com/maps/place/25+Gouger+St,+Adelaide+SA/">@Model.RestaurantAddress.AddressLine @Model.RestaurantAddress.Suburb</a></p>
+
                 <h5>Contact:</h5>
                 <p>Email:<br>Phone: @Model.RestaurantPhoneNumber</p>
                 <h5>Open Hours: </h5>
-                <p>Open Monday to Saturday</p>
-                <p>
-                    First dinner 5-7PM
-                </p>
-                <p>
-                    Second dinner 7-9PM
-                </p>
-                <p>
-                    Late night dinner 9-11PM
-                </p>
+                <p>Open Tuesdays to Sundays</p>
+                <p>Lunchtime 12-2PM</p>
+                <p>First dinner 5-7PM</p>
+                <p>Second dinner 7-9PM</p>
             </div>
         </div>
+
         <div class="col-md-6 d-flex flex-column align-items-center">
-                <!-- センター配置のためのクラスを追加 -->
-                <h5 class="text-center">@Model.RestaurantName Menu</h5>
-                <a href="/pdfs/mexikana-menu.pdf" target="_blank" id="previewPdf">See Menu</a>
-                <canvas id="pdf-canvas2" style="max-width: 80%; margin: auto;"></canvas> <!-- margin: autoを追加 -->
-         </div>
+            <!-- センター配置のためのクラスを追加 -->
+            <h5 class="text-center">@Model.RestaurantName Menu</h5>
+            <a href="/pdfs/bamboo-leaf-menu.pdf" target="_blank" id="previewPdf">See menu</a>
+            <canvas id="pdf-canvas1" style="max-width: 80%; margin: auto;"></canvas> <!-- margin: autoを追加 -->
+        </div>
     </div>
-
-
 </div>
-
 
 <script src="/js/pdf.js"></script>
 <script>
@@ -75,5 +69,5 @@
         });
     }
 
-    loadPdf('/pdfs/mexikana-menu.pdf', 'pdf-canvas2', 300);
+    loadPdf('/pdfs/bamboo-leaf-menu.pdf', 'pdf-canvas1', 300);
 </script>

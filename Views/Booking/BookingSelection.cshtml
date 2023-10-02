@@ -74,7 +74,7 @@
     <div class="container">
         <h1 class="display-header">Booking Selection</h1>
 
-        <form>
+        <form method="post" action="@Url.Action("Booking", "Booking")">
             <div class="elem-group">
                 <label for="guestNumber">Numer of Guest:</label>
                 <input type="number" id="guestNumber" name="guestNumber" min="1" max="10" step="1" value="1" onchange="numGuestChange()">
@@ -87,15 +87,10 @@
                 </select>
             </div>
 
-            <div class="elem-group" id="bookingDate" style="display:none">
-                testing
-            </div>
-
-
             <div class="elem-group" id="datePickerContainer">
             </div>
 
-            <div class="row">
+            <div class="row pb-2">
                 <div class="col-8">
                     <div id="slotPickerContainer">
                     </div>
@@ -106,14 +101,14 @@
                 </div>
             </div>
 
-            <div id="banquetOptions" style="display:none">
+            <div id="banquetOptions" style="display:none;pt-2">
                 <label for="banquetOption">Banquet Options:</label>
                 <div class="alert alert-info">
                     <strong>Info:</strong> Some banquet selections are only available for bookings consisting of 4 of more guests.
                 </div>
                 <div id="banquetCardsList" class="d-flex justify-content-around"></div>
             </div>
-            <button type="submit" style="margin-top:1rem">Next</button>
+            <input type="submit" style="margin-top:1rem" value="Next">
 
             <div class="col-4 p-2" id="banquetCard" style="display:none">
                 <div class="card">
@@ -121,8 +116,7 @@
                         <h5 class="card-title" id="cardTitle">À la carte</h5>
                         <p class="card-text">The À la carte option allows customers to order each distinctive food item at the restaurant.</p>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="banquetOption" id="banquetAlaCarte">
-                            <label class="form-check-label" for="flexRadioDefault1"></label>
+                            <input class="form-check-input" type="radio" name="banquetOption" id="banquetOption" value="">
                         </div>
                     </div>
                 </div>
@@ -159,6 +153,7 @@
                 const dateInput = document.createElement('input');
                 dateInput.type = 'date';
                 dateInput.id = 'datePicker';
+                dateInput.name = 'datePicker'
 
                 const dateLabel = document.createElement('label');
                 dateLabel.innerHTML = 'Select a date:';
@@ -240,7 +235,7 @@
                 container.appendChild(timeSlotInput);
                 timeSlotInput.addEventListener("change", function(){
                     if (timeSlotInput.value != ''){
-                        createTimePicker(restaurant);
+                        createtimePicker(restaurant);
                     }
                     else{
                         const container = document.getElementById('timePickerContainer')
@@ -250,7 +245,7 @@
 
             }
 
-            function createTimePicker(restaurant){
+            function createtimePicker(restaurant) {
                 const timeLabel = document.createElement('label');
                 timeLabel.innerHTML = 'Select a time:';
                 const container = document.getElementById('timePickerContainer');
@@ -258,54 +253,34 @@
 
                 const timeInput = document.createElement('select');
                 timeInput.classList.add('form-select');
-                timeInput.id = 'timepicker';
-
-                const defElement = document.createElement('option');
-                defElement.value = "";
-                defElement.textContent = "Select time...";
-                timeInput.appendChild(defElement);
+                timeInput.id = 'timePicker';
+                timeInput.name = 'timePicker';
 
                 const selectedSlot = document.getElementById('slotPicker').value;
                 const selectedDate = document.getElementById('datePicker').value;
 
-                // Find the corresponding time slot in the restaurantData object                
-
+                // Find the corresponding time slot in the restaurantData object
                 const chosenTimeSlot = restaurant[0].openTimes.find(slot => slot.timeSlotId == selectedSlot);
 
-                console.log(chosenTimeSlot.slotOpenTime);
+                const startTimeParts = chosenTimeSlot.slotOpenTime.split(':').map(Number);
+                const closeTimeParts = chosenTimeSlot.slotCloseTime.split(':').map(Number);
 
-                const start = new Date(selectedDate);
-                let [startHours, startMinutes, startSeconds] = chosenTimeSlot.slotOpenTime.split(':').map(Number);
-                start.setHours(startHours, startMinutes, startSeconds);
-                const startTimes = start.toTimeString();
+                const startTime = new Date(selectedDate);
+                startTime.setHours(startTimeParts[0], startTimeParts[1], 0); // Set start time
 
-                const close = new Date(chosenTimeSlot.slotCloseTime);
-                let [closeHours, closeMinutes, closeSeconds] = chosenTimeSlot.slotCloseTime.split(':').map(Number);
-                close.setHours(closeHours, closeMinutes, closeSeconds);
-                const closeTimes = close.toTimeString();
+                const closeTime = new Date(selectedDate);
+                closeTime.setHours(closeTimeParts[0], closeTimeParts[1], 0); // Set close time
 
-                let startParts = startTimes.split(":");
-                let startHour = parseInt(startParts[0]);
-                let startMinute = parseInt(startParts[1]);
-                let startTime = startHours * 60 + startMinutes;
+                const increment = 15; // 15 minutes
 
-                let closeParts = closeTimes.split(":"); // Adjusted variable name
-                let closeHour = parseInt(closeParts[0]); // Adjusted variable name
-                let closeMinute = parseInt(closeParts[1]); // Adjusted variable name
-                let closeTime = closeHours * 60 + closeMinutes; // Adjusted variable name
+                for (let time = startTime; time < closeTime; time.setMinutes(time.getMinutes() + increment)) {
+                    const hours = time.getHours();
+                    const minutes = time.getMinutes();
+                    const hoursStr = hours.toString().padStart(2, '0');
+                    const minutesStr = minutes.toString().padStart(2, '0');
+                    const timeStr = `${hoursStr}:${minutesStr}`;
 
-                let increment = 15; // 15 minutes
-
-                for (let i = startTime; i < closeTime; i += increment) { // Adjusted variable name
-                    let hours = Math.floor(i / 60);
-                    let minutes = i % 60;
-
-                    let hoursStr = hours.toString().padStart(2, '0');
-                    let minutesStr = minutes.toString().padStart(2, '0');
-
-                    let timeStr = `${hoursStr}:${minutesStr}`;
-
-                    let option = document.createElement('option');
+                    const option = document.createElement('option');
                     option.value = timeStr;
                     option.text = timeStr;
                     timeInput.appendChild(option);
@@ -316,6 +291,7 @@
                 container.appendChild(timeLabel);
                 container.appendChild(timeInput);
             }
+
 
             function createBanquetOptions(restaurant){
                 if (document.getElementById('restaurantSelect').value != ''){
@@ -339,13 +315,15 @@
                         var newCard = baseCard.cloneNode(true);
                         newCard.style.display = 'block';
 
-
                         newCard.querySelector('h5').innerText = banquet.banquetName;
                         var banquetInnerText = "";
                         Object.entries(banquet.banquetItems).forEach(([item, banquetInfo]) => {
                             banquetInnerText += banquetInfo.banquetItem1;
                             banquetInnerText += "\n";
                         })
+
+                        var inputElement = newCard.querySelector('input[name="banquetOption"]');
+                        inputElement.value = banquet.banquetId;
 
                         newCard.querySelector('p').innerText = banquetInnerText;
                         if (document.getElementById('guestNumber').value >= banquet.banquetMinPeople){

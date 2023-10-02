@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SGV_Booking.Data;
 using SGV_Booking.Models;
+using SGV_Booking.ViewModels;
 
 namespace SGV_Booking.Controllers
 {
@@ -17,10 +18,6 @@ namespace SGV_Booking.Controllers
         {
             _context = context;
         }
-        public IActionResult Booking()
-        {
-            return View();
-        }
         public IActionResult BookingSelection()
         {
             ViewBag.RestaurantsList = _context.Restaurants.Select(r => new SelectListItem
@@ -30,11 +27,32 @@ namespace SGV_Booking.Controllers
             })
             .ToList();
 
-            return View();
+            var vm = new BookingInfoProcess();
+
+            return View(vm);
         }
-        public IActionResult BookingSummary()
+
+        [HttpPost]
+        public ActionResult BookingSelection(BookingInfoProcess vm, string timeString)
         {
-            return View();
+            TimeSpan time;
+            bool isTimeParseSuccessful = TimeSpan.TryParse(timeString, out time);
+
+            DateTime date = vm.datePicker;
+            vm.datePicker = date;
+
+            vm.timePicker = time;
+            return View("Booking", vm); // Pass it as a parameter to the next step
+        }
+        [HttpPost]
+        public ActionResult Booking(BookingInfoProcess vm)
+        {
+            return View("Booking", vm);
+        }
+        [HttpPost]
+        public IActionResult BookingSummary(BookingInfoProcess vm)
+        {
+            return View("BookingSummary", vm);
         }
         public async Task<IActionResult> BookingConfirmation(int guestCount, string date, string bookingTime, string selectedRestaurant, string selectedBanquet, string firstName, string lastName, string email, string phoneNumber, string dietaryRequirements)
         {
