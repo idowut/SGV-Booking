@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model SGV_Booking.ViewModels.BookingInfoProcess;
+
+<!DOCTYPE html>
 <html>
 <head>
     <title>Booking Selection Page</title>
@@ -66,38 +68,6 @@
             border-radius: 5px;
         }
 
-        #bookingTimeSelect {
-            display: none;
-        }
-
-        #banquetOptions {
-            display: none;
-        }
-
-            #banquetOptions .card {
-                width: 100%;
-                max-width: 300px;
-                margin: 0 auto;
-                margin-bottom: 20px;
-            }
-
-            #banquetOptions .card-title {
-                font-size: 18px;
-                font-weight: bold;
-            }
-
-            #banquetOptions .card-text {
-                font-size: 14px;
-            }
-
-            #banquetOptions .btn {
-                width: 100%;
-                background-color: #333;
-                color: #fff;
-                border: none;
-                font-size: 16px;
-                border-radius: 5px;
-            }
     </style>
 </head>
 <body>
@@ -105,260 +75,297 @@
         <h1 class="display-header">Booking Selection</h1>
 
         <form>
-        <div class="elem-group">
-            <label for="guest">Guest</label>
-            <select class="form-select" id="guest" name="total_guest" aria-label="Default select example" required>
-                <option selected disabled>Select the number of guests</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-                <option value="9">9</option>
-                <option value="10">10</option>
-            </select>
-        </div>
-
             <div class="elem-group">
-                <label for="checkin-date">Select Date</label>
-                <input type="date" id="datetime" name="datetime" min="<?php echo date('Y-m-d'); ?>" required>
+                <label for="guestNumber">Numer of Guest:</label>
+                <input type="number" id="guestNumber" name="guestNumber" min="1" max="10" step="1" value="1" onchange="numGuestChange()">
             </div>
 
             <div class="elem-group">
-                <label for="restaurantSelect">Select Restaurant</label>
-                <select class="form-select" id="restaurantSelect" aria-label="Default select example">
-                    <option selected disabled>Restaurant</option>
-                    <option value="Bamboo Leaf">Bamboo Leaf</option>
-                    <option value="La Oeste De La Mar">La Oeste De La Mar</option>
-                    <option value="Mexikana">Mexikana</option>
+                <label for="restaurantSelect">Select a Restaurant:</label>
+                <select class="form-select" name="restaurantSelect" id="restaurantSelect" asp-items="@ViewBag.RestaurantsList" onchange="itemChanged(this.value)">
+                    <option value="">Select Restaurant...</option>
                 </select>
             </div>
 
-
-            <div class="elem-group" id="bookingTimeSelect">
-                <label for="bookingTime">Select Time</label>
-                <select id="bookingTime" name="booking_time" required>
-                    <option value="" disabled selected>Select a Time</option>
-
-                </select>
+            <div class="elem-group" id="bookingDate" style="display:none">
+                testing
             </div>
 
-            <div id="banquetOptions" style="display: none;">
 
-                <label for="banquetOption">Banquet Option</label>
+            <div class="elem-group" id="datePickerContainer">
+            </div>
+
+            <div class="row">
+                <div class="col-8">
+                    <div id="slotPickerContainer">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div id="timePickerContainer">
+                    </div>
+                </div>
+            </div>
+
+            <div id="banquetOptions" style="display:none">
+                <label for="banquetOption">Banquet Options:</label>
                 <div class="alert alert-info">
                     <strong>Info:</strong> Some banquet selections are only available for bookings consisting of 4 of more guests.
                 </div>
-                <div class="row">
-                    <div class="col-4" id="alaCarteOption">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">À la carte</h5>
-                                <p class="card-text">The À la carte option allows customers to order each distinctive food item at the restaurant.</p>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                    <label class="form-check-label" for="flexRadioDefault1"></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div id="banquetCardsList" class="d-flex justify-content-around"></div>
+            </div>
+            <button type="submit" style="margin-top:1rem">Next</button>
 
-                    <div class="col-4" id="shareBanquetOption">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Share Banquet</h5>
-                                <p class="card-text">Some information regarding the banquet.</p>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
-                                    <label class="form-check-label" for="flexRadioDefault2"></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-4" id="feastBanquetOption">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Feast Banquet</h5>
-                                <p class="card-text">
-                                    A large banquet big enough to feast with others including: Crispy beef, Satay chicken, S + P Eggplant, Crying Tiger Salad, Steam prawn dumplings, Ribs, and Barramundi curry
-                                    <br>
-                                    $70 per person
-                                </p>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3">
-                                    <label class="form-check-label" for="flexRadioDefault3"></label>
-                                </div>
-                            </div>
+            <div class="col-4 p-2" id="banquetCard" style="display:none">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" id="cardTitle">À la carte</h5>
+                        <p class="card-text">The À la carte option allows customers to order each distinctive food item at the restaurant.</p>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="banquetOption" id="banquetAlaCarte">
+                            <label class="form-check-label" for="flexRadioDefault1"></label>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
 
-        <form action="Booking" method="GET">
-            <button type="submit">Next</button>
+            <div class="alert alert-info" id="banquetGuestWarning" style="display:none">
+                <strong>Info: </strong> Some banquet selections are only available for bookings consisting of 4 of more guests.
+            </div>
         </form>
         <script>
-            function updateSessionStorage() {
-                var selectedGuests = document.getElementById("guest").value;
-                var selectedDate = document.getElementById("datetime").value;
-                var selectedRestaurant = document.getElementById("restaurantSelect").value;
-                var selectedTime = document.getElementById("bookingTime").value;
-
-
-                sessionStorage.setItem("selectedGuests", selectedGuests);
-                sessionStorage.setItem("selectedDate", selectedDate);
-                sessionStorage.setItem("selectedRestaurant", selectedRestaurant);
-                sessionStorage.setItem("selectedTime", selectedTime);
+            function numGuestChange(){
+                itemChanged(document.getElementById('restaurantSelect').value)
             }
 
-            document.getElementById("guest").addEventListener("change", updateSessionStorage);
-            document.getElementById("datetime").addEventListener("change", updateSessionStorage);
-            document.getElementById("restaurantSelect").addEventListener("change", updateSessionStorage);
-            document.getElementById("bookingTime").addEventListener("change", updateSessionStorage);
+            function itemChanged(value) {
+                fetch(`/Booking/restaurantInfo/?id=${value}`).then(response => {
+                    console.log('response status: ' + response.status);
+                    console.log('response msg: ' + response.statusText);
+                    return response.json()
+                })
+                    .then(data => {
+                        console.log(data);
+                        createBanquetOptions(data);
+                        createDatePicker(data);
+                    })
+                    .catch(err => console.log(err));
+            }
 
-            document.getElementById("restaurantSelect").addEventListener("change", function () {
-                var selectedRestaurant = this.value;
-                var guestCount = document.getElementById("guest").value;
-                var alaCarteOption = document.getElementById("alaCarteOption");
-                var shareBanquetOption = document.getElementById("shareBanquetOption");
-                var feastBanquetOption = document.getElementById("feastBanquetOption");
-                var banquetOptions = document.getElementById("banquetOptions");
-                
+            function createDatePicker(restaurant) {
+                const container = document.getElementById('datePickerContainer');
+                container.innerHTML = ''; // Clear the container
 
-                // Clear existing options
-                bookingTime.innerHTML = '';
+                const openDays = restaurant[0].openDays;
+                const dateInput = document.createElement('input');
+                dateInput.type = 'date';
+                dateInput.id = 'datePicker';
 
-                if (selectedRestaurant !== "Restaurant") {
-                    // Show the booking time select and banquet options based on guest count
-                    bookingTimeSelect.style.display = "block";
-                    banquetOptions.style.display = "block";
+                const dateLabel = document.createElement('label');
+                dateLabel.innerHTML = 'Select a date:';
+                container.appendChild(dateLabel);
+                container.appendChild(dateInput);
 
-                    // Adds booking time options based on the selected restaurant
-                    if (selectedRestaurant === "Bamboo Leaf") { // Bamboo Leaf
-                        addOption(bookingTime, "12:00 PM", "12:00 PM (Lunch)");
-                        addOption(bookingTime, "12:15 PM", "12:15 PM (Lunch)");
-                        addOption(bookingTime, "12:30 PM", "12:30 PM (Lunch)");
-                        addOption(bookingTime, "12:45 PM", "12:45 PM (Lunch)");
-                        addOption(bookingTime, "1:00 PM", "1:00 PM (Lunch)");
-                        addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
-                        addOption(bookingTime, "5:15 PM", "5:15 PM (First Dinner)");
-                        addOption(bookingTime, "5:30 PM", "5:30 PM (First Dinner)");
-                        addOption(bookingTime, "5:45 PM", "5:45 PM (First Dinner)");
-                        addOption(bookingTime, "6:00 PM", "6:00 PM (First Dinner)");
-                        addOption(bookingTime, "6:15 PM", "6:15 PM (First Dinner)");
-                        addOption(bookingTime, "7:00 PM", "7:00 PM (Second Dinner)");
-                        addOption(bookingTime, "7:15 PM", "7:15 PM (Second Dinner)");
-                        addOption(bookingTime, "7:30 PM", "7:30 PM (Second Dinner)");
-                        addOption(bookingTime, "7:45 PM", "7:45 PM (Second Dinner)");                       
-                    } else if (selectedRestaurant === "La Oeste De La Mar") { // La Oeste
-                        addOption(bookingTime, "10:00 AM", "10:00 AM (Brunch)");
-                        addOption(bookingTime, "10:00 AM", "10:00 AM (Brunch)");
-                        addOption(bookingTime, "10:15 AM", "10:15 AM (Brunch)");
-                        addOption(bookingTime, "10:30 AM", "10:30 AM (Brunch)");
-                        addOption(bookingTime, "10:45 AM", "10:45 AM (Brunch)");
-                        addOption(bookingTime, "11:00 AM", "11:00 AM (Brunch)");
-                        addOption(bookingTime, "12:00 PM", "12:00 PM (Lunch)");
-                        addOption(bookingTime, "12:15 PM", "12:15 PM (Lunch)");
-                        addOption(bookingTime, "12:30 PM", "12:30 PM (Lunch)");
-                        addOption(bookingTime, "12:45 PM", "12:45 PM (Lunch)");
-                        addOption(bookingTime, "1:00 PM", "1:00 PM (Lunch)");
-                        addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
-                        addOption(bookingTime, "5:15 PM", "5:15 PM (First Dinner)");
-                        addOption(bookingTime, "5:30 PM", "5:30 PM (First Dinner)");
-                        addOption(bookingTime, "5:45 PM", "5:45 PM (First Dinner)");
-                        addOption(bookingTime, "6:00 PM", "6:00 PM (First Dinner)");
-                        addOption(bookingTime, "6:15 PM", "6:15 PM (First Dinner)");
-                        addOption(bookingTime, "7:00 PM", "7:00 PM (Second Dinner)");
-                        addOption(bookingTime, "7:15 PM", "7:15 PM (Second Dinner)");
-                        addOption(bookingTime, "7:30 PM", "7:30 PM (Second Dinner)");
-                        addOption(bookingTime, "7:45 PM", "7:45 PM (Second Dinner)");
-                    } else if (selectedRestaurant === "Mexikana") { // Mexikana
-                        addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
-                        addOption(bookingTime, "5:00 PM", "5:00 PM (First Dinner)");
-                        addOption(bookingTime, "5:15 PM", "5:15 PM (First Dinner)");
-                        addOption(bookingTime, "5:30 PM", "5:30 PM (First Dinner)");
-                        addOption(bookingTime, "5:45 PM", "5:45 PM (First Dinner)");
-                        addOption(bookingTime, "6:00 PM", "6:00 PM (First Dinner)");
-                        addOption(bookingTime, "6:15 PM", "6:15 PM (First Dinner)");
-                        addOption(bookingTime, "7:00 PM", "7:00 PM (Second Dinner)");
-                        addOption(bookingTime, "7:15 PM", "7:15 PM (Second Dinner)");
-                        addOption(bookingTime, "7:30 PM", "7:30 PM (Second Dinner)");
-                        addOption(bookingTime, "7:45 PM", "7:45 PM (Second Dinner)");
-                        addOption(bookingTime, "8:00 PM", "8:00 PM (Second Dinner)");
-                        addOption(bookingTime, "8:15 PM", "8:15 PM (Second Dinner)");
-                        addOption(bookingTime, "9:00 PM", "9:00 PM (Night Dinner)");
-                        addOption(bookingTime, "9:15 PM", "9:15 PM (Night Dinner)");
-                        addOption(bookingTime, "9:30 PM", "9:30 PM (Night Dinner)");
-                        addOption(bookingTime, "9:45 PM", "9:45 PM (Night Dinner)");
+                const currentDate = new Date();
+                currentDate.setDate(currentDate.getDate() + 1);
+                const minDate = currentDate.toISOString().split('T')[0];
+                document.getElementById('datePicker').setAttribute('min', minDate);
+
+
+
+
+                dateInput.addEventListener('change', function () {
+                    const selectedDate = new Date(this.value);
+                    const day = (selectedDate.getUTCDay() + 6) % 7; // Adjusting Sunday to be the last element, i.e., index 6 in our array
+
+                    console.log(selectedDate);
+                    console.log(currentDate);
+
+                    const daysToDisable = getDaysToDisable(openDays);
+
+
+                    if (selectedDate < currentDate) {
+                        alert('Please select a date in the future.\n\nIf you\'d like to make on day bookings, Please contact restaurant for more information. ');
+                        this.value = ''; // Clear the input
+                    } else if (daysToDisable.includes(day)) {
+                        alert('The selected date is not available. Please choose another date.');
+                        this.value = ''; // Clear the input
                     }
 
-                    // Display the appropriate banquet option text and enable/disable radio buttons
-                    if (selectedRestaurant === "Bamboo Leaf") { // Bamboo Leaf
-                        alaCarteOption.style.display = "block";
-                        shareBanquetOption.style.display = "block";
-                        feastBanquetOption.style.display = "block";
-                        if (guestCount <= 3) {
-                            // Hide Share Banquet and Feast Banquet options
-                            shareBanquetOption.style.display = "none";
-                            feastBanquetOption.style.display = "none";
-                        } else {
-                            // Show Share Banquet and Feast Banquet options
-                            shareBanquetOption.style.display = "block";
-                            feastBanquetOption.style.display = "block";
-                        }
-                        // Update card text for share banquet
-                        var shareBanquetText = "A shared banquet that includes: Satay Chicken, Steam prawn dumplings, S + P Squid, Roast Pork, Sticky pork and Asian green \n$55 per person";
-                        var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
-                        shareBanquetCardBody.innerText = shareBanquetText;
-                    } else if (selectedRestaurant === "La Oeste") { // La Oeste
-                        alaCarteOption.style.display = "block";
-                        shareBanquetOption.style.display = "none";
-                        feastBanquetOption.style.display = "none";
-                    } else if (selectedRestaurant === "Mexikana") { // Mexikana
-                        alaCarteOption.style.display = "block";
-                        shareBanquetOption.style.display = "block";
-                        feastBanquetOption.style.display = "none";
-
-                        if (guestCount <= 3) {
-                            // Hide Share Banquet and Feast Banquet options for Mexikana
-                            shareBanquetOption.style.display = "none";
-                        } else {
-                            // Show Share Banquet option for Mexikana
-                            shareBanquetOption.style.display = "block";
-                        }
-                        // Update card text for share banquet
-                        var shareBanquetText = "A shared banquet that includes: Papas Fritas, Korean Fried Chicken, Tacos, Smokey chicken, Taquitos dorados and Nachos \n$35 per person";
-                        var shareBanquetCardBody = shareBanquetOption.querySelector(".card-text");
-                        shareBanquetCardBody.innerText = shareBanquetText;
+                    if(this.value != ''){
+                        createSlotPicker(restaurant);
                     }
-                } else {
-                    // Hide the booking time select and banquet options
-                    bookingTimeSelect.style.display = "none";
-                    banquetOptions.style.display = "none";
-                    alaCarteOption.style.display = "none";
-                    shareBanquetOption.style.display = "none";
-                    feastBanquetOption.style.display = "none";
+                });
+            }
+
+            function getDaysToDisable(openDays) {
+                console.log("Opendays: " + JSON.stringify(openDays))
+
+                const daysOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']; // starting from Monday
+                const daysToDisable = [];
+
+                daysOrder.forEach((day, index) => {
+                    const key = 'open' + day;
+                    if (!openDays[0][key]) daysToDisable.push(index);
+                });
+
+                console.log(daysToDisable)
+
+                return daysToDisable;
+            }
+
+            function createSlotPicker(restaurant){
+                const container = document.getElementById('slotPickerContainer')
+                container.innerHTML = ''; // Clear the container
+
+                const sittingLabel = document.createElement('label');
+                sittingLabel.innerHTML = 'Select a sitting:';
+
+                const timeSlotInput = document.createElement('select')
+                timeSlotInput.id = 'slotPicker'
+                timeSlotInput.classList.add("form-select")
+                const defElement = document.createElement('option');
+                defElement.value = "";
+                defElement.textContent = "Select sitting...";
+                timeSlotInput.appendChild(defElement);
+
+                restaurant[0].openTimes.forEach((timeSlot) => {
+                    const optionElement = document.createElement('option');
+
+                    optionElement.value = timeSlot.timeSlotId;
+                    optionElement.textContent = timeSlot.slotName + ` (${timeSlot.slotOpenTime} - ${timeSlot.slotCloseTime})`;
+                    timeSlotInput.appendChild(optionElement);
+                })
+
+                container.appendChild(sittingLabel);
+                container.appendChild(timeSlotInput);
+                timeSlotInput.addEventListener("change", function(){
+                    if (timeSlotInput.value != ''){
+                        createTimePicker(restaurant);
+                    }
+                    else{
+                        const container = document.getElementById('timePickerContainer')
+                        container.innerHTML = '';
+                    }
+                });
+
+            }
+
+            function createTimePicker(restaurant){
+                const timeLabel = document.createElement('label');
+                timeLabel.innerHTML = 'Select a time:';
+                const container = document.getElementById('timePickerContainer');
+                container.innerHTML = '';
+
+                const timeInput = document.createElement('select');
+                timeInput.classList.add('form-select');
+                timeInput.id = 'timepicker';
+
+                const defElement = document.createElement('option');
+                defElement.value = "";
+                defElement.textContent = "Select time...";
+                timeInput.appendChild(defElement);
+
+                const selectedSlot = document.getElementById('slotPicker').value;
+                const selectedDate = document.getElementById('datePicker').value;
+
+                // Find the corresponding time slot in the restaurantData object                
+
+                const chosenTimeSlot = restaurant[0].openTimes.find(slot => slot.timeSlotId == selectedSlot);
+
+                console.log(chosenTimeSlot.slotOpenTime);
+
+                const start = new Date(selectedDate);
+                let [startHours, startMinutes, startSeconds] = chosenTimeSlot.slotOpenTime.split(':').map(Number);
+                start.setHours(startHours, startMinutes, startSeconds);
+                const startTimes = start.toTimeString();
+
+                const close = new Date(chosenTimeSlot.slotCloseTime);
+                let [closeHours, closeMinutes, closeSeconds] = chosenTimeSlot.slotCloseTime.split(':').map(Number);
+                close.setHours(closeHours, closeMinutes, closeSeconds);
+                const closeTimes = close.toTimeString();
+
+                let startParts = startTimes.split(":");
+                let startHour = parseInt(startParts[0]);
+                let startMinute = parseInt(startParts[1]);
+                let startTime = startHours * 60 + startMinutes;
+
+                let closeParts = closeTimes.split(":"); // Adjusted variable name
+                let closeHour = parseInt(closeParts[0]); // Adjusted variable name
+                let closeMinute = parseInt(closeParts[1]); // Adjusted variable name
+                let closeTime = closeHours * 60 + closeMinutes; // Adjusted variable name
+
+                let increment = 15; // 15 minutes
+
+                for (let i = startTime; i < closeTime; i += increment) { // Adjusted variable name
+                    let hours = Math.floor(i / 60);
+                    let minutes = i % 60;
+
+                    let hoursStr = hours.toString().padStart(2, '0');
+                    let minutesStr = minutes.toString().padStart(2, '0');
+
+                    let timeStr = `${hoursStr}:${minutesStr}`;
+
+                    let option = document.createElement('option');
+                    option.value = timeStr;
+                    option.text = timeStr;
+                    timeInput.appendChild(option);
+
+                    console.log('Option appended:', timeStr);
                 }
 
-                // Function to add options to a dropdown
-                function addOption(select, value, text) {
-                    var option = document.createElement("option");
-                    option.value = value;
-                    option.text = text;
-                    select.appendChild(option);
+                container.appendChild(timeLabel);
+                container.appendChild(timeInput);
+            }
+
+            function createBanquetOptions(restaurant){
+                if (document.getElementById('restaurantSelect').value != ''){
+                    document.getElementById('banquetOptions').style.display = 'block';
+                    let cardsContainer = document.getElementById('banquetCardsList');
+
+                    while (cardsContainer.firstChild) {
+                        cardsContainer.removeChild(cardsContainer.firstChild);
+                    }
+
+                    var baseCard = document.getElementById('banquetCard');
+
+                    const banquetOptions = restaurant[0].banquets;
+
+                    var newCard = baseCard.cloneNode(true);
+
+                    newCard.style.display = 'block';
+                    cardsContainer.appendChild(newCard)
+
+                    Object.entries(banquetOptions).forEach(([key, banquet]) => {
+                        var newCard = baseCard.cloneNode(true);
+                        newCard.style.display = 'block';
+
+
+                        newCard.querySelector('h5').innerText = banquet.banquetName;
+                        var banquetInnerText = "";
+                        Object.entries(banquet.banquetItems).forEach(([item, banquetInfo]) => {
+                            banquetInnerText += banquetInfo.banquetItem1;
+                            banquetInnerText += "\n";
+                        })
+
+                        newCard.querySelector('p').innerText = banquetInnerText;
+                        if (document.getElementById('guestNumber').value >= banquet.banquetMinPeople){
+                            cardsContainer.appendChild(newCard)
+                        }
+                    })
+
                 }
+                else{
+                    var container = document.getElementById('banquetOptions');
+                    var cardsContainer = document.getElementById('banquetCardsList');
+                    while(cardsContainer.firstChild){
+                        cardsContainer.removeChild(cardsContainer.firstChild);
+                    }
+                    container.style.display = "none";
 
-            });
-
-            // Initial state on page load
-            document.getElementById("restaurantSelect").selectedIndex = 0;
-            document.getElementById("restaurantSelect").dispatchEvent(new Event("change"));           
+                }
+            }
         </script>
+
     </div>
 </body>
 </html>

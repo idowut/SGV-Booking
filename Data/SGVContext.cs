@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using SGV_Booking.Models;
 
 namespace SGV_Booking.Data
@@ -22,16 +19,18 @@ namespace SGV_Booking.Data
         public virtual DbSet<BanquetItem> BanquetItems { get; set; } = null!;
         public virtual DbSet<Booking> Bookings { get; set; } = null!;
         public virtual DbSet<Restaurant> Restaurants { get; set; } = null!;
+        public virtual DbSet<RestaurantOpenDay> RestaurantOpenDays { get; set; } = null!;
+        public virtual DbSet<RestaurantOpenTime> RestaurantOpenTimes { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
-//        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//        {
-//            if (!optionsBuilder.IsConfigured)
-//            {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-//                optionsBuilder.UseSqlServer("Data Source=DESKTOP-8PR6E5F\\SQLEXPRESS;Initial Catalog=SGV;Integrated Security=True;");
-//            }
-//        }
+        //        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //        {
+        //            if (!optionsBuilder.IsConfigured)
+        //            {
+        //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        //                optionsBuilder.UseSqlServer("Data Source=DESKTOP-8PR6E5F\\SQLEXPRESS;Initial Catalog=SGV;Integrated Security=True;");
+        //            }
+        //        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -168,13 +167,66 @@ namespace SGV_Booking.Data
                     .HasConstraintName("fk_addressID");
             });
 
+            modelBuilder.Entity<RestaurantOpenDay>(entity =>
+            {
+                entity.HasKey(e => e.RestaurantId)
+                    .HasName("pk_restaurantOpenID");
+
+                entity.Property(e => e.RestaurantId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("restaurantID");
+
+                entity.Property(e => e.OpenFriday).HasColumnName("openFriday");
+
+                entity.Property(e => e.OpenMonday).HasColumnName("openMonday");
+
+                entity.Property(e => e.OpenSaturday).HasColumnName("openSaturday");
+
+                entity.Property(e => e.OpenSunday).HasColumnName("openSunday");
+
+                entity.Property(e => e.OpenThursday).HasColumnName("openThursday");
+
+                entity.Property(e => e.OpenTuesday).HasColumnName("openTuesday");
+
+                entity.Property(e => e.OpenWednesday).HasColumnName("openWednesday");
+
+                entity.HasOne(d => d.Restaurant)
+                    .WithOne(p => p.RestaurantOpenDay)
+                    .HasForeignKey<RestaurantOpenDay>(d => d.RestaurantId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_restaurantOpenID");
+            });
+
+            modelBuilder.Entity<RestaurantOpenTime>(entity =>
+            {
+                entity.HasKey(e => e.TimeSlotId)
+                    .HasName("pk_timeSlotID");
+
+                entity.Property(e => e.TimeSlotId).HasColumnName("timeSlotID");
+
+                entity.Property(e => e.RestaurantId).HasColumnName("restaurantID");
+
+                entity.Property(e => e.SlotCloseTime).HasColumnName("slotCloseTime");
+
+                entity.Property(e => e.SlotName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("slotName");
+
+                entity.Property(e => e.SlotOpenTime).HasColumnName("slotOpenTime");
+
+                entity.HasOne(d => d.Restaurant)
+                    .WithMany(p => p.RestaurantOpenTimes)
+                    .HasForeignKey(d => d.RestaurantId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_restaurantTimeID");
+            });
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.UserId).HasColumnName("userID");
 
                 entity.Property(e => e.BookingsCount).HasColumnName("bookingsCount");
-
-                entity.Property(e => e.priorityStatus).HasColumnName("priorityStatus");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(200)
@@ -199,6 +251,8 @@ namespace SGV_Booking.Data
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("phoneNumber");
+
+                entity.Property(e => e.PriorityStatus).HasColumnName("priorityStatus");
 
                 entity.Property(e => e.UserType).HasColumnName("userType");
             });

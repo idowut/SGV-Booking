@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SGV_Booking.Data;
+using SGV_Booking.Models;
 
 namespace SGV_Booking.Controllers
 {
@@ -21,6 +23,13 @@ namespace SGV_Booking.Controllers
         }
         public IActionResult BookingSelection()
         {
+            ViewBag.RestaurantsList = _context.Restaurants.Select(r => new SelectListItem
+            {
+                Value = r.RestaurantId.ToString(),
+                Text = r.RestaurantName,
+            })
+            .ToList();
+
             return View();
         }
         public IActionResult BookingSummary()
@@ -77,9 +86,27 @@ namespace SGV_Booking.Controllers
             }
         }
 
-        public IActionResult RestaurantOpenTimes(int id)
+        public IActionResult restaurantInfo(int id)
         {
-            return View();
+            var apiData = _context.Restaurants.Where(r => r.RestaurantId == id)
+                .Select(r => new
+                {
+                    r.RestaurantAddressId,
+                    r.RestaurantName,
+                    OpenTimes = _context.RestaurantOpenTimes.Where(r => r.RestaurantId == id).ToList(),
+                    OpenDays = _context.RestaurantOpenDays.Where(r => r.RestaurantId == id).ToList(),
+                    Banquets = _context.Banquets.Where(r => r.RestaurantId == id).Select(r => new
+                    {
+                        r.BanquetId,
+                        r.BanquetName,
+                        r.BanquetMinPeople,
+                        r.BanquetPrice,
+                        BanquetItems = _context.BanquetItems.Where(b => b.BanquetId == r.BanquetId).ToList(),
+                    }).ToList(),
+                })
+                .ToList();
+
+            return Json(apiData);
         }
 
     }
