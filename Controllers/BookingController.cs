@@ -151,7 +151,7 @@ namespace SGV_Booking.Controllers
                 customerCommand.Parameters.AddWithValue("@firstname", vm.customerFirstName);
                 customerCommand.Parameters.AddWithValue("@lastname", vm.customerLastName);
                 customerCommand.Parameters.AddWithValue("@email", vm.customerEmail);
-                customerCommand.Parameters.AddWithValue("@phoneNumber", 0);
+                customerCommand.Parameters.AddWithValue("@phoneNumber", vm.customerPhone);
                 customerCommand.Parameters.AddWithValue("@password", "aaaaaaaaaaaaaaaaaaaa");
                 customerCommand.Parameters.AddWithValue("@bookCount", 1);
                 int j = customerCommand.ExecuteNonQuery();
