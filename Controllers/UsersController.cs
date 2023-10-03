@@ -164,7 +164,19 @@ namespace SGV_Booking.Controllers
                     .Select(userindata => userindata)
                     .ToList();
 
-                if (registerQuery.Count == 0)
+
+                if (!user.Email.Contains("@"))
+                {
+                    ViewBag.emailError = "Incorrect Format - e.g name@example.com";
+                }
+
+                if (!user.PhoneNumber.All(char.IsDigit) || user.PhoneNumber.Length < 10)
+                {
+                        ViewBag.phoneError = "Invalid Phone Number - e.g. 0123456789";
+                }
+
+
+                if (registerQuery.Count == 0 && user.Email.Contains("@") && user.PhoneNumber.All(char.IsDigit) && user.PhoneNumber.Length == 10)
                 {
                     user.UserType = 2;
                     user.BookingsCount = 0;
@@ -173,6 +185,8 @@ namespace SGV_Booking.Controllers
                     Console.WriteLine(user);
                     return RedirectToAction(nameof(RegisterDetails));
                 }
+
+               
 
                 if (registerQuery.Count > 0)
                 {
@@ -196,6 +210,8 @@ namespace SGV_Booking.Controllers
 
             return View();
         }
+
+
         public IActionResult RegisterDetails()
         {
             return View();
