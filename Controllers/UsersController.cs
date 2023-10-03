@@ -3,6 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using SGV_Booking.Data;
 using SGV_Booking.Models;
 using SGV_Booking.ViewModels;
+using System.Net;
+using System.Net.Mail;
+using System.Threading.Tasks;
+
 
 namespace SGV_Booking.Controllers
 {
@@ -156,14 +160,12 @@ namespace SGV_Booking.Controllers
             ViewBag.emailError = null;
             ViewBag.firstName = user.FirstName;
 
-
             if (ModelState.IsValid)
             {
                 var registerQuery = _context.Users
                     .Where(userindata => userindata.PhoneNumber.Equals(user.PhoneNumber) || userindata.Email.Equals(user.Email))
                     .Select(userindata => userindata)
                     .ToList();
-
 
                 if (!user.Email.Contains("@"))
                 {
@@ -172,9 +174,8 @@ namespace SGV_Booking.Controllers
 
                 if (!user.PhoneNumber.All(char.IsDigit) || user.PhoneNumber.Length < 10)
                 {
-                        ViewBag.phoneError = "Invalid Phone Number - e.g. 0123456789";
+                    ViewBag.phoneError = "Invalid Phone Number - e.g. 0123456789";
                 }
-
 
                 if (registerQuery.Count == 0 && user.Email.Contains("@") && user.PhoneNumber.All(char.IsDigit) && user.PhoneNumber.Length == 10)
                 {
@@ -183,10 +184,12 @@ namespace SGV_Booking.Controllers
                     _context.Add(user);
                     await _context.SaveChangesAsync();
                     Console.WriteLine(user);
+
+                    // Send a confirmation email
+                    await SendConfirmationEmail(user);
+
                     return RedirectToAction(nameof(RegisterDetails));
                 }
-
-               
 
                 if (registerQuery.Count > 0)
                 {
@@ -201,16 +204,45 @@ namespace SGV_Booking.Controllers
                     {
                         ViewBag.emailError = "Email is already in use.";
                     }
-
                 }
-
-
-                return View();
             }
 
             return View();
         }
 
+        // Send confirmation email method
+        private async Task SendConfirmationEmail(User user)
+        {
+            try
+            {
+                var fromEmail = "test6460@outlook.com"; // Replace with your email address
+                var fromEmailPassword = "testing646";
+                var toEmail = user.Email;
+                var subject = "Registration Confirmation";
+                var body = $"Dear {user.FirstName},\n\n" +
+                           $"Thank you for registering with us! Your account has been created successfully.\n\n" +
+                           $"Sincerely,\n" +
+                           "SGV Team";
+
+                using (var smtpClient = new SmtpClient("smtp.office365.com")) // Replace with your email provider's SMTP server
+                {
+                    smtpClient.Port = 587; // Replace with the SMTP server port of your email provider
+                    smtpClient.Credentials = new NetworkCredential(fromEmail, fromEmailPassword);
+                    smtpClient.EnableSsl = true;
+
+                    var mailMessage = new MailMessage(fromEmail, toEmail, subject, body);
+                    mailMessage.IsBodyHtml = true;
+
+                    await smtpClient.SendMailAsync(mailMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle email sending errors
+                Console.WriteLine("Email sending error: " + ex.ToString());
+            }
+            return View();
+        }
 
         public IActionResult RegisterDetails()
         {
