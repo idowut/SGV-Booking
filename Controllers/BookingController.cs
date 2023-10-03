@@ -8,6 +8,9 @@ using SGV_Booking.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System;
 using Microsoft.AspNetCore.Localization;
+using System.Net;
+using System.Net.Mail; 
+using System.Threading.Tasks; 
 
 namespace SGV_Booking.Controllers
 {
@@ -168,6 +171,43 @@ namespace SGV_Booking.Controllers
             int i = addCommand.ExecuteNonQuery();
 
             connectionString.Close();
+
+            try
+            {
+                var fromEmail = "test6460@outlook.com"; // Replace with your email address
+                var fromEmailPassword = "testing646";
+                var toEmail = vm.customerEmail;
+                var subject = "Booking Confirmation";
+                var body = $"Thank you for booking with us! Your booking has been confirmed.\n\n" +
+                          $"Booking Details:\n" +
+                          $"Date and Time: {vm.datePicker} {vm.timePicker}\n" +
+                          $"Restaurant: {vm.restaurantSelect}\n" +
+                          $"Booking Notes: {vm.bookingNotes}\n" +
+                          $"Number of Guests: {vm.guestNumber}";
+
+                using (var smtpClient = new SmtpClient("smtp.office365.com"))
+                {
+                    smtpClient.Port = 587; // Replace with the SMTP server port of your email provider
+                    smtpClient.Credentials = new NetworkCredential(fromEmail, fromEmailPassword); // Replace with your email password
+                    smtpClient.EnableSsl = true; // Use SSL if your email provider requires it
+
+                    var mailMessage = new MailMessage(fromEmail, toEmail, subject, body);
+                    mailMessage.IsBodyHtml = true; // You can use HTML in the email body if needed
+
+                    await smtpClient.SendMailAsync(mailMessage);
+
+                    Console.WriteLine("Email sent successfully"); // Add this line
+
+                }
+
+                ViewBag.EmailSent = true;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.EmailSent = false;
+                ViewBag.EmailError = ex.Message;
+                Console.WriteLine("Email sending error: " + ex.ToString());
+            }
 
             vm.datePicker = vm.datePicker;
             var dateConversion = vm.datePicker;
