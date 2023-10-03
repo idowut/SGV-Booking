@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Session;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SGV_Booking.Data;
-using SGV_Booking.Models;
 using SGV_Booking.ViewModels;
+using Microsoft.AspNetCore.Http;
+using System;
+using Microsoft.AspNetCore.Localization;
 
 namespace SGV_Booking.Controllers
 {
@@ -13,10 +16,14 @@ namespace SGV_Booking.Controllers
         const string SessionUserId = "_UserID";
         const string SessionUserName = "_UserName";
         private readonly SGVContext _context;
+        private readonly IConfiguration connString;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public BookingController(SGVContext context)
+        public BookingController(SGVContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
+            connString = configuration;
             _context = context;
+            _httpContextAccessor = httpContextAccessor;  // Assigning the injected instance to the field
         }
         public IActionResult BookingSelection()
         {
@@ -35,15 +42,29 @@ namespace SGV_Booking.Controllers
         [HttpPost]
         public ActionResult BookingSelection(BookingInfoProcess vm, string timeString)
         {
-            TimeSpan time;
-            bool isTimeParseSuccessful = TimeSpan.TryParse(timeString, out time);
 
-            DateTime date = vm.datePicker;
-            vm.datePicker = date;
+            if (!TimeSpan.TryParse(timeString, out TimeSpan time))
+            {
+                // Handle the error here, maybe return to the same view with a error message
+                ViewBag.ErrorMessage = "Time is in an invalid format.";
+                return View("Error"); // Or return the same view with an error message.
+            }
 
+            vm.datePicker = vm.datePicker;
             vm.timePicker = time;
-            return View("Booking", vm); // Pass it as a parameter to the next step
+            var dateConversion = vm.datePicker;
+            Console.WriteLine(time);
+            if (_httpContextAccessor.HttpContext?.Session.GetInt32("_UserID") == null){
+                vm.customerID = -1;
+            }
+            else
+            {
+                vm.customerID = _httpContextAccessor.HttpContext?.Session.GetInt32("_UserID");
+            }
+
+            return View("Booking", vm);
         }
+
         [HttpPost]
         public ActionResult Booking(BookingInfoProcess vm)
         {
@@ -54,32 +75,49 @@ namespace SGV_Booking.Controllers
         {
             return View("BookingSummary", vm);
         }
-        public async Task<IActionResult> BookingConfirmation(int guestCount, string date, string bookingTime, string selectedRestaurant, string selectedBanquet, string firstName, string lastName, string email, string phoneNumber, string dietaryRequirements)
+
+        public async Task<IActionResult> BookingConfirmation(BookingInfoProcess vm)
         {
-            DateTime dt = Convert.ToDateTime(date + " " + bookingTime);
+            DateTime dt = Convert.ToDateTime(vm.datePicker + " " + vm.timePicker);
 
-            Console.WriteLine(selectedRestaurant);
-            var Restaurant = await _context.Restaurants.FirstOrDefaultAsync(i => i.RestaurantName == selectedRestaurant);
-            var RestaurantId = Restaurant.RestaurantId;
+            var Restaurant = await _context.Restaurants.FirstOrDefaultAsync(i => i.RestaurantId == vm.restaurantSelect);
+            int RestaurantId = vm.restaurantSelect;
 
-            var Customer = await _context.Users.FirstOrDefaultAsync(i => i.FirstName == firstName && i.LastName == lastName && i.Email == email); ;
+            var BookingNotes = vm.bookingNotes;
 
-            var CustomerId = -1;
-            if (Customer != null)
+            var BanquetOption = vm.banquetOption;
+
+            var NumGuest = vm.guestNumber;
+
+            string query = "INSERT INTO Bookings (restaurantID, bookingTime, customerID, bookingNotes, numGuest, bookingStatus)";
+            query += "VALUES(@RestaurantID, @dateTime, @CustomerID, @BookingNotes, @NumGuest, @bookingStatus)";
+
+            string customerQuery = "INSERT INTO Users (userType, firstName, lastName, email, phoneNumber, password, bookingsCount)";
+            customerQuery += "VALUES(@userType, @firstname, @lastname, @email, @phoneNumber, @password, @bookCount)";
+
+            Console.WriteLine(connString.ToString());
+
+            SqlConnection connectionString = new SqlConnection(connString.GetConnectionString("SGVContext"));
+
+            connectionString.Open();
+
+            var Customer = await _context.Users.FirstOrDefaultAsync(i => i.FirstName == vm.customerFirstName && i.LastName == vm.customerLastName && i.Email == vm.customerEmail);
+
+            if (Customer == null)
             {
-                CustomerId = Customer.UserId;
+                SqlCommand customerCommand = new SqlCommand(customerQuery, connectionString);
+                customerCommand.Parameters.AddWithValue("@userType", 2);
+                customerCommand.Parameters.AddWithValue("@firstname", vm.customerFirstName);
+                customerCommand.Parameters.AddWithValue("@lastname", vm.customerLastName);
+                customerCommand.Parameters.AddWithValue("@email", vm.customerEmail);
+                customerCommand.Parameters.AddWithValue("@phoneNumber", 0);
+                customerCommand.Parameters.AddWithValue("@password", "aaaaaaaaaaaaaaaaaaaa");
+                customerCommand.Parameters.AddWithValue("@bookCount", 1);
+                int j = customerCommand.ExecuteNonQuery();
             }
 
-            var BookingNotes = dietaryRequirements;
-
-            var BanquetOption = selectedBanquet;
-
-            var NumGuest = guestCount;
-
-            string query = "INSERT INTO Bookings (restaurantID, bookingTime, customerID, bookingNotes, numGuest)";
-            query += "VALUES(@RestaurantID, @dateTime, @CustomerID, @BookingNotes, @NumGuest)";
-
-            SqlConnection connectionString = new SqlConnection("Data Source=DESKTOP-8PR6E5F\\SQLEXPRESS;Initial Catalog=SGV;Integrated Security=True");
+            var Customer2 = await _context.Users.FirstOrDefaultAsync(i => i.FirstName == vm.customerFirstName && i.LastName == vm.customerLastName && i.Email == vm.customerEmail);
+            var CustomerId = Customer2.UserId;
 
             SqlCommand addCommand = new SqlCommand(query, connectionString);
             addCommand.Parameters.AddWithValue("@RestaurantID", RestaurantId);
@@ -87,20 +125,31 @@ namespace SGV_Booking.Controllers
             addCommand.Parameters.AddWithValue("@CustomerID", CustomerId);
             addCommand.Parameters.AddWithValue("@BookingNotes", BookingNotes);
             addCommand.Parameters.AddWithValue("@NumGuest", NumGuest);
+            addCommand.Parameters.AddWithValue("@bookingStatus", 0);
 
-            connectionString.Open();
             int i = addCommand.ExecuteNonQuery();
 
             connectionString.Close();
 
+            vm.datePicker = vm.datePicker;
+            var dateConversion = vm.datePicker;
+            if (_httpContextAccessor.HttpContext?.Session.GetInt32("_UserID") == null)
+            {
+                vm.customerID = -1;
+            }
+            else
+            {
+                vm.customerID = _httpContextAccessor.HttpContext?.Session.GetInt32("_UserID");
+            }
+
             if (i != 0)
             {
-                return View();
+                return View("BookingConfirmation", vm);
             }
             else
             {
                 Console.WriteLine("not successful");
-                return View();
+                return View("BookingConfirmation", vm);
             }
         }
 
@@ -125,6 +174,21 @@ namespace SGV_Booking.Controllers
                 .ToList();
 
             return Json(apiData);
+        }
+
+        [HttpGet]
+        public IActionResult GetUserId()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId != null || userId == -1)
+            {
+                return Json(userId);
+            }
+            else
+            {
+                userId = -1;
+                return Json(userId);
+            }
         }
 
     }

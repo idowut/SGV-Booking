@@ -75,6 +75,7 @@
     <input type="hidden" name="datePicker" value="@Model.datePicker">
     <input type="hidden" name="timePicker" value="@Model.timePicker">
     <input type="hidden" name="restaurantSelect" value="@Model.restaurantSelect">
+    <input readonly name="customerId" id="customerId" value="@Model.customerID">
 
 
     <div class="container">
@@ -111,21 +112,22 @@
     </div>
 
 </form>
+<script>
+    fetch('/Booking/GetUserId')
+        .then(response => {
+            // Check if request was successful
+            if (!response.ok) {
+                throw new Error('Network response was not ok' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(userId => {
+            console.log("User ID: " + userId);
+            document.getElementById('customerId').value = userId
+        })
+        .catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
 
-    <script>
-        function ToSummary() {
-            var firstName = document.getElementById("firstName").value;
-            var lastName = document.getElementById("lastName").value;
-            var email = document.getElementById("email").value;
-            var phoneNumber = document.getElementById("phoneNumber").value;
-            var dietaryRequirements = document.getElementById("requirementNote").value;
+</script>
 
-            sessionStorage.setItem("firstName", firstName);
-            sessionStorage.setItem("lastName", lastName);
-            sessionStorage.setItem("email", email);
-            sessionStorage.setItem("phoneNumber", phoneNumber);
-            sessionStorage.setItem("dietaryRequirements", dietaryRequirements);
-
-            window.location.href = "BookingSummary";
-        }
-    </script>

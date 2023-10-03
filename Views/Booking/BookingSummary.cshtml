@@ -1,26 +1,131 @@
 ﻿@model SGV_Booking.ViewModels.BookingInfoProcess;
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: lightblue;
+        margin: 0;
+        padding: 0;
+    }
 
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .display-header {
+        background-color: #333;
+        color: #fff;
+        padding: 15px;
+        text-align: center;
+        font-size: 24px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+
+    .elem-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input[type="number"],
+    input[type="date"],
+    select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-position: right center;
+    }
+
+    button[type="submit"] {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+</style>
 <body>
-    <p>tsting: @Model.customerFirstName</p>
     <div class="container">
-        <h1 class="display-header">Booking Summary</h1>     
-        <form action="@Url.Action("BookingSummary", "Booking")" method="POST">
-
-            <input name="guestNumber" value="@Model.guestNumber">
-            <input name="banquetOption" value="@Model.banquetOption">
-            <input name="datePicker" value="@Model.datePicker">
-            <input name="timePicker" value="@Model.timePicker">
-            <input name="restaurantSelect" value="@Model.restaurantSelect">
-            <input name="bookingNotes" value="@Model.bookingNotes">
-
-            <input name="customerFirstName" value="@Model.customerFirstName">
-            <input name="customerLastName" value="@Model.customerLastName">
-            <input name="customerPhone" value="@Model.customerPhone">
-            <input name="customerEmail" value="@Model.customerEmail">
+        <h1 class="display-header">Booking Summary</h1>
+        <form method="post" action="@Url.Action("BookingConfirmation", "Booking")">
 
 
+            <div class="container">
+                <input name="customerId" value="@Model.customerID" readonly>
 
+                <div class="row">
+                    <div class="col-6">
+                        <label>Number of Guest:</label>
+                        <input name="guestNumber" value="@Model.guestNumber" readonly>
+                    </div>
+                    <div class="col-3">
+                        <label>Date:</label>
+                        <input name="datePicker" value="@Model.datePicker" readonly>
+                    </div>
+                    <div class="col-3">
+                        <label>Time:</label>
+                        <input name="timePicker" value="@Model.timePicker" readonly>
+                    </div>
+                </div>
 
+                <div class="row">
+                    <div class="col-6">
+                        <label>Restaurant:</label>
+                        <input name="restaurantSelect" id="restaurantSelect" value="@Model.restaurantSelect" hidden>
+                        <input name="restaurantSelectName" id="restaurantSelectName" value="@Model.restaurantSelect" readonly>
+                    </div>
+                    <div class="col-6">
+                        <label>Banquet:</label>
+                        <input name="banquetOption" id="banquetOption" value="@Model.banquetOption">
+                    </div>
+                </div>
+
+                <div class="row m-1">
+                    <label>Booking notes:</label>
+                    <textarea name="bookingNotes" class="p-2" readonly>@Model.bookingNotes</textarea>
+                </div> 
+                <div class="row">
+                    <div class="col-6">
+                        <label for="firstName">First Name:</label>
+                        <input name="customerFirstName" value="@Model.customerFirstName" readonly>
+                    </div>
+
+                    <div class="col-6">
+                        <label for="lastName">Last Name:</label>
+                        <input name="customerLastName" value="@Model.customerLastName" readonly>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6">
+                        <label for="email">Email:</label>
+                        <input name="customerEmail" value="@Model.customerEmail" readonly>
+                    </div>
+                    <div class="col-6">
+                        <label for="phoneNumber">Phone Number:</label>
+                        <input name="customerPhone" value="@Model.customerPhone" readonly>
+                    </div>
+                </div>
+            </div>
 
 
             <input type="submit" id="submitButton" value="Confirm Booking"/>
@@ -28,28 +133,38 @@
     </div>
 
     <script>
-        var firstName = sessionStorage.getItem("firstName");
-        var lastName = sessionStorage.getItem("lastName");
-        var email = sessionStorage.getItem("email");
-        var phoneNumber = sessionStorage.getItem("phoneNumber");
-        var dietaryRequirements = sessionStorage.getItem("dietaryRequirements");
-        var selectedGuests = sessionStorage.getItem("selectedGuests");
-        var selectedDate = sessionStorage.getItem("selectedDate");
-        var selectedTime = sessionStorage.getItem("selectedTime");
-        var selectedRestaurant = sessionStorage.getItem("selectedRestaurant");
-        var selectedBanquet = sessionStorage.getItem("selectedBanquet");
+        function onRun(){
+                fetch(`/Booking/restaurantInfo/?id=${@Model.restaurantSelect}`).then(response => {
+                    console.log('response status: ' + response.status);
+                    console.log('response msg: ' + response.statusText);
+                    return response.json()
+                })
+                    .then(data => {
+                        console.log(data);
+                        convertValues(data);
+                    })
+                    .catch(err => console.log(err));
+        }
 
-        document.getElementById("firstName").value = firstName;
-        document.getElementById("lastName").value = lastName;
-        document.getElementById("email").value = email;
-        document.getElementById("phoneNumber").value = phoneNumber;
-        document.getElementById("dietaryRequirements").value = dietaryRequirements;
-        document.getElementById("guestCount").value = selectedGuests;
-        document.getElementById("dateTime").value = selectedDate;
-        document.getElementById("bookingTime").value = selectedTime;
-        document.getElementById("selectedRestaurant").value = selectedRestaurant;
-        document.getElementById("selectedBanquet").value = selectedBanquet;
+    function convertValues(restaurant){
+        document.getElementById('restaurantSelectName').value = restaurant[0].restaurantName;
 
+            var temp = '@(Model.banquetOption == null ? "isNull" : "notNull")';
+
+        if(temp === 'isNull')
+        {
+                document.getElementById('banquetOption').value = "À la carte";
+        } else
+        {
+            convertBanquet(@Model.banquetOption);
+        }
+    }
+
+    function convertBanquet(data){
+            document.getElementById('banquetOption').value = restaurant[0].banquets.find(banquet => banquet.banquetId == data).banquetName
+
+    }
+    onRun()
     </script>
 </body>
 </html>

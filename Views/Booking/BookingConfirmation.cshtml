@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model SGV_Booking.ViewModels.BookingInfoProcess
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -73,33 +75,48 @@
 
         <div class="booking-info">
             <h2>Booking Details</h2>
-            <p><strong>First Name:</strong> <span id="firstName"></span></p>
-            <p><strong>Last Name:</strong> <span id="lastName"></span></p>
-            <p><strong>Selected Restaurant:</strong> <span id="selectedRestaurant"></span></p>
-            <p><strong>Email:</strong> <span id="email"></span></p>
-            <p><strong>Date:</strong> <span id="dateTime"></span></p>
-            <p><strong>Time:</strong> <span id="bookingTime"></span></p>
-            <p><strong>Number of Guests:</strong> <span id="guestCount"></span></p>
+            <p><strong>First Name:</strong> <span>@Model.customerFirstName</span></p>
+            <p><strong>Last Name:</strong> <span>@Model.customerLastName</span></p>
+            <p><strong>Selected Restaurant:</strong> <span id="restaurantSelectName">@Model.restaurantSelect</span></p>
+            <p><strong>Selected Banquet:</strong> <span id="banquetOption">@Model.banquetOption</span></p>
+            <p><strong>Email:</strong> <span>@Model.customerEmail</span></p>
+            <p><strong>Date:</strong> <span>@Model.datePicker</span></p>
+            <p><strong>Time:</strong> <span>@Model.timePicker</span></p>
+            <p><strong>Number of Guests:</strong> <span>@Model.guestNumber</span></p>
         </div>
     </div>
 
-    <script>
-        var firstName = sessionStorage.getItem("firstName");
-        var lastName = sessionStorage.getItem("lastName");
-        var email = sessionStorage.getItem("email");
-        var selectedDate = sessionStorage.getItem("selectedDate");
-        var selectedTime = sessionStorage.getItem("selectedTime");
-        var selectedRestaurant = sessionStorage.getItem("selectedRestaurant");
-        var selectedGuests = sessionStorage.getItem("selectedGuests");
-
-        document.getElementById("firstName").textContent = firstName;
-        document.getElementById("lastName").textContent = lastName;
-        document.getElementById("email").textContent = email;
-        document.getElementById("dateTime").textContent = selectedDate;
-        document.getElementById("bookingTime").textContent = selectedTime;
-        document.getElementById("selectedRestaurant").textContent = selectedRestaurant;
-        document.getElementById("guestCount").textContent = selectedGuests;
-    </script>
-
 </body>
 </html>
+<script>
+    function onRun() {
+        fetch(`/Booking/restaurantInfo/?id=${@Model.restaurantSelect}`).then(response => {
+            console.log('response status: ' + response.status);
+            console.log('response msg: ' + response.statusText);
+            return response.json()
+        })
+            .then(data => {
+                console.log(data);
+                convertValues(data);
+            })
+            .catch(err => console.log(err));
+    }
+
+    function convertValues(restaurant) {
+        document.getElementById('restaurantSelectName').textContent = restaurant[0].restaurantName;
+
+        var temp = '@(Model.banquetOption == null ? "isNull" : "notNull")';
+
+        if (temp === 'isNull') {
+            document.getElementById('banquetOption').textContent = "À la carte";
+        } else {
+            convertBanquet(@Model.banquetOption);
+        }
+    }
+
+    function convertBanquet(data) {
+        document.getElementById('banquetOption').textContent = restaurant[0].banquets.find(banquet => banquet.banquetId == data).banquetName
+
+    }
+    onRun()
+</script>

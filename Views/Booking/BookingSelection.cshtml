@@ -116,7 +116,7 @@
                         <h5 class="card-title" id="cardTitle">À la carte</h5>
                         <p class="card-text">The À la carte option allows customers to order each distinctive food item at the restaurant.</p>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="banquetOption" id="banquetOption" value="">
+                            <input class="form-check-input" type="radio" name="banquetOption" id="banquetOption" value="" checked="checked">
                         </div>
                     </div>
                 </div>
@@ -130,6 +130,8 @@
             function numGuestChange(){
                 itemChanged(document.getElementById('restaurantSelect').value)
             }
+
+            itemChanged(document.getElementById('restaurantSelect').value)
 
             function itemChanged(value) {
                 fetch(`/Booking/restaurantInfo/?id=${value}`).then(response => {
