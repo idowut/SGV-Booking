@@ -170,11 +170,9 @@ namespace SGV_Booking.Controllers
             return Json(apiData);
         }
 
-        public IActionResult bookingLists()
+        public IActionResult bookingLists(int id)
         {
-            var apiData = _context.Bookings
-                .Select(r => r.BookingTime)
-                .ToList();
+            var apiData = _context.Bookings.Where(b => b.RestaurantId == id).ToList();
 
             return Json(apiData);
         }
