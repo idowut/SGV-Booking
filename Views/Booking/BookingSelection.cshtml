@@ -81,10 +81,13 @@
             </div>
 
             <div class="elem-group">
-                <label for="restaurantSelect">Select a Restaurant:</label>
-                <select class="form-select" name="restaurantSelect" id="restaurantSelect" asp-items="@ViewBag.RestaurantsList" onchange="itemChanged(this.value)">
-                    <option value="">Select Restaurant...</option>
-                </select>
+                <div class="row">
+                    <label for="restaurantSelect">Select a Restaurant:</label>
+                    <select class="form-select" name="restaurantSelect" id="restaurantSelect" asp-items="@ViewBag.RestaurantsList" onchange="itemChanged(this.value)">
+                        <option value="">Select Restaurant...</option>
+                    </select>
+                    <p style="color: red">@Model.ErrorMessage</p>
+                </div>
             </div>
 
             <div class="elem-group" id="datePickerContainer">
@@ -116,7 +119,7 @@
                         <h5 class="card-title" id="cardTitle">À la carte</h5>
                         <p class="card-text">The À la carte option allows customers to order each distinctive food item at the restaurant.</p>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="banquetOption" id="banquetOption" value="" checked="checked">
+                            <input class="form-check-input" type="radio" name="banquetOption" id="banquetOption" value="0">
                         </div>
                     </div>
                 </div>
@@ -150,6 +153,15 @@
             function createDatePicker(restaurant) {
                 const container = document.getElementById('datePickerContainer');
                 container.innerHTML = ''; // Clear the container
+                if (document.getElementById('slotPicker')){
+                    document.getElementById('slotPicker').value = ''
+                }
+
+                if (document.getElementById('timePicker')) {
+                    document.getElementById('timePicker').value = ''
+                }
+
+
 
                 const openDays = restaurant[0].openDays;
                 const dateInput = document.createElement('input');
@@ -166,9 +178,6 @@
                 currentDate.setDate(currentDate.getDate() + 1);
                 const minDate = currentDate.toISOString().split('T')[0];
                 document.getElementById('datePicker').setAttribute('min', minDate);
-
-
-
 
                 dateInput.addEventListener('change', function () {
                     const selectedDate = new Date(this.value);
@@ -275,25 +284,54 @@
 
                 const increment = 15; // 15 minutes
 
-                for (let time = startTime; time < closeTime; time.setMinutes(time.getMinutes() + increment)) {
-                    const hours = time.getHours();
-                    const minutes = time.getMinutes();
-                    const hoursStr = hours.toString().padStart(2, '0');
-                    const minutesStr = minutes.toString().padStart(2, '0');
-                    const timeStr = `${hoursStr}:${minutesStr}`;
+                var restaurantId = document.getElementById("restaurantSelect").value;
 
-                    const option = document.createElement('option');
-                    option.value = timeStr;
-                    option.text = timeStr;
-                    timeInput.appendChild(option);
+                let counterAdded = 0
 
-                    console.log('Option appended:', timeStr);
-                }
+                fetch(`/Booking/bookingLists/?id=${restaurantId}`).then(response => {
+                    console.log('response status: ' + response.status);
+                    console.log('response msg: ' + response.statusText);
+                    return response.json()
+                })
+                    .then(data => {
+                        console.log(data);
+                        for (let time = startTime; time < closeTime; time.setMinutes(time.getMinutes() + increment)) {
+                            let found = false;
+                            const hours = time.getHours();
+                            const minutes = time.getMinutes();
+                            const hoursStr = hours.toString().padStart(2, '0');
+                            const minutesStr = minutes.toString().padStart(2, '0');
+                            const timeStr = `${hoursStr}:${minutesStr}`;
 
-                container.appendChild(timeLabel);
-                container.appendChild(timeInput);
+                            const option = document.createElement('option');
+                            option.value = timeStr;
+                            option.text = timeStr;
+
+                            var date = document.getElementById('datePicker').value;
+
+                            data.forEach(function(item){
+                                if (item.bookingTime === (date + "T" + timeStr + ":00")){
+                                    found = true;
+                                }
+                            })
+                            if (!found){
+                                counterAdded = counterAdded + 1;
+                                timeInput.appendChild(option);
+                            }
+
+                        }
+                        if (counterAdded == 0) {
+                            alert("There are no more available times for this time period. \nPlease select a different slot.")
+                            document.getElementById('slotPicker').value = '';
+                        }
+                        else{
+                            container.appendChild(timeLabel);
+                            container.appendChild(timeInput);
+                        }
+                        })
+                    .catch(err => console.log(err));
+                
             }
-
 
             function createBanquetOptions(restaurant){
                 if (document.getElementById('restaurantSelect').value != ''){

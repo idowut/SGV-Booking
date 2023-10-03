@@ -68,14 +68,12 @@
     }
     </style>
 <form method="post" action="@Url.Action("BookingSummary", "Booking")">
-    <p>@Model.datePicker</p>
-    <p>@Model.timePicker</p>
     <input type="hidden" name="guestNumber" value="@Model.guestNumber">
     <input type="hidden" name="banquetOption" value="@Model.banquetOption">
     <input type="hidden" name="datePicker" value="@Model.datePicker">
     <input type="hidden" name="timePicker" value="@Model.timePicker">
     <input type="hidden" name="restaurantSelect" value="@Model.restaurantSelect">
-    <input readonly name="customerId" id="customerId" value="@Model.customerID">
+    <input type="hidden" name="customerId" id="customerId" value="@Model.customerID">
 
 
     <div class="container">
@@ -104,8 +102,9 @@
             </div>
         </div>
         <div class="col-12">
-            <label for="requirementNote">Dietary Requirements</label>
-        <textarea class="form-control" id="bookingNotes" name="bookingNotes" rows="3" placeholder="Dietary Requirements..."></textarea>
+            <br />
+            <label for="requirementNote">Booking Notes</label>
+        <textarea class="form-control" id="bookingNotes" name="bookingNotes" rows="3" placeholder="Anything you'd like us to know?"></textarea>
         </div>
 
         <input type="submit" style="margin-top:1rem" value="Next">
@@ -124,10 +123,37 @@
         .then(userId => {
             console.log("User ID: " + userId);
             document.getElementById('customerId').value = userId
+            if(userId != -1){
+                getUser(userId);
+            }
         })
         .catch(error => {
             console.error('There has been a problem with your fetch operation:', error);
         });
 
+    function getUser(id){
+        var userId = document.getElementById('customerId').value
+        console.log(userId);
+        fetch(`/Booking/GetUserInfo/?id=${userId}`).then(response => {
+            console.log('response status: ' + response.status);
+            console.log('response msg: ' + response.statusText);
+            return response.json()
+        })
+            .then(data => {
+                console.log(data);
+                replaceInfo(data);
+            })
+            .catch(err => console.log(err));
+    }
+
+    function replaceInfo(data){
+        document.getElementById('customerFirstName').value = data[0].firstName;
+        document.getElementById('customerLastName').value = data[0].lastName;
+        document.getElementById('customerEmail').value = data[0].email;
+        document.getElementById('customerPhone').value = data[0].phoneNumber;
+
+
+
+    }
 </script>
 

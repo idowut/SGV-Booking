@@ -8,6 +8,9 @@ using SGV_Booking.ViewModels;
 using Microsoft.AspNetCore.Http;
 using System;
 using Microsoft.AspNetCore.Localization;
+using System.Net;
+using System.Net.Mail; 
+using System.Threading.Tasks; 
 
 namespace SGV_Booking.Controllers
 {
@@ -50,24 +53,62 @@ namespace SGV_Booking.Controllers
                 return View("Error"); // Or return the same view with an error message.
             }
 
-            vm.datePicker = vm.datePicker;
-            vm.timePicker = time;
-            var dateConversion = vm.datePicker;
-            Console.WriteLine(time);
-            if (_httpContextAccessor.HttpContext?.Session.GetInt32("_UserID") == null){
-                vm.customerID = -1;
-            }
-            else
+            vm.customerID = -1;
+
+            if (vm.restaurantSelect == 0)
             {
-                vm.customerID = _httpContextAccessor.HttpContext?.Session.GetInt32("_UserID");
+                return View("BookingSelection");
             }
 
-            return View("Booking", vm);
+            return View("BookingSelection", vm);
         }
 
         [HttpPost]
         public ActionResult Booking(BookingInfoProcess vm)
         {
+            ViewBag.banquet = vm.banquetOption;
+            if (vm.restaurantSelect == 0)
+            {
+
+                vm.ErrorMessage = "Please Select a Restaurant...";
+                ViewBag.RestaurantsList = _context.Restaurants.Select(r => new SelectListItem
+                {
+                    Value = r.RestaurantId.ToString(),
+                    Text = r.RestaurantName,
+                })
+           .ToList();
+
+                return View("BookingSelection", vm);
+            }
+
+            if (!vm.banquetOption.HasValue)
+            {
+                vm.ErrorMessage = "Pleast Select a Banquet...";
+                ViewBag.RestaurantsList = _context.Restaurants.Select(r => new SelectListItem
+                {
+                    Value = r.RestaurantId.ToString(),
+                    Text = r.RestaurantName,
+                })
+                .ToList();
+
+                return View("BookingSelection", vm);
+
+            }
+
+            if (string.IsNullOrEmpty(vm.datePicker))
+            {
+                vm.ErrorMessage = "Please Select a Date";
+                ViewBag.date = vm.datePicker;
+                ViewBag.RestaurantsList = _context.Restaurants.Select(r => new SelectListItem
+                {
+                    Value = r.RestaurantId.ToString(),
+                    Text = r.RestaurantName,
+                })
+                .ToList();
+
+                return View("BookingSelection", vm);
+            }
+
             return View("Booking", vm);
         }
         [HttpPost]
@@ -110,7 +151,7 @@ namespace SGV_Booking.Controllers
                 customerCommand.Parameters.AddWithValue("@firstname", vm.customerFirstName);
                 customerCommand.Parameters.AddWithValue("@lastname", vm.customerLastName);
                 customerCommand.Parameters.AddWithValue("@email", vm.customerEmail);
-                customerCommand.Parameters.AddWithValue("@phoneNumber", 0);
+                customerCommand.Parameters.AddWithValue("@phoneNumber", vm.customerPhone);
                 customerCommand.Parameters.AddWithValue("@password", "aaaaaaaaaaaaaaaaaaaa");
                 customerCommand.Parameters.AddWithValue("@bookCount", 1);
                 int j = customerCommand.ExecuteNonQuery();
@@ -130,6 +171,43 @@ namespace SGV_Booking.Controllers
             int i = addCommand.ExecuteNonQuery();
 
             connectionString.Close();
+
+            try
+            {
+                var fromEmail = "sgvBooking@outlook.com"; // Replace with your email address
+                var fromEmailPassword = "testing646";
+                var toEmail = vm.customerEmail;
+                var subject = "Booking Confirmation";
+                var body = $"Thank you for booking with us! Your booking has been confirmed.\n\n" +
+                          $"Booking Details:\n" +
+                          $"Date and Time: {vm.datePicker} {vm.timePicker}\n" +
+                          $"Restaurant: {vm.restaurantSelect}\n" +
+                          $"Booking Notes: {vm.bookingNotes}\n" +
+                          $"Number of Guests: {vm.guestNumber}";
+
+                using (var smtpClient = new SmtpClient("smtp.office365.com"))
+                {
+                    smtpClient.Port = 587; // Replace with the SMTP server port of your email provider
+                    smtpClient.Credentials = new NetworkCredential(fromEmail, fromEmailPassword); // Replace with your email password
+                    smtpClient.EnableSsl = true; // Use SSL if your email provider requires it
+
+                    var mailMessage = new MailMessage(fromEmail, toEmail, subject, body);
+                    mailMessage.IsBodyHtml = true; // You can use HTML in the email body if needed
+
+                    await smtpClient.SendMailAsync(mailMessage);
+
+                    Console.WriteLine("Email sent successfully"); // Add this line
+
+                }
+
+                ViewBag.EmailSent = true;
+            }
+            catch (Exception ex)
+            {
+                ViewBag.EmailSent = false;
+                ViewBag.EmailError = ex.Message;
+                Console.WriteLine("Email sending error: " + ex.ToString());
+            }
 
             vm.datePicker = vm.datePicker;
             var dateConversion = vm.datePicker;
@@ -176,19 +254,29 @@ namespace SGV_Booking.Controllers
             return Json(apiData);
         }
 
-        [HttpGet]
+        public IActionResult bookingLists(int id)
+        {
+            var apiData = _context.Bookings.Where(b => b.RestaurantId == id).ToList();
+
+            return Json(apiData);
+        }
+
         public IActionResult GetUserId()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId != null || userId == -1)
-            {
-                return Json(userId);
-            }
-            else
+            var userId = HttpContext.Session.GetInt32(SessionUserId);
+
+            if (userId == null)
             {
                 userId = -1;
-                return Json(userId);
             }
+
+            return Json(userId);
+        }
+
+        public IActionResult GetUserInfo(int id)
+        {
+            var apiData = _context.Users.Where(user => user.UserId == id).ToList();
+            return Json(apiData);
         }
 
     }

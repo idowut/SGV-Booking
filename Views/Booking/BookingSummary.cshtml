@@ -70,7 +70,7 @@
 
 
             <div class="container">
-                <input name="customerId" value="@Model.customerID" readonly>
+                <input name="customerId" value="@Model.customerID" hidden>
 
                 <div class="row">
                     <div class="col-6">
@@ -99,10 +99,6 @@
                     </div>
                 </div>
 
-                <div class="row m-1">
-                    <label>Booking notes:</label>
-                    <textarea name="bookingNotes" class="p-2" readonly>@Model.bookingNotes</textarea>
-                </div> 
                 <div class="row">
                     <div class="col-6">
                         <label for="firstName">First Name:</label>
@@ -126,7 +122,10 @@
                     </div>
                 </div>
             </div>
-
+            <div class="row p-2 m-2">
+                    <label>Booking notes:</label>
+                    <textarea name="bookingNotes" class="p-2" readonly>@Model.bookingNotes</textarea>
+            </div>
 
             <input type="submit" id="submitButton" value="Confirm Booking"/>
         </form>
