@@ -53,14 +53,8 @@ namespace SGV_Booking.Controllers
             vm.datePicker = vm.datePicker;
             vm.timePicker = time;
             var dateConversion = vm.datePicker;
-            Console.WriteLine(time);
-            if (_httpContextAccessor.HttpContext?.Session.GetInt32("_UserID") == null){
-                vm.customerID = -1;
-            }
-            else
-            {
-                vm.customerID = _httpContextAccessor.HttpContext?.Session.GetInt32("_UserID");
-            }
+
+            vm.customerID = -1;
 
             return View("Booking", vm);
         }
@@ -176,19 +170,31 @@ namespace SGV_Booking.Controllers
             return Json(apiData);
         }
 
-        [HttpGet]
+        public IActionResult bookingLists()
+        {
+            var apiData = _context.Bookings
+                .Select(r => r.BookingTime)
+                .ToList();
+
+            return Json(apiData);
+        }
+
         public IActionResult GetUserId()
         {
-            var userId = HttpContext.Session.GetInt32("UserId");
-            if (userId != null || userId == -1)
-            {
-                return Json(userId);
-            }
-            else
+            var userId = HttpContext.Session.GetInt32(SessionUserId);
+
+            if (userId == null)
             {
                 userId = -1;
-                return Json(userId);
             }
+
+            return Json(userId);
+        }
+
+        public IActionResult GetUserInfo(int id)
+        {
+            var apiData = _context.Users.Where(user => user.UserId == id).ToList();
+            return Json(apiData);
         }
 
     }
