@@ -4,6 +4,7 @@
     ViewData["Title"] = "RestaurantIndex";
 }
 
+
 <body>
     <div style="background-color: #C3C3C3; padding: 20px; border-radius: 10px;">
         <div class="container">
@@ -18,15 +19,23 @@
                         <thead>
                             <tr>
                                 <th>
-                                    Date and Time
+                                    Date and Time:
                                 </th>
                                 <th>
-                                    Booking Notes
+                                    Num Guest:
                                 </th>
                                 <th>
-                                    Customer
+                                    Customer:
                                 </th>
-                                <th></th>
+                                <th>
+                                    Notes:
+                                </th>
+                                <th>
+                                    
+                                </th>
+                                <th style="text-align: right;">
+                                    Booking Status
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,13 +46,31 @@
                                         @Html.DisplayFor(modelItem => item.BookingTime)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.BookingNotes)
+                                        @Html.DisplayFor(modelItem => item.NumGuest)
                                     </td>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Customer.FirstName)
                                     </td>
+                                    <td style="max-width: 150px; word-wrap: break-word;">
+                                        @Html.DisplayFor(modelItem => item.BookingNotes)
+                                    </td>
                                     <td>
-                                        <a asp-action="RestaurantBookingDetails" asp-route-id="@item.BookingId">Details</a>
+                                        <a asp-action="RestaurantBookingDetails" asp-route-id="@item.BookingId">Go to Details</a>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        @if (item.BookingStatus)
+                                        {
+                                            <span>Arrived</span>
+                                        }
+                                        else
+                                        {
+                                            <span>Waiting</span>
+                                            <form id="changeStatusForm" method="post" action="/Users/ChangeBookingStatus" style="display: inline;">
+                                                <input type="hidden" id="bookingId" name="bookingId" value="@item.BookingId" />
+                                                <input type="hidden" id="newStatus" name="newStatus" value="true" />
+                                                <button type="submit" style="margin-left: 10px;">Change to Arrived</button>
+                                            </form>
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -51,7 +78,13 @@
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 </body>
+
+<script>
+    function changeBookingStatus(bookingId) {
+        document.getElementById('bookingId').value = bookingId;
+        document.getElementById('changeStatusForm').submit();
+    }
+</script>
