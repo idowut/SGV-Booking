@@ -183,7 +183,6 @@ namespace SGV_Booking.Controllers
                     user.BookingsCount = 0;
                     _context.Add(user);
                     await _context.SaveChangesAsync();
-                    Console.WriteLine(user);
 
                     // Send a confirmation email
                     await SendConfirmationEmail(user);
@@ -241,7 +240,6 @@ namespace SGV_Booking.Controllers
                 // Handle email sending errors
                 Console.WriteLine("Email sending error: " + ex.ToString());
             }
-            return View();
         }
 
         public IActionResult RegisterDetails()
