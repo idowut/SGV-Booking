@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace SGV_Booking.Models
 {
@@ -13,7 +14,7 @@ namespace SGV_Booking.Models
         public bool OpenFriday { get; set; }
         public bool OpenSaturday { get; set; }
         public bool OpenSunday { get; set; }
-
+        [JsonIgnore]  // Ignore this property during serialization
         public virtual Restaurant Restaurant { get; set; } = null!;
     }
 }
