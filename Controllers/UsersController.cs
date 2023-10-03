@@ -218,10 +218,13 @@ namespace SGV_Booking.Controllers
                 var fromEmailPassword = "testing646";
                 var toEmail = user.Email;
                 var subject = "Registration Confirmation";
-                var body = $"Dear {user.FirstName},\n\n" +
-                           $"Thank you for registering with us! Your account has been created successfully.\n\n" +
-                           $"Sincerely,\n" +
-                           "SGV Team";
+                var body = $@"Dear {user.FirstName},<br><br>
+
+Thank you for registering with us! Your account has been created successfully.<br><br>
+
+Sincerely,<br>
+SGV Team";
+
 
                 using (var smtpClient = new SmtpClient("smtp.office365.com")) // Replace with your email provider's SMTP server
                 {
