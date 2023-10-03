@@ -50,18 +50,62 @@ namespace SGV_Booking.Controllers
                 return View("Error"); // Or return the same view with an error message.
             }
 
-            vm.datePicker = vm.datePicker;
-            vm.timePicker = time;
-            var dateConversion = vm.datePicker;
-
             vm.customerID = -1;
 
-            return View("Booking", vm);
+            if (vm.restaurantSelect == 0)
+            {
+                return View("BookingSelection");
+            }
+
+            return View("BookingSelection", vm);
         }
 
         [HttpPost]
         public ActionResult Booking(BookingInfoProcess vm)
         {
+            ViewBag.banquet = vm.banquetOption;
+            if (vm.restaurantSelect == 0)
+            {
+
+                vm.ErrorMessage = "Please Select a Restaurant...";
+                ViewBag.RestaurantsList = _context.Restaurants.Select(r => new SelectListItem
+                {
+                    Value = r.RestaurantId.ToString(),
+                    Text = r.RestaurantName,
+                })
+           .ToList();
+
+                return View("BookingSelection", vm);
+            }
+
+            if (!vm.banquetOption.HasValue)
+            {
+                vm.ErrorMessage = "Pleast Select a Banquet...";
+                ViewBag.RestaurantsList = _context.Restaurants.Select(r => new SelectListItem
+                {
+                    Value = r.RestaurantId.ToString(),
+                    Text = r.RestaurantName,
+                })
+                .ToList();
+
+                return View("BookingSelection", vm);
+
+            }
+
+            if (string.IsNullOrEmpty(vm.datePicker))
+            {
+                vm.ErrorMessage = "Please Select a Date";
+                ViewBag.date = vm.datePicker;
+                ViewBag.RestaurantsList = _context.Restaurants.Select(r => new SelectListItem
+                {
+                    Value = r.RestaurantId.ToString(),
+                    Text = r.RestaurantName,
+                })
+                .ToList();
+
+                return View("BookingSelection", vm);
+            }
+
             return View("Booking", vm);
         }
         [HttpPost]

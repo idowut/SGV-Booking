@@ -2,10 +2,12 @@
 {
     public class BookingInfoProcess
     {
+
+        public string ErrorMessage { get; set; }
         public int restaurantSelect { get; set; }
         public string datePicker { get; set; }
         public TimeSpan timePicker { get; set; }
-        public DateOnly date { get; set; }
+        public DateOnly? date { get; set; }
         public int? customerID { get; set; }
         public string customerFirstName { get; set; }
         public string customerLastName { get; set; }

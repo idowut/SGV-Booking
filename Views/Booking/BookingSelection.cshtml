@@ -81,10 +81,15 @@
             </div>
 
             <div class="elem-group">
-                <label for="restaurantSelect">Select a Restaurant:</label>
-                <select class="form-select" name="restaurantSelect" id="restaurantSelect" asp-items="@ViewBag.RestaurantsList" onchange="itemChanged(this.value)">
-                    <option value="">Select Restaurant...</option>
-                </select>
+                <div class="row">
+                    <label for="restaurantSelect">Select a Restaurant:</label>
+                    <select class="form-select" name="restaurantSelect" id="restaurantSelect" asp-items="@ViewBag.RestaurantsList" onchange="itemChanged(this.value)">
+                        <option value="">Select Restaurant...</option>
+                    </select>
+                    <p style="color: red">@Model.ErrorMessage</p>
+                    <p>BanquetID: @ViewBag.banquet</p>
+                    <p>date: @ViewBag.date</p>
+                </div>
             </div>
 
             <div class="elem-group" id="datePickerContainer">
