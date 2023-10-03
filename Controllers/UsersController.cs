@@ -305,6 +305,44 @@ namespace SGV_Booking.Controllers
             return View(booking);
         }
 
+        [HttpPost]
+        public IActionResult ChangeBookingStatus(int bookingId)
+        {
+
+            var booking = _context.Bookings.SingleOrDefault(b => b.BookingId == bookingId);
+
+            if (booking != null)
+            {
+                int resturantID = booking.RestaurantId;
+
+                booking.BookingStatus = true;
+
+                UpdateBooking(booking);
+
+                return RedirectToAction("RestaurantIndex", new { id = resturantID });
+
+            }
+
+            return RedirectToAction("RestaurantIndex");
+        }
+
+        private void UpdateBooking(Booking booking)
+        {
+            var existingBooking = _context.Bookings.SingleOrDefault(b => b.BookingId == booking.BookingId);
+
+            if (existingBooking != null)
+            {
+                existingBooking.BookingStatus = booking.BookingStatus;
+
+                _context.Entry(existingBooking).State = EntityState.Modified;
+
+                _context.SaveChanges();
+            }
+            else
+            {
+                return;
+            }
+        }
 
         private bool UserExists(int id)
         {
