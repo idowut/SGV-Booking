@@ -13,61 +13,44 @@
 @{
     ViewBag.Title = "BAMBOO LEAF";
 }
-
-<div class="container">
-    <h1 class="text-center">@Model.RestaurantName</h1>
+<br />
+<body style="background-repeat:no-repeat; background-attachment:fixed; background-size:cover; background-image:url('/images/a-4k-ultra-hd-wallpaper-of-a-tiger-dressed-in-a-chefs-outfit-holding-a-spatula-qq8byzma.jpeg')">
+</body>
+<br />
+<br />
+<br />
+<div class="container" style="width: 300%">
+    <h1 class="text-center" style="color: white; font-size: 300%">@Model.RestaurantName</h1>
     <hr />
-
     <div class="row">
-        <div class="col-md-6">
-            <div class="text-center">
-                <h1>   </h1>
-                <h5>Address:</h5>
-                <p><a href="https://www.google.com/maps/place/25+Gouger+St,+Adelaide+SA/">@Model.RestaurantAddress.AddressLine @Model.RestaurantAddress.Suburb</a></p>
+        <div class="col" style="margin-right: 50%; margin-top: 20%">
+            <br />
+            <br />
+            <br />
+            <div class="container">
+                <div class="card" style="width: 140%; background-color: darkgray">
+                    <div class="text-center">
+                        <h1>   </h1>
+                        <h5>Address:</h5>
+                        <p><a href="https://www.google.com/maps/place/25+Gouger+St,+Adelaide+SA/">@Model.RestaurantAddress.AddressLine @Model.RestaurantAddress.Suburb</a></p>
 
-                <h5>Contact:</h5>
-                <p>Email:<br>Phone: @Model.RestaurantPhoneNumber</p>
-                <h5>Open Hours: </h5>
-                <p>Open Tuesdays to Sundays</p>
-                <p>Lunchtime 12-2PM</p>
-                <p>First dinner 5-7PM</p>
-                <p>Second dinner 7-9PM</p>
+                        <h5>Contact:</h5>
+                        <p>Email:<br>Phone: @Model.RestaurantPhoneNumber</p>
+                        <h5>Open Hours: </h5>
+                        <p>Open Tuesdays to Sundays</p>
+                        <p>Lunchtime 12-2PM</p>
+                        <p>First dinner 5-7PM</p>
+                        <p>Second dinner 7-9PM</p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="col-md-6 d-flex flex-column align-items-center">
-            <!-- センター配置のためのクラスを追加 -->
-            <h5 class="text-center">@Model.RestaurantName Menu</h5>
-            <a href="/pdfs/bamboo-leaf-menu.pdf" target="_blank" id="previewPdf">See menu</a>
-            <canvas id="pdf-canvas1" style="max-width: 80%; margin: auto;"></canvas> <!-- margin: autoを追加 -->
+        <div class="col d-flex flex-column align-items-center">
+            <img src="/images/bambooleafimage.png" style="width: 300%" />
         </div>
     </div>
 </div>
-
-<script src="/js/pdf.js"></script>
-<script>
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/pdf.worker.js';
-
-    function loadPdf(pdfPath, canvasId, maxCanvasWidth) {
-        pdfjsLib.getDocument(pdfPath).promise.then(function (pdf) {
-            return pdf.getPage(1);
-        }).then(function (page) {
-            var viewport = page.getViewport({ scale: 1 });
-            var scale = maxCanvasWidth / viewport.width;
-            var scaledViewport = page.getViewport({ scale: scale });
-
-            var canvas = document.getElementById(canvasId);
-            var context = canvas.getContext('2d');
-            canvas.height = scaledViewport.height;
-            canvas.width = scaledViewport.width;
-
-            var renderContext = {
-                canvasContext: context,
-                viewport: scaledViewport
-            };
-            page.render(renderContext);
-        });
-    }
-
-    loadPdf('/pdfs/bamboo-leaf-menu.pdf', 'pdf-canvas1', 300);
-</script>
+<br />
+<br />
+<br />
