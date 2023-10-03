@@ -7,41 +7,111 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" type="text/css" href="~/css/buttondesign.css"> <!-- CSSファイルへのパス -->
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        .image-container {
+            padding: 0; /* Remove padding */
+        }
+
+            .image-container img {
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                object-fit: cover; /* Cover the container */
+                object-position: center; /* Center the image */
+            }
+    </style>
+
 </head>
-<body style="background-size:cover; background-repeat:no-repeat; background-image:url(https://c0.wallpaperflare.com/preview/184/811/591/blur-bread-rolls-counter-cup.jpg)">
+<body style="margin:0;min-height:100vh;background-repeat:no-repeat; background-image:url('/images/piqsels.com-id-jmtpw.jpg'); background-size:; background-position:center">
     <!-- 背景色の設定 -->
-    <br />
-    <div class="text-center">
-        <h1 class="display-4" style="color: white; font-weight: bold; font-family:  Brandon Grotesque;" ;>Welcome to Soylent Green Ventures</h1>
-    </div>
+
+    <div class="d-flex h-100 text-center text-white">
+            <main class="px-3">
+                <h1 class="display-4" style="color: white; font-weight: bold">Welcome to Soylent Green Ventures</h1>
+                <br />
+                <br />
+            <p class="lead">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam diam lectus, rutrum eleifend elementum vitae, varius vel enim. Fusce porta varius justo, sit amet elementum ante blandit et. Curabitur quis.
+
+            </p>
+                <p class="lead">
+                Lorem ipsum.
+
+                </p>
+            </main>
+        </div>
 
 
-    <br />
-    <br />
-
-    <div class="container text-center">
-        <h1> </h1>
-        <p class="lead"></p>
-        <div class="row">
-            <div class="col-md-4 button-container" id="bamboo">
+</div>
+    <div class="row pt-5 mt-5 mb-5 animate__animated animate__fadeIn">
+        <div class="col-4 rounded-3" style="background-color:darkgray">
+            <div class="container p-5">
+                <h5>Bamboo Leaf</h5>
+                <p>
+                    Maecenas lobortis sagittis nisi at tempus. Donec eget fringilla erat. Nunc eleifend odio id purus finibus, sit amet tincidunt metus posuere. Aliquam non varius ex. Sed vestibulum at odio vel lobortis.
+                    Nunc blandit malesuada metus id molestie. Vestibulum elementum lobortis facilisis. Integer vitae gravida nunc. Etiam vulputate ex placerat, dapibus ante in, ultrices elit.
+                    Sed congue, ligula eu tempus efficitur, urna leo tincidunt diam, id faucibus magna mauris sed nulla. Nullam suscipit quis nisl ut convallis. Nulla facilisi. Aenean urna est, sagittis non ultrices sed, aliquet a ante.
+                    Aenean venenatis quam in diam efficitur aliquet.
+                </p>
                 <form asp-area="" asp-controller="Restaurants" asp-action="Bamboo" method="post">
-                    <button type="submit" class="button-67" style="background-color: rgb(160, 132, 202); color: white; border: 2px solid rgb(160, 132, 202);">Bamboo Leaf</button>
+                    <button type="submit" class="button-67 rounded" style="background-color: rgb(160, 132, 202); color: white; border: 2px solid rgb(160, 132, 202);">View Bamboo Leaf</button>
                 </form>
             </div>
-
-
-            <div class="col-md-4 button-container" id="oeste">
+        </div>
+        <div class="col-4 rounded-3 ms-3" style="background-color:transparent">
+            <div class="container rounded-3 p-0 image-container">
+                <img src="~/images/1850233.jpg" alt="Bamboo Leaf Image Descriptor">
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="row pt-5 mt-5 mb-5">
+        <div class="col-4 ms-auto rounded-3" style="background-color:transparent">
+            <div class="container rounded-3 p-0 image-container">
+                <img src="~/images/15271874383_97b5009b73_o.jpg" />
+            </div>
+        </div>
+        <div class="col-4 rounded-3 ms-5" style="background-color:darkgray">
+            <div class="container p-5">
+                <h5>La Oeste De La Mar</h5>
+                <p>
+                    Maecenas lobortis sagittis nisi at tempus. Donec eget fringilla erat. Nunc eleifend odio id purus finibus, sit amet tincidunt metus posuere. Aliquam non varius ex. Sed vestibulum at odio vel lobortis.
+                    Nunc blandit malesuada metus id molestie. Vestibulum elementum lobortis facilisis. Integer vitae gravida nunc. Etiam vulputate ex placerat, dapibus ante in, ultrices elit.
+                    Sed congue, ligula eu tempus efficitur, urna leo tincidunt diam, id faucibus magna mauris sed nulla. Nullam suscipit quis nisl ut convallis. Nulla facilisi. Aenean urna est, sagittis non ultrices sed, aliquet a ante.
+                    Aenean venenatis quam in diam efficitur aliquet.
+                </p>
                 <form asp-area="" asp-controller="Restaurants" asp-action="La_oeste" method="post">
-                    <button type="submit" class="button-67" style="background-color: rgb(160, 132, 202); color: white; border: 2px solid rgb(160, 132, 202);">La Oeste</button> <!-- ここでCSSクラスを適用 -->
-                </form>
-            </div>
-
-            <div class="col-md-4 button-container" id="mexikana">
-                <form asp-area="" asp-controller="Restaurants" asp-action="Mexikana" method="post">
-                    <button type="submit" class="button-67" style="background-color: rgb(160, 132, 202); color: white; border: 2px solid rgb(160, 132, 202);">Mexikana</button> <!-- ここでCSSクラスを適用 -->
+                    <button type="submit" class="button-67 rounded" style="background-color: rgb(160, 132, 202); color: white; border: 2px solid rgb(160, 132, 202);">View La Oeste</button> <!-- ここでCSSクラスを適用 -->
                 </form>
             </div>
         </div>
     </div>
+    <br />
+    <br />
+    <br />
+    <div class="row pt-5 mt-5 mb-5">
+        <div class="col-4 rounded-3 me-3" style="background-color:darkgray">
+            <div class="container p-5">
+                <h5>Mexikana</h5>
+                <p>
+                    Maecenas lobortis sagittis nisi at tempus. Donec eget fringilla erat. Nunc eleifend odio id purus finibus, sit amet tincidunt metus posuere. Aliquam non varius ex. Sed vestibulum at odio vel lobortis.
+                    Nunc blandit malesuada metus id molestie. Vestibulum elementum lobortis facilisis. Integer vitae gravida nunc. Etiam vulputate ex placerat, dapibus ante in, ultrices elit.
+                    Sed congue, ligula eu tempus efficitur, urna leo tincidunt diam, id faucibus magna mauris sed nulla. Nullam suscipit quis nisl ut convallis. Nulla facilisi. Aenean urna est, sagittis non ultrices sed, aliquet a ante.
+                    Aenean venenatis quam in diam efficitur aliquet.
+                </p>
+                <form asp-area="" asp-controller="Restaurants" asp-action="Mexikana" method="post">
+                    <button type="submit" class="button-67 rounded" style="background-color: rgb(160, 132, 202); color: white; border: 2px solid rgb(160, 132, 202);">View Mexikana</button> <!-- ここでCSSクラスを適用 -->
+                </form>
+            </div>
+        </div>
+        <div class="col-4 rounded-3 ms-3" style="background-color:transparent">
+            <div class="container rounded-3 p-0 image-container">
+                <img src="~/images/restaurant-food-cooking-plate-seafood-fire-636624-pxhere.com.jpg" />
+            </div>
+        </div>
+    </div>
+    <br />
 </body>
 </html>
