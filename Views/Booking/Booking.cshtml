@@ -95,10 +95,12 @@
             <div class="col-6">
                 <label for="email">Email</label>
                 <input class="form-control" id="customerEmail" name="customerEmail" placeholder="Email" type="text" required>
+                <p style="color: red">@ViewBag.emailError</p>
             </div>
             <div class="col-6">
                 <label for="phoneNumber">Phone Number</label>
                 <input class="form-control" id="customerPhone" name="customerPhone" placeholder="e.g 0000000000" maxlength="10" type="number" required>
+                <p style="color: red">@ViewBag.phoneError</p>
             </div>
         </div>
         <div class="col-12">

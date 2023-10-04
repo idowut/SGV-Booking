@@ -128,8 +128,29 @@ namespace SGV_Booking.Controllers
         [HttpPost]
         public IActionResult BookingSummary(BookingInfoProcess vm)
         {
+            ViewBag.emailError = null;
+            ViewBag.phoneError = null;
+
+            if (!vm.customerEmail.Contains("@"))
+            {
+                ViewBag.emailError = "Please Enter the Correct Format - e.g. name@example.com";
+                return View("Booking", vm);
+            }
+
+            if(!vm.customerPhone.All(char.IsDigit))
+            {
+                ViewBag.phoneError = "Invalid Phone Number";
+            }
+
             return View("BookingSummary", vm);
         }
+
+
+
+
+
+
+
 
         public async Task<IActionResult> BookingConfirmation(BookingInfoProcess vm)
         {
