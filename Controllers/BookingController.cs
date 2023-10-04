@@ -174,6 +174,7 @@ namespace SGV_Booking.Controllers
 
             try
             {
+                var restaurant = _context.Restaurants.Where(r => r.RestaurantId == vm.restaurantSelect).FirstOrDefault();
                 var fromEmail = "sgvBooking@outlook.com"; // Replace with your email address
                 var fromEmailPassword = "testing646";
                 var toEmail = vm.customerEmail;
@@ -181,7 +182,7 @@ namespace SGV_Booking.Controllers
                 var body = $@"Thank you for booking with us! Your booking has been confirmed. <br><br>
 Booking Details:  <br><br>
 Date and Time: {vm.datePicker} {vm.timePicker}  <br><br>
-Restaurant: {vm.restaurantSelect}  <br><br>
+Restaurant: {restaurant.RestaurantName}  <br><br>
 Booking Notes: {vm.bookingNotes}  <br><br>
 Number of Guests: {vm.guestNumber}";
 
