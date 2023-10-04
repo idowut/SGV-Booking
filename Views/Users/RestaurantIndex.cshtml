@@ -12,6 +12,7 @@
                     <h1 class="title" style="color: black;">@Model.TheRestaurant.RestaurantName Bookings</h1>
                 </div>
             </div>
+
             <div class="container" style="background-color: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
                 <div class="container">
                     <table class="table">
@@ -51,7 +52,14 @@
                     </table>
                 </div>
             </div>
-
+            <div class="container" style="background-color: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
+                <form method="post">
+                    <input type="hidden" name="RestaurantId" value="@Model.TheRestaurant.RestaurantId" />
+                    Reward Value:
+                    <input type="number" name="RestaurantRewardValue" value="@Model.TheRestaurant.RestaurantRewardValue" />
+                    <input type="submit" value="Update Reward Value" />
+                </form>
+            </div>
         </div>
     </div>
 </body>

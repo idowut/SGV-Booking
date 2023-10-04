@@ -29,6 +29,7 @@ namespace SGV_Booking.Controllers
                         Problem("Entity set 'SGVDatabaseContext.Users'  is null.");
         }
 
+        [HttpGet]
         public async Task<IActionResult> RestaurantIndex(int id)
         {
             var vm = new RestaurantAndBookings();
@@ -52,6 +53,22 @@ namespace SGV_Booking.Controllers
 
             return View(vm);
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RestaurantIndex(int id, int? RestaurantRewardValue)
+        {
+            if (RestaurantRewardValue.HasValue)
+            {
+                var restaurant = await _context.Restaurants.FirstOrDefaultAsync(m => m.RestaurantId == id);
+                if (restaurant != null)
+                {
+                    restaurant.RestaurantRewardValue = RestaurantRewardValue.Value;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            return RedirectToAction("RestaurantIndex", new { id = id });
         }
 
 
