@@ -109,6 +109,20 @@ namespace SGV_Booking.Controllers
                 return View("BookingSelection", vm);
             }
 
+            if(vm.timePicker == TimeSpan.Zero)
+            {
+                vm.ErrorMessage = "Please Select a Time...";
+                ViewBag.date = vm.datePicker;
+                ViewBag.RestaurantsList = _context.Restaurants.Select(r => new SelectListItem
+                {
+                    Value = r.RestaurantId.ToString(),
+                    Text = r.RestaurantName,
+                })
+                .ToList();
+
+                return View("BookingSelection", vm);
+            }
+
             return View("Booking", vm);
         }
         [HttpPost]
