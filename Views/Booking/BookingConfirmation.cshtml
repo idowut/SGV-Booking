@@ -78,7 +78,7 @@
             <p><strong>First Name:</strong> <span>@Model.customerFirstName</span></p>
             <p><strong>Last Name:</strong> <span>@Model.customerLastName</span></p>
             <p><strong>Selected Restaurant:</strong> <span id="restaurantSelectName">@Model.restaurantSelect</span></p>
-            <p><strong>Selected Banquet:</strong> <span id="banquetOption">@Model.banquetOption</span></p>
+            <p><strong>Selected Banquet:</strong> <span id="banquetOptionPlaceHolder">@Model.banquetOption</span></p>
             <p><strong>Email:</strong> <span>@Model.customerEmail</span></p>
             <p><strong>Date:</strong> <span>@Model.datePicker</span></p>
             <p><strong>Time:</strong> <span>@Model.timePicker</span></p>
@@ -107,16 +107,25 @@
 
         var temp = '@(Model.banquetOption == null ? "isNull" : "notNull")';
 
-        if (temp === 'isNull') {
+        console.log(temp);
+
+        if (temp === 0) {
             document.getElementById('banquetOption').textContent = "À la carte";
         } else {
-            convertBanquet(@Model.banquetOption);
+            convertBanquet(restaurant, @Model.banquetOption);
         }
     }
 
-    function convertBanquet(data) {
-        document.getElementById('banquetOption').textContent = restaurant[0].banquets.find(banquet => banquet.banquetId == data).banquetName
-
+    function convertBanquet(data, id) {
+        console.log(data);
+        if (document.getElementById('banquetOptionPlaceHolder').value == 0 || data[0].banquets.length == 0) {
+            document.getElementById('banquetOptionPlaceHolder').textContent = "À la carte";
+            console.log('true');
+        }
+        else {
+            document.getElementById('banquetOptionPlaceHolder').textContent = data[0].banquets.find(banquet => banquet.banquetId == data).banquetName;
+            console.log('false');
+        }
     }
     onRun()
 </script>

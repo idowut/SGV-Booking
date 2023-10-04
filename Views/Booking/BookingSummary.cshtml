@@ -66,7 +66,7 @@
 <body>
     <div class="container">
         <h1 class="display-header">Booking Summary</h1>
-        <form method="post" action="@Url.Action("BookingConfirmation", "Booking")">
+        <form method="post" action="@Url.Action("BookingConfirmation", "Booking")" id="BookingForm">
 
 
             <div class="container">
@@ -95,7 +95,9 @@
                     </div>
                     <div class="col-6">
                         <label>Banquet:</label>
-                        <input name="banquetOption" id="banquetOption" value="@Model.banquetOption">
+                        <input name="banquetoptionPlaceHolder" id="banquetOptionPlaceHolder" value="@Model.banquetOption">
+                        <input name="banquetOption" value="@Model.banquetOption" hidden>
+
                     </div>
                 </div>
 
@@ -127,11 +129,15 @@
                     <textarea name="bookingNotes" class="p-2" readonly>@Model.bookingNotes</textarea>
             </div>
 
-            <input type="submit" id="submitButton" value="Confirm Booking"/>
+            <input type="submit" id="submitButton" value="Confirm Booking" onclick="changeSubmit()"/>
         </form>
     </div>
 
     <script>
+        function changeSubmit(){
+            document.getElementById('BookingForm').submit();
+            document.getElementById('submitButton').disabled =  true;
+        }
         function onRun(){
                 fetch(`/Booking/restaurantInfo/?id=${@Model.restaurantSelect}`).then(response => {
                     console.log('response status: ' + response.status);
@@ -155,13 +161,18 @@
                 document.getElementById('banquetOption').value = "À la carte";
         } else
         {
-            convertBanquet(@Model.banquetOption);
+            convertBanquet(restaurant, @Model.banquetOption);
         }
     }
 
-    function convertBanquet(data){
-            document.getElementById('banquetOption').value = restaurant[0].banquets.find(banquet => banquet.banquetId == data).banquetName
-
+    function convertBanquet(data, id){
+        console.log(data);
+            if (document.getElementById('banquetOptionPlaceHolder').value == 0) {
+                document.getElementById('banquetOptionPlaceHolder').value = "À la carte";
+            }
+            else{
+                document.getElementById('banquetOptionPlaceHolder').value = data[0].banquets.find(banquet => banquet.banquetId == data).banquetName;
+            }
     }
     onRun()
     </script>
