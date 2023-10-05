@@ -10,5 +10,7 @@ namespace SGV_Booking.ViewModels
     {
         public User TheUser { get; set; }
         public List<Booking> UserBookings { get; set; }
+
+        public List<int> rewardValues { get; set; }
     }
 }

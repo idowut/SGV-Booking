@@ -92,7 +92,7 @@
                                 }
 
                                 double totalBookingBPercentage = (double)totalBookingsB * 20;
-                                double totalValueBPercentage = (double)totalValueB / 1250 * 100;
+                                double totalValueBPercentage = (double)totalValueB / @Model.rewardValues[0] * 100;
 
                                 // La Oeste De La Mar
 
@@ -128,7 +128,7 @@
                                 }
 
                                 double totalBookingMPercentage = (double)totalBookingsM * 20;
-                                double totalValueMPercentage = (double)totalValueM / 1250 * 100;
+                                double totalValueMPercentage = (double)totalValueM / @Model.rewardValues[2] * 100;
 
                                 
 
@@ -144,7 +144,7 @@
                                         </div>
                                     </div>
                                     <div class="col" style="text-align: left;">
-                                        <h6 style="font-size: 14px;">$@totalValueB/$1250</h6>
+                                        <h6 style="font-size: 14px;">$@totalValueB/@Model.rewardValues[0]</h6>
                                     </div>
                                 </div>
                                 <br />
@@ -188,7 +188,7 @@
                                         </div>
                                     </div>
                                     <div class="col" style="text-align: left;">
-                                        <h6 style="font-size: 14px;">$@totalValueM/$1250</h6>
+                                        <h6 style="font-size: 14px;">$@totalValueM/@Model.rewardValues[2]</h6>
                                     </div>
                                 </div>
                                 <br />

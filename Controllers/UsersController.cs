@@ -109,6 +109,8 @@ namespace SGV_Booking.Controllers
                 .OrderBy(i => i.BookingTime)
                 .ToListAsync();
 
+            vm.rewardValues = _context.Restaurants.Select(r => r.RestaurantRewardValue).ToList();
+
             if (vm.TheUser == null)
             {
                 return NotFound();
