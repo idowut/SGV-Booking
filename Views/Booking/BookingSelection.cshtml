@@ -82,11 +82,14 @@
 
             <div class="elem-group">
                 <div class="row">
-                    <label for="restaurantSelect">Select a Restaurant:</label>
-                    <select class="form-select" name="restaurantSelect" id="restaurantSelect" asp-items="@ViewBag.RestaurantsList" onchange="itemChanged(this.value)">
-                        <option value="">Select Restaurant...</option>
-                    </select>
-                    <p style="color: red">@Model.ErrorMessage</p>
+                    <div>
+
+                        <label for="restaurantSelect">Select a Restaurant:</label>
+                        <select class="form-select" name="restaurantSelect" id="restaurantSelect" asp-items="@ViewBag.RestaurantsList" onchange="itemChanged(this.value)">
+                            <option value="">Select Restaurant...</option>
+                        </select>
+                        <p style="color: red">@Model.ErrorMessage</p>
+                    </div>
                 </div>
             </div>
 
@@ -119,7 +122,7 @@
                         <h5 class="card-title" id="cardTitle">À la carte</h5>
                         <p class="card-text">The À la carte option allows customers to order each distinctive food item at the restaurant.</p>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="banquetOption" id="banquetOption" value="" checked="checked">
+                            <input class="form-check-input" type="radio" name="banquetOption" id="banquetOption" value="0">
                         </div>
                     </div>
                 </div>

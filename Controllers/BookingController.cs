@@ -109,13 +109,48 @@ namespace SGV_Booking.Controllers
                 return View("BookingSelection", vm);
             }
 
+            if(vm.timePicker == TimeSpan.Zero)
+            {
+                vm.ErrorMessage = "Please Select a Time...";
+                ViewBag.date = vm.datePicker;
+                ViewBag.RestaurantsList = _context.Restaurants.Select(r => new SelectListItem
+                {
+                    Value = r.RestaurantId.ToString(),
+                    Text = r.RestaurantName,
+                })
+                .ToList();
+
+                return View("BookingSelection", vm);
+            }
+
             return View("Booking", vm);
         }
         [HttpPost]
         public IActionResult BookingSummary(BookingInfoProcess vm)
         {
+            ViewBag.emailError = null;
+            ViewBag.phoneError = null;
+
+            if (!vm.customerEmail.Contains("@"))
+            {
+                ViewBag.emailError = "Please Enter the Correct Format - e.g. name@example.com";
+                return View("Booking", vm);
+            }
+
+            if(!vm.customerPhone.All(char.IsDigit))
+            {
+                ViewBag.phoneError = "Invalid Phone Number";
+            }
+
             return View("BookingSummary", vm);
         }
+
+
+
+
+
+
+
 
         public async Task<IActionResult> BookingConfirmation(BookingInfoProcess vm)
         {
@@ -174,16 +209,17 @@ namespace SGV_Booking.Controllers
 
             try
             {
-                var fromEmail = "test6460@outlook.com"; // Replace with your email address
+                var restaurant = _context.Restaurants.Where(r => r.RestaurantId == vm.restaurantSelect).FirstOrDefault();
+                var fromEmail = "sgvBooking@outlook.com"; // Replace with your email address
                 var fromEmailPassword = "testing646";
                 var toEmail = vm.customerEmail;
                 var subject = "Booking Confirmation";
-                var body = $"Thank you for booking with us! Your booking has been confirmed.\n\n" +
-                          $"Booking Details:\n" +
-                          $"Date and Time: {vm.datePicker} {vm.timePicker}\n" +
-                          $"Restaurant: {vm.restaurantSelect}\n" +
-                          $"Booking Notes: {vm.bookingNotes}\n" +
-                          $"Number of Guests: {vm.guestNumber}";
+                var body = $@"Thank you for booking with us! Your booking has been confirmed. <br><br>
+Booking Details:  <br><br>
+Date and Time: {vm.datePicker} {vm.timePicker}  <br><br>
+Restaurant: {restaurant.RestaurantName}  <br><br>
+Booking Notes: {vm.bookingNotes}  <br><br>
+Number of Guests: {vm.guestNumber}";
 
                 using (var smtpClient = new SmtpClient("smtp.office365.com"))
                 {

@@ -19,6 +19,8 @@ namespace SGV_Booking.Controllers
         {
             var restaurant = _context.Restaurants
                                       .Include(r => r.RestaurantAddress)
+                                      .Include(r => r.RestaurantOpenDay)
+                                      .Include(r => r.RestaurantOpenTimes)
                                       .FirstOrDefault(r => r.RestaurantName == restaurantName);
             if (restaurant == null)
             {
