@@ -161,6 +161,11 @@ namespace SGV_Booking.Controllers
 
             var BookingNotes = vm.bookingNotes;
 
+            if (BookingNotes == null || BookingNotes.Length == 0 || BookingNotes == "")
+            {
+                BookingNotes = "No Booking Notes Provided...";
+            }
+
             var BanquetOption = vm.banquetOption;
 
             var NumGuest = vm.guestNumber;

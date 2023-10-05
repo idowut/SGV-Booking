@@ -1,4 +1,4 @@
-﻿@model SGV_Booking.Models.Booking
+﻿@model SGV_Booking.ViewModels.BookingBanquetUser
 
 @{
     ViewData["Title"] = "Details";
@@ -7,7 +7,7 @@
 
 
 <body>
-    <a class="btn btn-primary" asp-action="CustomerIndex" asp-controller="Users" asp-route-id="@Model.CustomerId"> < Back to User Dashboard</a>
+    <a class="btn btn-primary" asp-action="CustomerIndex" asp-controller="Users" asp-route-id="@Model.TheBooking.CustomerId"> < Back to User Dashboard</a>
     <br />
     <br />
     <div style="background-color: #C3C3C3; padding: 20px; border-radius: 10px;">
@@ -23,24 +23,32 @@
             <div class="container" style="background-color: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
                 <div class="row">
                     <h3 style="color: darkgrey;">Restaurant:</h3>
-                    <p style="color: black;"> @Html.DisplayFor(model => model.Restaurant.RestaurantName) </p>
+                    <p style="color: black;"> @Html.DisplayFor(model => model.TheBooking.Restaurant.RestaurantName) </p>
                 </div>
                 <div class="row">
                     <h4 style="color: darkgrey;">Date/Time:</h4>
-                    <p style="color: black;"> @Html.DisplayFor(model => model.BookingTime) </p>
+                    <p style="color: black;"> @Html.DisplayFor(model => model.TheBooking.BookingTime) </p>
                 </div>
                 <div class="row">
                     <h4 style="color: darkgrey;">People Amount:</h4>
-                    <p style="color: black;"> @Html.DisplayFor(Model => Model.NumGuest)</p>
+                    <p style="color: black;"> @Html.DisplayFor(Model => Model.TheBooking.NumGuest)</p>
                 </div>
                 <div class="row">
                     <h4 style="color: darkgrey;">Banquets Reserved:</h4>
-                    <p style="color: black;"> @Html.DisplayFor(model => model.BanquetOption) </p>
+                    @if (Model.TheBanquet == null)
+                    {
+                        <p>No banquet selected.</p>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(model => model.TheBanquet.BanquetName)
+                    }
+                    </p>
                 </div>
                 <div style="width: 100%;">
                        <h4 style="color: darkgrey;">Booking Notes:</h4>
                        @* <div style="background-color: #E4E4E4; padding: 15px; border-radius: 10px;">*@
-                            <p style="color: black;">@Html.DisplayFor(model => model.BookingNotes)</p>
+                            <p style="color: black;">@Html.DisplayFor(model => model.TheBooking.BookingNotes)</p>
                         </div>
                     </div>
                 <div style="height: 20px"></div>
@@ -48,8 +56,8 @@
                     <div class="row">
                         <div class="col">
                             <div class="update-button-container" style="display: flex; justify-content:space-between; margin-top: 10px;">
-                                <a asp-action="Delete" asp-route-id="@Model.BookingId" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; text-decoration: none;">Cancel Booking</a>
-                                <button style="background-color: #007bff; color: white; border: none; padding: 5px 20px; border-radius: 5px;" asp-action="CustomerEdit" asp-route-id="@Model.BookingId">Edit</button>
+                                <a asp-action="Delete" asp-route-id="@Model.TheBooking.BookingId" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; text-decoration: none;">Cancel Booking</a>
+                                <button style="background-color: #007bff; color: white; border: none; padding: 5px 20px; border-radius: 5px;" asp-action="CustomerEdit" asp-route-id="@Model.TheBooking.BookingId">Edit</button>
                             </div>
                         </div>
                     </div>

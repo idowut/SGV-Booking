@@ -99,7 +99,7 @@
             </div>
             <div class="col-6">
                 <label for="phoneNumber">Phone Number</label>
-                <input class="form-control" id="customerPhone" name="customerPhone" placeholder="e.g 0000000000" maxlength="10" type="number" required>
+                <input type="number" id="customerPhone" name="customerPhone" placeholder="e.g 0000000000" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="10">
                 <p style="color: red">@ViewBag.phoneError</p>
             </div>
         </div>

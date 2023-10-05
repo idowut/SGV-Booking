@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SGV_Booking.Data;
 using SGV_Booking.Models;
+using SGV_Booking.ViewModels;
 
 namespace SGV_Booking.Controllers
 {
@@ -48,21 +49,24 @@ namespace SGV_Booking.Controllers
         // GET: Bookings/CustomerDetails/5
         public async Task<IActionResult> CustomerDetails(int? id)
         {
+            BookingBanquetUser vm = new BookingBanquetUser();
             if (id == null || _context.Bookings == null)
             {
                 return NotFound();
             }
 
-            var booking = await _context.Bookings
+            vm.TheBooking = await _context.Bookings
                 .Include(b => b.Customer)
                 .Include(b => b.Restaurant)
                 .FirstOrDefaultAsync(m => m.BookingId == id);
-            if (booking == null)
+            if (vm.TheBooking == null)
             {
                 return NotFound();
             }
 
-            return View(booking);
+            vm.TheUser = await _context.Users.FirstOrDefaultAsync(u => u.UserId == vm.TheBooking.CustomerId);
+
+            return View(vm);
         }
 
         // GET: Bookings/Create
