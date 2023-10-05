@@ -233,8 +233,8 @@ namespace SGV_Booking.Controllers
         {
             try
             {
-                var fromEmail = "sgvBooking@outlook.com"; // Replace with your email address
-                var fromEmailPassword = "testing646";
+                var fromEmail = "bookingsgv@outlook.com"; // Replace with your email address
+                var fromEmailPassword = "test3456";
                 var toEmail = user.Email;
                 var subject = "Registration Confirmation";
                 var body = $@"Dear {user.FirstName},<br><br>

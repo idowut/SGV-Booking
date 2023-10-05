@@ -215,8 +215,8 @@ namespace SGV_Booking.Controllers
             try
             {
                 var restaurant = _context.Restaurants.Where(r => r.RestaurantId == vm.restaurantSelect).FirstOrDefault();
-                var fromEmail = "SGVBOOKINGS@outlook.com"; // Replace with your email address
-                var fromEmailPassword = "test345";
+                var fromEmail = "bookingsgv@outlook.com"; // Replace with your email address
+                var fromEmailPassword = "test3456";
                 var toEmail = vm.customerEmail;
                 var subject = "Booking Confirmation";
                 var body = $@"Thank you for booking with us! Your booking has been confirmed. <br><br>
