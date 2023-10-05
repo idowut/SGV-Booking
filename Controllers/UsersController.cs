@@ -29,6 +29,7 @@ namespace SGV_Booking.Controllers
                         Problem("Entity set 'SGVDatabaseContext.Users'  is null.");
         }
 
+        [HttpGet]
         public async Task<IActionResult> RestaurantIndex(int id)
         {
             var vm = new RestaurantAndBookings();
@@ -52,6 +53,22 @@ namespace SGV_Booking.Controllers
 
             return View(vm);
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RestaurantIndex(int id, int? RestaurantRewardValue)
+        {
+            if (RestaurantRewardValue.HasValue)
+            {
+                var restaurant = await _context.Restaurants.FirstOrDefaultAsync(m => m.RestaurantId == id);
+                if (restaurant != null)
+                {
+                    restaurant.RestaurantRewardValue = RestaurantRewardValue.Value;
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            return RedirectToAction("RestaurantIndex", new { id = id });
         }
 
 
@@ -214,17 +231,14 @@ namespace SGV_Booking.Controllers
         {
             try
             {
-                var fromEmail = "sgvBooking@outlook.com"; // Replace with your email address
+                var fromEmail = "test6460@outlook.com"; // Replace with your email address
                 var fromEmailPassword = "testing646";
                 var toEmail = user.Email;
                 var subject = "Registration Confirmation";
-                var body = $@"Dear {user.FirstName},<br><br>
-
-Thank you for registering with us! Your account has been created successfully.<br><br>
-
-Sincerely,<br>
-SGV Team";
-
+                var body = $"Dear {user.FirstName},\n\n" +
+                           $"Thank you for registering with us! Your account has been created successfully.\n\n" +
+                           $"Sincerely,\n" +
+                           "SGV Team";
 
                 using (var smtpClient = new SmtpClient("smtp.office365.com")) // Replace with your email provider's SMTP server
                 {
@@ -338,44 +352,6 @@ SGV Team";
             return View(booking);
         }
 
-        [HttpPost]
-        public IActionResult ChangeBookingStatus(int bookingId)
-        {
-
-            var booking = _context.Bookings.SingleOrDefault(b => b.BookingId == bookingId);
-
-            if (booking != null)
-            {
-                int resturantID = booking.RestaurantId;
-
-                booking.BookingStatus = true;
-
-                UpdateBooking(booking);
-
-                return RedirectToAction("RestaurantIndex", new { id = resturantID });
-
-            }
-
-            return RedirectToAction("RestaurantIndex");
-        }
-
-        private void UpdateBooking(Booking booking)
-        {
-            var existingBooking = _context.Bookings.SingleOrDefault(b => b.BookingId == booking.BookingId);
-
-            if (existingBooking != null)
-            {
-                existingBooking.BookingStatus = booking.BookingStatus;
-
-                _context.Entry(existingBooking).State = EntityState.Modified;
-
-                _context.SaveChanges();
-            }
-            else
-            {
-                return;
-            }
-        }
 
         private bool UserExists(int id)
         {
